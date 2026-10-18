@@ -172,3 +172,60 @@
 .solo-plan p {
   margin: 0;
 }
+
+/* 鳴き判断 */
+.call-discard {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.call-discard-tile .tile {
+  --tile-w: 36px;
+}
+
+.call-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.call-choices .button {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 6px;
+  min-height: 52px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.call-choice-label {
+  white-space: nowrap;
+}
+
+.call-meld {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1px;
+  vertical-align: middle;
+}
+
+.call-meld .tile {
+  --tile-w: 22px;
+}
+
+.call-made {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.call-made .call-meld .tile {
+  --tile-w: 30px;
+}
