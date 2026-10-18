@@ -154,3 +154,26 @@ describe('generateQuestion(問題の作り方)', () => {
     expect(a.turn).toBe(b.turn)
   })
 })
+
+describe('問題の保存と復元(学習記録用)', () => {
+  it('保存した形から同じ局面と正解を作り直せる', async () => {
+    const { fromQuestionData, questionKeyOf, toQuestionData } = await import('./efficiencyQuestion')
+    const rng = createRng(55)
+    for (const { id } of DIFFICULTIES) {
+      const q = generateQuestion(id, rng)
+      const data = JSON.parse(JSON.stringify(toQuestionData(q)))
+      const r = fromQuestionData(data)
+      expect(formatTiles(r.hand)).toBe(formatTiles(q.hand))
+      expect(r.drawn).toEqual(q.drawn)
+      expect(r.visible).toEqual(q.visible)
+      expect(r.judgement.correctKinds).toEqual(q.judgement.correctKinds)
+      expect(questionKeyOf(r)).toBe(questionKeyOf(q))
+    }
+  })
+
+  it('形が正しくないデータはエラー', async () => {
+    const { fromQuestionData } = await import('./efficiencyQuestion')
+    expect(() => fromQuestionData(null)).toThrow()
+    expect(() => fromQuestionData({ difficulty: 'beginner', turn: 1, hand: '123m', drawn: '1z', dora: '1z', own: '', others: ['', '', ''] })).toThrow()
+  })
+})

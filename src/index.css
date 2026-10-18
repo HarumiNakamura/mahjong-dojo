@@ -141,3 +141,32 @@ h3 {
   border-radius: 999px;
   vertical-align: middle;
 }
+
+/* 画面には見せず、読み上げだけに使う */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- 保存場所の表示 ---- */
+
+.storage-notice {
+  margin: 12px 0;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+
+.storage-notice--warn {
+  color: var(--wrong);
+  background: var(--wrong-bg);
+}

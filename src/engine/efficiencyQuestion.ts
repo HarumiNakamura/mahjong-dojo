@@ -8,7 +8,7 @@
 
 import { randomInt, type Rng } from './random'
 import { calcShantenFromTiles } from './shanten'
-import { sortTiles, type Tile } from './tiles'
+import { formatTiles, parseTiles, sortTiles, type Tile } from './tiles'
 import { judgeDiscards, type EfficiencyJudgement } from './efficiency'
 import { createWall } from './wall'
 
@@ -123,4 +123,73 @@ export function generateQuestion(difficulty: Difficulty, rng: Rng, maxAttempts =
     if (q) return q
   }
   throw new Error(`問題を作れませんでした(${difficulty})`)
+}
+
+// ---- 保存用の形(学習記録で局面を再現するため) ----
+
+/** 問題を保存するための形(牌は文字列表記) */
+export interface EfficiencyQuestionData {
+  difficulty: Difficulty
+  turn: number
+  hand: string
+  drawn: string
+  dora: string
+  own: string
+  others: [string, string, string]
+}
+
+export function toQuestionData(q: EfficiencyQuestion): EfficiencyQuestionData {
+  return {
+    difficulty: q.difficulty,
+    turn: q.turn,
+    hand: formatTiles(q.hand),
+    drawn: formatTiles([q.drawn]),
+    dora: formatTiles([q.doraIndicator]),
+    own: formatTiles(q.ownDiscards),
+    others: q.otherDiscards.map((r) => formatTiles(r)) as [string, string, string],
+  }
+}
+
+/** 同じ問題を見分けるためのキー */
+export function questionKeyOf(q: EfficiencyQuestion): string {
+  const d = toQuestionData(q)
+  return [d.hand, d.drawn, d.dora, d.own, ...d.others].join('|')
+}
+
+/** 保存した形から問題を作り直す(正解も計算し直す)。形が正しくなければエラー */
+export function fromQuestionData(value: unknown): EfficiencyQuestion {
+  const d = value as Partial<EfficiencyQuestionData> | null
+  const isStr = (v: unknown): v is string => typeof v === 'string'
+  if (
+    !d ||
+    !DIFFICULTIES.some((x) => x.id === d.difficulty) ||
+    typeof d.turn !== 'number' ||
+    !isStr(d.hand) ||
+    !isStr(d.drawn) ||
+    !isStr(d.dora) ||
+    !isStr(d.own) ||
+    !Array.isArray(d.others) ||
+    d.others.length !== 3 ||
+    !d.others.every(isStr)
+  ) {
+    throw new Error('何切るの問題データが正しくありません')
+  }
+  const hand = parseTiles(d.hand)
+  const drawn = parseTiles(d.drawn)
+  const dora = parseTiles(d.dora)
+  if (hand.length !== 13 || drawn.length !== 1 || dora.length !== 1) throw new Error('何切るの問題データが正しくありません')
+  const ownDiscards = parseTiles(d.own)
+  const otherDiscards = d.others.map((r) => parseTiles(r)) as [Tile[], Tile[], Tile[]]
+  const visible = [dora[0], ...ownDiscards, ...otherDiscards.flat()]
+  return {
+    difficulty: d.difficulty as Difficulty,
+    turn: d.turn,
+    hand,
+    drawn: drawn[0],
+    doraIndicator: dora[0],
+    ownDiscards,
+    otherDiscards,
+    visible,
+    judgement: judgeDiscards([...hand, drawn[0]], visible),
+  }
 }
