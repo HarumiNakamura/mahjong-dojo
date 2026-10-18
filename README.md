@@ -10,4 +10,6 @@ npm run build   # ビルド
 npm run deploy  # Cloudflare Workers に公開
 ```
 
-開発方針は [CLAUDE.md](./CLAUDE.md) を参照してください。
+- 開発方針: [CLAUDE.md](./CLAUDE.md)
+- 採用ルール: [docs/rules.md](./docs/rules.md)
+- 公開手順: [docs/deploy.md](./docs/deploy.md)
