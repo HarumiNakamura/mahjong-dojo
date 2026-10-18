@@ -1,16 +1,15 @@
 // 守備の判定エンジン
 //
-// 1. 他家がリーチしている局面を作る(山から配牌し、4人とも牌効率どおりに打ち、テンパイした他家はリーチする)
+// 1. 他家がリーチしている局面を作る(山から配牌し、4人とも簡易プレイヤーで打ち、テンパイした他家はリーチする)
 // 2. 自分の手牌の各牌について、リーチ者ごとに安全度の根拠(現物・字牌・スジ・壁・無スジ)を判定する
 // 3. 根拠ごとの危険度は src/data/danger-table.ts の目安を使う。リーチ者が複数なら全員分をまとめる
 //
 // 座席は 0 = 自分、1 = 下家、2 = 対面、3 = 上家。打つ順番は 0 → 1 → 2 → 3。
 
 import { DANGER_TABLE, type NumberGroup } from '../data/danger-table'
-import { judgeDiscards } from './efficiency'
 import { randomInt, type Rng } from './random'
-import { calcShantenFromTiles } from './shanten'
-import { isHonor, rankOf, sortTiles, tileName, tilesToCounts, TILE_KINDS, type Tile } from './tiles'
+import { calcShanten, calcShantenFromTiles } from './shanten'
+import { formatTiles, isHonor, parseTiles, rankOf, sortTiles, tileName, tilesToCounts, TILE_KINDS, type Tile } from './tiles'
 import { findWaits } from './waits'
 import { createWall } from './wall'
 
@@ -71,9 +70,37 @@ export interface SituationOptions {
   maxTurn?: number
 }
 
-function chooseDiscard(hand14: Tile[], visible: Tile[], rng: Rng): number {
-  const j = judgeDiscards(hand14, visible)
-  const kind = j.correctKinds[randomInt(rng, j.correctKinds.length)]
+/**
+ * 簡易プレイヤーの打牌: シャンテン数が一番進む牌のうち、まわりにつながる牌が少ない(孤立した)牌を切る。
+ * リーチ者に当たる牌は切らない(当たり牌しかなければ null)。
+ */
+function chooseDiscard(hand14: Tile[], avoid: ReadonlySet<number>, rng: Rng): number | null {
+  const counts = tilesToCounts(hand14)
+  const linkScore = (k: number) => {
+    if (isHonor(k)) return counts[k] * 3
+    const r = rankOf(k)
+    const at = (d: number) => (r + d >= 1 && r + d <= 9 ? counts[k + d] : 0)
+    return counts[k] * 3 + (at(-1) + at(1)) * 2 + at(-2) + at(2)
+  }
+  let best: number[] = []
+  let bestShanten = Infinity
+  let bestScore = Infinity
+  for (let k = 0; k < TILE_KINDS; k++) {
+    if (counts[k] === 0 || avoid.has(k)) continue
+    counts[k]--
+    const sh = calcShanten(counts).min
+    counts[k]++
+    const score = linkScore(k)
+    if (sh < bestShanten || (sh === bestShanten && score < bestScore)) {
+      best = [k]
+      bestShanten = sh
+      bestScore = score
+    } else if (sh === bestShanten && score === bestScore) {
+      best.push(k)
+    }
+  }
+  if (best.length === 0) return null
+  const kind = best[randomInt(rng, best.length)]
   const normal = hand14.findIndex((t) => t.kind === kind && !t.red)
   return normal >= 0 ? normal : hand14.findIndex((t) => t.kind === kind)
 }
@@ -90,7 +117,6 @@ export function trySituation(rng: Rng, options: SituationOptions): DefenseSituat
   const dealerSeat = randomInt(rng, 4)
   let order = 0
   let turnsSinceFirstRiichi = -1
-  const allVisibleFor = () => [doraIndicator, ...rivers.flatMap((r) => r.map((x) => x.tile))]
 
   for (let turn = 1; turn <= maxTurn && wall.length > 8; turn++) {
     for (let seat = 0; seat < 4; seat++) {
@@ -118,18 +144,20 @@ export function trySituation(rng: Rng, options: SituationOptions): DefenseSituat
       }
       // アガリ形になったら(ツモアガリ)、この局は使わない
       if (calcShantenFromTiles(hand14).min === -1) return null
-      let index: number
-      if (riichiIndex[seat] !== null) {
-        index = hand14.length - 1 // リーチ後はツモ切り
-      } else {
-        index = chooseDiscard(hand14, allVisibleFor(), rng)
+      // リーチ者に当たる牌は切らない(ロンが出ると局面が終わるため)
+      const avoid = new Set<number>()
+      for (const other of [1, 2, 3]) {
+        if (other !== seat && riichiIndex[other] !== null) for (const w of findWaits(hands[other]).waits) avoid.add(w.kind)
       }
+      let index: number | null
+      if (riichiIndex[seat] !== null) {
+        index = avoid.has(hand14[hand14.length - 1].kind) ? null : hand14.length - 1 // リーチ後はツモ切り
+      } else {
+        index = chooseDiscard(hand14, avoid, rng)
+      }
+      if (index === null) return null
       const discard = hand14[index]
       hands[seat] = sortTiles(hand14.filter((_, i) => i !== index))
-      // 他のリーチ者に当たる牌を切ったらロンされるので、この局は使わない
-      for (const s of [1, 2, 3]) {
-        if (s !== seat && riichiIndex[s] !== null && findWaits(hands[s]).waits.some((w) => w.kind === discard.kind)) return null
-      }
       rivers[seat].push({ tile: discard, order: order++ })
       // 自分以外がテンパイしたらリーチ(リーチ者が予定の人数に達するまで)
       if (
@@ -393,4 +421,88 @@ export function situationIsConsistent(s: DefenseSituation): boolean {
   const all = [...s.myHand, s.drawn, ...s.hands.slice(1).flat(), ...s.rivers.flatMap((r) => r.map((x) => x.tile)), s.doraIndicator, ...s.wall]
   const counts = tilesToCounts(all)
   return counts.length === TILE_KINDS && counts.every((n) => n <= 4)
+}
+
+// ---- 保存と復元(問題データ用) ----
+
+/** 局面を保存できる形。山と、リーチしていない他家の手牌は含めない */
+export interface SituationData {
+  turn: number
+  dealer: number
+  dora: string
+  /** 各座席の河 */
+  rivers: string[]
+  /** 打った座席の順番(例: "0123012…")。リーチ後に通った牌(現物)の判定に使う */
+  seq: string
+  riichi: (number | null)[]
+  hand: string
+  drawn: string
+  /** リーチ者の手牌(リーチしていない座席は空文字) */
+  riichiHands: string[]
+}
+
+export function situationToData(s: DefenseSituation): SituationData {
+  const seq = s.rivers
+    .flatMap((river, seat) => river.map((r) => ({ seat, order: r.order })))
+    .sort((a, b) => a.order - b.order)
+    .map((x) => x.seat)
+    .join('')
+  return {
+    turn: s.turn,
+    dealer: s.dealerSeat,
+    dora: formatTiles([s.doraIndicator]),
+    rivers: s.rivers.map((r) => formatTiles(r.map((x) => x.tile))),
+    seq,
+    riichi: [...s.riichiIndex],
+    hand: formatTiles(s.myHand),
+    drawn: formatTiles([s.drawn]),
+    riichiHands: s.hands.map((h, seat) => (s.riichiIndex[seat] !== null ? formatTiles(h) : '')),
+  }
+}
+
+export function situationFromData(value: unknown): DefenseSituation {
+  const d = value as Partial<SituationData> | null
+  const bad = () => new Error('守備の問題データが正しくありません')
+  if (
+    !d ||
+    typeof d.turn !== 'number' ||
+    typeof d.dealer !== 'number' ||
+    typeof d.dora !== 'string' ||
+    !Array.isArray(d.rivers) ||
+    d.rivers.length !== 4 ||
+    typeof d.seq !== 'string' ||
+    !Array.isArray(d.riichi) ||
+    d.riichi.length !== 4 ||
+    typeof d.hand !== 'string' ||
+    typeof d.drawn !== 'string' ||
+    !Array.isArray(d.riichiHands)
+  ) {
+    throw bad()
+  }
+  const tilesBySeat = d.rivers.map((r) => parseTiles(String(r)))
+  const rivers: RiverTile[][] = [[], [], [], []]
+  ;[...d.seq].forEach((c, order) => {
+    const seat = Number(c)
+    const tile = tilesBySeat[seat]?.[rivers[seat].length]
+    if (!tile) throw bad()
+    rivers[seat].push({ tile, order })
+  })
+  if (rivers.some((r, seat) => r.length !== tilesBySeat[seat].length)) throw bad()
+  const riichiIndex = d.riichi.map((x) => (typeof x === 'number' ? x : null))
+  if (riichiIndex.some((x, seat) => x !== null && (seat === 0 || x >= rivers[seat].length))) throw bad()
+  const myHand = parseTiles(d.hand)
+  const drawn = parseTiles(d.drawn)
+  if (myHand.length !== 13 || drawn.length !== 1) throw bad()
+  return {
+    turn: d.turn,
+    doraIndicator: parseTiles(d.dora)[0],
+    dealerSeat: d.dealer,
+    rivers,
+    riichiIndex,
+    myHand,
+    drawn: drawn[0],
+    hands: [0, 1, 2, 3].map((seat) => parseTiles(String(d.riichiHands?.[seat] ?? ''))),
+    wall: [],
+    nextOrder: d.seq.length,
+  }
 }

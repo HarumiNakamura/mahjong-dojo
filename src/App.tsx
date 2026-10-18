@@ -5,6 +5,7 @@ import { Layout } from './components/layout/Layout'
 import { TileSettingsProvider } from './components/tile/TileSettingsProvider'
 import { AboutPage } from './pages/AboutPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
+import { DefenseDrillPage } from './pages/DefenseDrillPage'
 import { DevDrillPage } from './pages/DevDrillPage'
 import { DevTilesPage } from './pages/DevTilesPage'
 import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
@@ -33,6 +34,8 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '点数早見表', element: <ScoreTablePage /> }
     case '/practice/waits':
       return { title: '待ち当て', element: <WaitsDrillPage /> }
+    case '/practice/defense':
+      return { title: '守備(安パイ並べ)', element: <DefenseDrillPage /> }
     case '/practice/solo':
       return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':

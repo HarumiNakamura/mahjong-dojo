@@ -33,8 +33,7 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
   {
     path: '/practice/defense',
     title: '守備',
-    description: '相手のリーチに対して、安全な牌(安パイ)を選ぶ練習です。',
-    comingSoon: true,
+    description: '相手のリーチに対して、手牌を安全な順に並べる練習です。現物・スジ・壁の見方が身につきます。',
   },
   {
     path: '/practice/judgment',

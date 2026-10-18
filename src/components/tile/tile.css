@@ -94,6 +94,12 @@ button.hand-tile:focus-visible {
 .discards .tile {
   --tile-w: 30px;
 }
+.discards-highlight {
+  display: inline-flex;
+  border-radius: 4px;
+  outline: 3px solid var(--focus);
+  outline-offset: -1px;
+}
 
 /* 長押し・マウスで見ている牌 */
 .hand-tile--previewed .tile-svg {

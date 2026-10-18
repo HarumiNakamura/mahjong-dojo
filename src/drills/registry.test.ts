@@ -46,3 +46,14 @@ describe('点数計算', () => {
     expect(drill.describeCorrect(restored)).toMatch(/点|\//)
   })
 })
+
+describe('安パイ並べ', () => {
+  it('保存した形(JSON)から同じ問題・同じキーに戻せ、正解を判定できる', async () => {
+    const { generateSafetyQuestion, safestKinds } = await import('../engine/safetyQuestion')
+    const drill = findDrill('safety')!
+    const q = generateSafetyQuestion('beginner', 'pick', createRng(2))
+    const restored = drill.fromData(JSON.parse(JSON.stringify(drill.toData(q))))
+    expect(drill.keyOf(restored)).toBe(drill.keyOf(q))
+    expect(drill.judge(restored, [safestKinds(q)[0]])).toBe(true)
+  })
+})
