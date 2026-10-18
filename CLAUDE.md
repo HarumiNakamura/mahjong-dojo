@@ -55,8 +55,16 @@
 - `src/engine/shanten.ts` … シャンテン数(通常手・七対子・国士無双と最小値。副露は手牌の枚数から判断)
 - `src/engine/ukeire.ts` … 受け入れ枚数(打牌候補ごとのシャンテン数・有効牌・残り枚数、待ち牌)
 - `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像やフォントを使わず SVG で自作する
-- `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用)
+- `src/app/` … ページ構成(`routes.ts`)と画面切り替え(`router.ts`・`Link.tsx`。ライブラリは使わない)
+- `src/components/layout/` … サイト共通の枠(ヘッダー・メニュー・広告枠・フッター)。広告枠(`AdSlot`)は本文の下にだけ置き、問題・牌・ボタンの近くには置かない
+- `src/components/drill/` … ドリル共通部品(問題 → 回答 → 正誤 → 解説 → 次の問題)。各ドリルはこれを使う
+- `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
 - `src/` … 画面(React コンポーネント)
+
+## デザイン
+
+- 色は `src/index.css` の CSS 変数(`--bg`・`--text`・`--accent` など)を使い、直接の色指定は避ける(ダークモードは OS の設定で自動切り替え)
+- 本文は16px以上、押せるボタンは高さ48px前後にする
 
 ## 牌の表記
 

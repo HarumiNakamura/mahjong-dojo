@@ -1,0 +1,137 @@
+.drill {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.drill-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  scroll-margin-top: 72px;
+}
+
+.drill-streak {
+  margin-left: 8px;
+  padding: 0 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 999px;
+}
+
+.drill-question {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.drill-feedback {
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid;
+  scroll-margin-bottom: 96px;
+}
+
+.drill-feedback--correct {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+}
+
+.drill-feedback--wrong {
+  border-color: var(--wrong);
+  background: var(--wrong-bg);
+}
+
+.drill-verdict {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.drill-feedback--correct .drill-verdict {
+  color: var(--correct);
+}
+
+.drill-feedback--wrong .drill-verdict {
+  color: var(--wrong);
+}
+
+.drill-verdict-mark {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.drill-explanation > :first-child {
+  margin-top: 0;
+}
+
+.drill-explanation > :last-child {
+  margin-bottom: 0;
+}
+
+.drill-actions {
+  padding-top: 4px;
+}
+
+.drill-summary-title {
+  margin: 0;
+}
+
+.drill-summary-score {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+/* 選択肢ボタン(各ドリルで使える) */
+.choice-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.choice-button {
+  min-height: 52px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.choice-button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.choice-button:disabled {
+  cursor: default;
+}
+
+.choice-button--chosen {
+  border-color: var(--text);
+}
+
+.choice-button--correct {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+  color: var(--correct);
+}
+
+.choice-button--wrong {
+  border-color: var(--wrong);
+  background: var(--wrong-bg);
+  color: var(--wrong);
+}
