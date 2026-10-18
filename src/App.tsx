@@ -20,6 +20,7 @@ import { RecordsPage } from './pages/records/RecordsPage'
 import { ScoreDrillPage } from './pages/ScoreDrillPage'
 import { ScoreTablePage } from './pages/ScoreTablePage'
 import { SoloPage } from './pages/SoloPage'
+import { TodayPage } from './pages/TodayPage'
 import { WaitsDrillPage } from './pages/WaitsDrillPage'
 import { ReviewPage } from './pages/records/ReviewPage'
 
@@ -28,6 +29,8 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
   switch (path) {
     case '/':
       return { element: <HomePage /> }
+    case '/today':
+      return { title: '今日の練習', element: <TodayPage /> }
     case '/practice':
       return { title: '練習', element: <PracticePage /> }
     case '/practice/efficiency':

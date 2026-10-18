@@ -138,3 +138,173 @@
   font-size: 1.0625rem;
   font-weight: 700;
 }
+
+/* ホーム: 今日の練習・ロードマップ・弱点マップ */
+.home-note {
+  margin: 4px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.today-card,
+.weak-rec {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.today-card p,
+.weak-rec p {
+  margin: 0;
+}
+
+.today-card-streak strong {
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.today-status {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.today-drill {
+  margin: 0 0 8px;
+}
+
+.roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roadmap-link {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+.roadmap-step--next .roadmap-link {
+  border: 2px solid var(--accent);
+}
+
+.roadmap-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-weight: 700;
+}
+
+.roadmap-step--cleared .roadmap-num {
+  background: var(--correct-bg);
+  color: var(--correct);
+}
+
+.roadmap-step--next .roadmap-num {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.roadmap-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.roadmap-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.roadmap-status {
+  flex: none;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.roadmap-step--next .roadmap-status {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.roadmap-text {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.roadmap-bar,
+.weak-bar {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.roadmap-bar {
+  margin-top: 4px;
+}
+
+.roadmap-bar-fill,
+.weak-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.weak-map {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.weak-row {
+  display: grid;
+  grid-template-columns: 5.5em 1fr 3em 3.2em;
+  align-items: center;
+  gap: 8px;
+}
+
+.weak-row--few {
+  opacity: 0.55;
+}
+
+.weak-label {
+  font-size: 15px;
+}
+
+.weak-value {
+  text-align: right;
+  font-weight: 700;
+}
+
+.weak-count {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-muted);
+}
