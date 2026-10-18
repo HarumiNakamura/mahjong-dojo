@@ -34,3 +34,8 @@ export function navigate(to: string) {
   }
   window.scrollTo(0, 0)
 }
+
+/** 今の URL のクエリ(?a=1&b=2)を読む。ページを開いたときの値を使う */
+export function readQuery(): URLSearchParams {
+  return new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search)
+}

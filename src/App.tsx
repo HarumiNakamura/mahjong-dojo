@@ -12,6 +12,7 @@ import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
 import { JudgmentPage } from './pages/JudgmentPage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { PlanPage } from './pages/PlanPage'
 import { PracticePage } from './pages/PracticePage'
 import { PushFoldPage } from './pages/PushFoldPage'
 import { RecordsPage } from './pages/records/RecordsPage'
@@ -42,6 +43,8 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '判断', element: <JudgmentPage /> }
     case '/practice/judgment/pushfold':
       return { title: '押し引きジャッジ', element: <PushFoldPage /> }
+    case '/practice/judgment/plan':
+      return { title: '配牌方針クイズ', element: <PlanPage /> }
     case '/practice/solo':
       return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':
