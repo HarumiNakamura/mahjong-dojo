@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy": "npm run build && wrangler deploy",
-    "build:glyphs": "node scripts/build-tile-glyphs.mjs"
+    "build:glyphs": "node scripts/build-tile-glyphs.mjs",
+    "report:scoring": "SCORING_REPORT=1 vitest run src/engine/scoring.test.ts"
   },
   "dependencies": {
     "react": "^19.2.8",

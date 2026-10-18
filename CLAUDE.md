@@ -64,6 +64,7 @@
 - `src/app/` … ページ構成(`routes.ts`)と画面切り替え(`router.ts`・`Link.tsx`。ライブラリは使わない)
 - `src/components/layout/` … サイト共通の枠(ヘッダー・メニュー・広告枠・フッター)。広告枠(`AdSlot`)は本文の下にだけ置き、問題・牌・ボタンの近くには置かない
 - `src/components/drill/` … ドリル共通部品(問題 → 回答 → 正誤 → 解説 → 次の問題)。各ドリルはこれを使う
+- `src/engine/scoring.ts` … 役・符・点数の計算(手牌の分け方をすべて調べ、最も高い点数を選ぶ。パオは含まない)。テストケースは `scoring.cases.ts`、一覧は `npm run report:scoring` で `docs/scoring-tests.md` に書き出す
 - `src/engine/waits.ts` … 待ちの判定(待ち牌・手牌の分け方・待ちの形。自分で4枚使っている当たり牌は除く。形式聴牌の判定にも使う)
 - `src/engine/waitsQuestion.ts` … 待ち当ての問題作り(1色の4・7・10・13枚形)と判定
 - `src/engine/solo.ts` … 一人麻雀(鳴きなし・リーチとツモアガリあり・18巡)の進行と振り返り(毎巡の打牌と最善手、受け入れの差、テンパイ巡目)。採点は牌効率だけで役や打点は見ない
@@ -93,6 +94,7 @@ engine では `"123m456p789s1122z"` 形式の文字列を使う(m=萬子, p=筒�
 - `npm run build` … 本番ビルド(型チェック込み)
 - `npm run lint` … リント
 - `npm run deploy` … ビルドして Cloudflare に公開
+- `npm run report:scoring` … 点数計算のテスト結果を `docs/scoring-tests.md` に書き出す(点数計算を変えたら実行する)
 
 ## 作業ルール
 
