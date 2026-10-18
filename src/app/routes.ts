@@ -51,8 +51,7 @@ export const LEARN_PAGE: PageInfo = {
 export const RECORDS_PAGE: PageInfo = {
   path: '/records',
   title: '学習記録',
-  description: 'これまでの正解率や苦手な分野を確認できます。記録はこのブラウザに保存されます。',
-  comingSoon: true,
+  description: 'これまでの正解率や間違えた問題を確認し、解き直せます。記録はこの端末のブラウザに保存されます。',
 }
 
 export interface NavItem {

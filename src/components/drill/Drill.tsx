@@ -33,6 +33,11 @@ export interface DrillProps<Q, A> {
   onResult?: (result: DrillResult<Q, A>) => void
   /** 1回の問題数。指定すると最後に結果を表示する */
   totalQuestions?: number
+  /** 指定すると、問題をお気に入りに登録するボタンを出す */
+  favorite?: {
+    isFavorite: (question: Q) => boolean
+    toggle: (question: Q) => void
+  }
 }
 
 /** ドリル共通の部品: 問題 → 回答 → 正誤 → 解説 → 次の問題 */
@@ -43,6 +48,7 @@ export function Drill<Q, A>({
   renderExplanation,
   onResult,
   totalQuestions,
+  favorite,
 }: DrillProps<Q, A>) {
   const [state, dispatch] = useReducer(
     drillReducer as (s: DrillState<Q, A>, a: DrillAction<Q, A>) => DrillState<Q, A>,
@@ -106,6 +112,19 @@ export function Drill<Q, A>({
           {state.stats.streak >= 2 && <span className="drill-streak">{state.stats.streak}連続正解</span>}
         </span>
       </div>
+      {favorite && (
+        <div className="drill-tools">
+          <button
+            type="button"
+            className="drill-favorite"
+            aria-pressed={favorite.isFavorite(state.question)}
+            onClick={() => favorite.toggle(state.question)}
+          >
+            <span aria-hidden="true">{favorite.isFavorite(state.question) ? '★' : '☆'}</span>
+            {favorite.isFavorite(state.question) ? 'お気に入り登録済み' : 'お気に入りに登録'}
+          </button>
+        </div>
+      )}
 
       <div className="drill-question">
         {renderQuestion({

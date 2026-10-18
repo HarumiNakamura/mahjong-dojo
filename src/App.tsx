@@ -11,6 +11,8 @@ import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PracticePage } from './pages/PracticePage'
+import { RecordsPage } from './pages/records/RecordsPage'
+import { ReviewPage } from './pages/records/ReviewPage'
 
 /** パスに対応するページと題名 */
 function resolvePage(path: string): { title?: string; element: ReactNode } {
@@ -27,6 +29,11 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '牌の表示確認', element: <DevTilesPage /> }
     case '/dev/drill':
       return { title: 'ドリル部品の確認', element: <DevDrillPage /> }
+  }
+  if (path === '/records') return { title: '学習記録', element: <RecordsPage /> }
+  const review = path.match(/^\/records\/review\/([a-z0-9-]+)\/(mistakes|favorites)$/)
+  if (review) {
+    return { title: '解き直し', element: <ReviewPage drillId={review[1]} mode={review[2] as 'mistakes' | 'favorites'} /> }
   }
   const soon = findComingSoonPage(path)
   if (soon) return { title: soon.title, element: <ComingSoonPage page={soon} /> }

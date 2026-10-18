@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { StorageNotice } from '../app/records/StorageNotice'
 import { Drill } from '../components/drill/Drill'
-import { isCorrectDiscard } from '../engine/efficiency'
+import { efficiencyDrill } from '../drills/efficiency'
+import { useDrillRecorder } from '../drills/useDrillRecorder'
 import { DIFFICULTIES, generateQuestion, type Difficulty, type EfficiencyQuestion } from '../engine/efficiencyQuestion'
 import { createRng } from '../engine/random'
-import { EfficiencyExplanation } from './efficiency/EfficiencyExplanation'
-import { EfficiencyQuestionView } from './efficiency/EfficiencyQuestionView'
 import './efficiency/efficiency.css'
 import './pages.css'
 
@@ -14,6 +14,9 @@ export function EfficiencyDrillPage() {
   const [difficulty, setDifficulty] = useState<Difficulty | null>(null)
   // 難易度を選ぶたびに新しい乱数で問題を作る
   const [seed, setSeed] = useState(0)
+  const { onResult, favorite } = useDrillRecorder(efficiencyDrill)
+  // 乱数は種が変わったときだけ作り直す(記録を保存して画面が描き直されても、同じ問題に戻らないように)
+  const rng = useMemo(() => createRng(seed), [seed])
 
   if (difficulty === null) {
     return (
@@ -48,11 +51,11 @@ export function EfficiencyDrillPage() {
             <li>受け入れ枚数は、自分の手牌・河・ドラ表示牌など、見えている牌を差し引いて数えます。</li>
           </ul>
         </div>
+        <StorageNotice />
       </>
     )
   }
 
-  const rng = createRng(seed)
   const label = DIFFICULTIES.find((d) => d.id === difficulty)?.label
   return (
     <>
@@ -66,10 +69,13 @@ export function EfficiencyDrillPage() {
         key={`${difficulty}-${seed}`}
         totalQuestions={QUESTIONS_PER_SET}
         makeQuestion={() => generateQuestion(difficulty, rng)}
-        judge={(q, kind) => isCorrectDiscard(q.judgement, kind)}
-        renderQuestion={(props) => <EfficiencyQuestionView key={props.index} {...props} />}
-        renderExplanation={({ question, answer }) => <EfficiencyExplanation question={question} answer={answer} />}
+        judge={efficiencyDrill.judge}
+        renderQuestion={efficiencyDrill.renderQuestion}
+        renderExplanation={efficiencyDrill.renderExplanation}
+        onResult={onResult}
+        favorite={favorite}
       />
+      <StorageNotice compact />
     </>
   )
 }

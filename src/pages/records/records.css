@@ -1,0 +1,211 @@
+.rec-section {
+  margin-top: 32px;
+}
+
+.rec-section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 12px;
+}
+
+.rec-note {
+  margin: 0 0 12px;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+.rec-empty {
+  color: var(--text-muted);
+}
+
+.rec-card {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.rec-card + .rec-card {
+  margin-top: 12px;
+}
+
+.rec-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rec-card-head h3 {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+.rec-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 700;
+}
+
+.rec-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.rec-stats div {
+  padding: 8px;
+  text-align: center;
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+
+.rec-stats dt {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.rec-stats dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.rec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rec-item {
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.rec-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.rec-answer {
+  margin: 6px 0 0;
+  font-size: 0.9375rem;
+}
+
+.rec-review-fav {
+  margin-bottom: 8px;
+}
+
+.rec-unfav,
+.rec-clear {
+  min-height: 40px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.rec-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rec-message {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  background: var(--correct-bg);
+  border-radius: 8px;
+}
+
+.rec-message--error {
+  background: var(--wrong-bg);
+  color: var(--wrong);
+}
+
+.rec-danger {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.rec-clear {
+  color: var(--wrong);
+  border-color: var(--wrong);
+}
+
+/* ---- 推移グラフ ---- */
+
+.trend {
+  margin: 0;
+}
+
+.trend-caption {
+  margin-bottom: 4px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.trend-chart {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.trend-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.trend-value {
+  min-height: 1.4em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.trend-track {
+  position: relative;
+  width: 100%;
+  max-width: 28px;
+  height: 72px;
+  border-bottom: 1px solid var(--border);
+}
+
+.trend-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent);
+  border-radius: 4px 4px 0 0;
+}
+
+.trend-day,
+.trend-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+
+.rec-more {
+  margin-top: 10px;
+}
