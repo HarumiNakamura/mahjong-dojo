@@ -69,3 +69,30 @@
   background: var(--surface);
   color: var(--accent);
 }
+
+/* ---- デザイン案の比較 ---- */
+
+.dev-design {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.dev-design-title {
+  margin: 0 !important;
+  font-size: 1.05rem !important;
+  color: var(--text) !important;
+}
+
+.dev-design-row {
+  margin-top: 4px;
+  --tile-w: 31px;
+}
+
+.dev-design-caption {
+  margin: 12px 0 4px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

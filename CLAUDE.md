@@ -54,7 +54,9 @@
 - `src/engine/tiles.ts` … 牌の表現(34種+赤5、文字列表記の読み書き、枚数配列、理牌)
 - `src/engine/shanten.ts` … シャンテン数(通常手・七対子・国士無双と最小値。副露は手牌の枚数から判断)
 - `src/engine/ukeire.ts` … 受け入れ枚数(打牌候補ごとのシャンテン数・有効牌・残り枚数、待ち牌)
-- `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像やフォントを使わず SVG で自作する
+- `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像を使わず SVG で自作する
+  - 牌の文字は端末のフォントに頼らず、SIL OFL のフォント(npm の @fontsource)から必要な文字だけを SVG のパスに変換して使う(`npm run build:glyphs` → `glyphs.generated.ts`)
+  - 使ったフォントとライセンスは `docs/licenses.md` に記録する
 - `src/app/` … ページ構成(`routes.ts`)と画面切り替え(`router.ts`・`Link.tsx`。ライブラリは使わない)
 - `src/components/layout/` … サイト共通の枠(ヘッダー・メニュー・広告枠・フッター)。広告枠(`AdSlot`)は本文の下にだけ置き、問題・牌・ボタンの近くには置かない
 - `src/components/drill/` … ドリル共通部品(問題 → 回答 → 正誤 → 解説 → 次の問題)。各ドリルはこれを使う
