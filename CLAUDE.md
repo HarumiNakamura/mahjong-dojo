@@ -75,6 +75,7 @@
 - `src/engine/pushfold.ts` … 押し引きの概算(押しの期待値=アガリ率×打点−放銃率×相手の打点−相手ツモの支払い、降りの期待値=−相手ツモの支払い。差が小さければどちらも正解)。数値は `src/data/pushfold-table.ts`、考え方は `docs/pushfold.md`
 - `src/engine/pushfoldQuestion.ts` … 押し引きジャッジの問題作り(テンパイ/イーシャンテンで、形を保つには危険牌を切るしかない局面)
 - `src/engine/plan.ts`・`planQuestion.ts` … 配牌方針の採点(門前リーチ・タンヤオ・役牌・染め手・七対子・守備寄りを、シャンテン数・役牌の対子・ドラ・色の偏り・么九牌・対子の数から0〜100点で採点。最高点から10点以内はすべて正解)。問題はシードで決まり、一人麻雀と同じ山なので `/practice/solo?seed=…&plan=…` で続きを打てる
+- `src/engine/call.ts`・`callQuestion.ts` … 鳴き判断(ポン・チー・スルー)。鳴いたあとの役(役牌・断么九・混一色/清一色)、シャンテン数が進むか、翻数の変化、巡目で判断。役がない鳴き・進まない鳴きは不正解。喰い替え(現物・スジ)の打牌は選べない
 - `src/engine/solo.ts` … 一人麻雀(鳴きなし・リーチとツモアガリあり・18巡)の進行と振り返り(毎巡の打牌と最善手、受け入れの差、テンパイ巡目)。採点は牌効率だけで役や打点は見ない
 - `src/engine/records.ts` … 学習記録のデータ操作(回答の追加・集計・推移・間違えた問題・お気に入り・書き出しと読み込み)
 - `src/app/records/` … 学習記録の保存先(localStorage)。使えない環境ではメモリだけで動き、画面に注意を出す(サイトは壊さない)
@@ -84,7 +85,7 @@
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック
 - `src/pages/solo/` … 一人麻雀(`/practice/solo`)の対局画面と振り返り。振り返りの局面は何切るのお気に入り(復習リスト)に追加できる
 - `src/pages/defense/` … 守備の練習(`/practice/defense`):安パイ並べとベタオリサバイバル。安パイ並べは並べ替え(押したまま動かす/タップで選んで置く)、河の根拠の強調、スジ表(現物からスジへの線・壁)、リーチ者の手牌公開
-- `src/pages/judgment/` … 判断の練習(`/practice/judgment` に一覧)。押し引きジャッジ(`/practice/judgment/pushfold`)・配牌方針クイズ(`/practice/judgment/plan`)
+- `src/pages/judgment/` … 判断の練習(`/practice/judgment` に一覧)。押し引きジャッジ(`/practice/judgment/pushfold`)・配牌方針クイズ(`/practice/judgment/plan`)・鳴き判断クイズ(`/practice/judgment/call`)
 - `src/pages/efficiency/` … 何切るドリル(`/practice/efficiency`)の問題表示と解説
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
 - `src/` … 画面(React コンポーネント)

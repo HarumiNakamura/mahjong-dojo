@@ -58,7 +58,6 @@ export const JUDGMENT_PAGES: readonly PageInfo[] = [
     path: '/practice/judgment/call',
     title: '鳴き判断クイズ',
     description: '他の人の捨て牌をポン・チーするか、スルーするかを判断します。',
-    comingSoon: true,
   },
 ]
 

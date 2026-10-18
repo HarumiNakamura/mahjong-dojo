@@ -5,6 +5,7 @@ import { Layout } from './components/layout/Layout'
 import { TileSettingsProvider } from './components/tile/TileSettingsProvider'
 import { AboutPage } from './pages/AboutPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
+import { CallPage } from './pages/CallPage'
 import { DefenseDrillPage } from './pages/DefenseDrillPage'
 import { DevDrillPage } from './pages/DevDrillPage'
 import { DevTilesPage } from './pages/DevTilesPage'
@@ -45,6 +46,8 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '押し引きジャッジ', element: <PushFoldPage /> }
     case '/practice/judgment/plan':
       return { title: '配牌方針クイズ', element: <PlanPage /> }
+    case '/practice/judgment/call':
+      return { title: '鳴き判断クイズ', element: <CallPage /> }
     case '/practice/solo':
       return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':
