@@ -56,12 +56,14 @@ export const RULES = {
   honbaValue: 300,
   /** 親ノーテン流局でも本場を積む */
   honbaOnDealerNotenDraw: true,
-  /** 南4局流局時に残った供託はトップが取得 */
+  /** 南4局流局時に残った供託はトップが取得(同点トップは按分) */
   leftoverRiichiToTop: true,
 
   // 最終成績(1,000点 = 1pt)。1位の値はオカ込み
   uma: [50000, 10000, -10000, -30000],
   tieSplitsUma: true,
+  /** 同点で等分したときの端数(供託の按分も同じ)は起家に近い人が多く受け取る */
+  tieRemainderTo: 'closest-to-first-dealer',
 
   // 符
   fu: {
@@ -93,6 +95,8 @@ export const RULES = {
 
   // パオ(大三元・大四喜・四槓子)。ロンは放銃者と折半、積み棒は鳴かせた人が負担
   pao: ['daisangen', 'daisuushii', 'suukantsu'],
+  /** 役満複合時、責任払いは確定させた役満の分だけ */
+  paoOnlyForConfirmedYakuman: true,
 
   // 搶槓
   chankanOnAnkan: false,
