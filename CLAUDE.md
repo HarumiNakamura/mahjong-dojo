@@ -53,6 +53,7 @@
 - `docs/rules.md` … ルールの詳細説明
 - `src/engine/tiles.ts` … 牌の表現(34種+赤5、文字列表記の読み書き、枚数配列、理牌)
 - `src/engine/shanten.ts` … シャンテン数(通常手・七対子・国士無双と最小値。副露は手牌の枚数から判断)
+- `src/engine/ukeire.ts` … 受け入れ枚数(打牌候補ごとのシャンテン数・有効牌・残り枚数、待ち牌)
 - `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像やフォントを使わず SVG で自作する
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用)
 - `src/` … 画面(React コンポーネント)
