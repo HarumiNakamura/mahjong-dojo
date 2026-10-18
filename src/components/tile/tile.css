@@ -149,3 +149,28 @@ button.hand-tile {
   line-height: 1.3;
   color: var(--text);
 }
+
+/* 押せない牌(リーチ中など) */
+.hand-tile--disabled {
+  opacity: 0.4;
+}
+
+button.hand-tile:disabled {
+  cursor: default;
+}
+
+/* 牌の下の短い表示(練習モードの受け入れ枚数など) */
+.hand-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hand-caption {
+  margin-top: 2px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-muted);
+  white-space: nowrap;
+}

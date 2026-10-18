@@ -3,14 +3,14 @@ import { findComingSoonPage, LEARN_PAGE, NAV_ITEMS, PRACTICE_PAGES, RECORDS_PAGE
 import { normalizePath } from './router'
 
 describe('ページ構成', () => {
-  it('練習は牌効率・待ち・点数計算・守備・判断の5つ', () => {
-    expect(PRACTICE_PAGES.map((p) => p.title)).toEqual(['牌効率', '待ち', '点数計算', '守備', '判断'])
+  it('練習は牌効率・一人麻雀・待ち・点数計算・守備・判断', () => {
+    expect(PRACTICE_PAGES.map((p) => p.title)).toEqual(['牌効率', '一人麻雀', '待ち', '点数計算', '守備', '判断'])
     for (const p of PRACTICE_PAGES) expect(p.path.startsWith('/practice/')).toBe(true)
   })
 
   it('ナビゲーションはホーム・練習・解説・学習記録・このサイトについて', () => {
     expect(NAV_ITEMS.map((i) => i.label)).toEqual(['ホーム', '練習', '解説', '学習記録', 'このサイトについて'])
-    expect(NAV_ITEMS[1].children).toHaveLength(5)
+    expect(NAV_ITEMS[1].children).toHaveLength(6)
   })
 
   it('パスはすべて重ならない', () => {

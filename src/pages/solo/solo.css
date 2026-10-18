@@ -1,0 +1,248 @@
+.solo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.solo-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.solo-turn {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.solo-dora {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.solo-dora-tile .tile {
+  --tile-w: 26px;
+}
+
+.solo-riichi {
+  color: var(--wrong);
+  border-color: var(--wrong);
+}
+
+.solo-river .discards .tile,
+.solo-final .discards .tile {
+  --tile-w: 26px;
+}
+
+.solo-label {
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.solo-none {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.solo-prompt {
+  margin: 4px 0 0;
+}
+
+.solo-practice-note,
+.solo-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.solo-last {
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 0.9375rem;
+  border-radius: 8px;
+}
+
+.solo-last--good {
+  background: var(--correct-bg);
+}
+
+.solo-last--bad {
+  background: var(--wrong-bg);
+}
+
+.solo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  /* 操作ボタンは手牌から少し離し、押し間違いを防ぐ */
+  margin-top: 8px;
+}
+
+.solo-actions .button {
+  flex: 1 1 140px;
+}
+
+.solo-setting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.solo-setting input {
+  width: 22px;
+  height: 22px;
+}
+
+.solo-setting span {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+}
+
+.solo-setting small {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* ---- 振り返り ---- */
+
+.solo-disclaimer {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  font-weight: 700;
+  background: var(--surface-2);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+}
+
+.solo-result {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.solo-result-main {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.solo-final {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.solo-turns {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.solo-turn-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.solo-turn-row--miss {
+  border: 2px solid var(--wrong);
+  background: var(--wrong-bg);
+}
+
+.solo-turn-row--muted {
+  opacity: 0.7;
+}
+
+.solo-turn-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--text);
+  text-align: left;
+}
+
+.solo-turn-button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.solo-turn-no {
+  min-width: 3.5em;
+  font-weight: 700;
+}
+
+.solo-turn-tile {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.solo-turn-tile .tile {
+  --tile-w: 22px;
+}
+
+.solo-turn-best {
+  color: var(--text-muted);
+}
+
+.solo-turn-diff {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.solo-turn-row--good .solo-turn-diff {
+  color: var(--correct);
+}
+
+.solo-turn-row--miss .solo-turn-diff {
+  color: var(--wrong);
+}
+
+.solo-tag {
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.solo-tag--miss {
+  color: var(--wrong);
+  border-color: var(--wrong);
+}
+
+.solo-turn-detail {
+  padding: 4px 12px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.solo-fav {
+  margin-top: 12px;
+}

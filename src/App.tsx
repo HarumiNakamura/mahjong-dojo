@@ -12,6 +12,7 @@ import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PracticePage } from './pages/PracticePage'
 import { RecordsPage } from './pages/records/RecordsPage'
+import { SoloPage } from './pages/SoloPage'
 import { ReviewPage } from './pages/records/ReviewPage'
 
 /** パスに対応するページと題名 */
@@ -23,6 +24,8 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '練習', element: <PracticePage /> }
     case '/practice/efficiency':
       return { title: '何切る(牌効率)', element: <EfficiencyDrillPage /> }
+    case '/practice/solo':
+      return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':
       return { title: 'このサイトについて', element: <AboutPage /> }
     case '/dev/tiles':

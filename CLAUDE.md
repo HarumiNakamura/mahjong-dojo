@@ -64,10 +64,12 @@
 - `src/app/` … ページ構成(`routes.ts`)と画面切り替え(`router.ts`・`Link.tsx`。ライブラリは使わない)
 - `src/components/layout/` … サイト共通の枠(ヘッダー・メニュー・広告枠・フッター)。広告枠(`AdSlot`)は本文の下にだけ置き、問題・牌・ボタンの近くには置かない
 - `src/components/drill/` … ドリル共通部品(問題 → 回答 → 正誤 → 解説 → 次の問題)。各ドリルはこれを使う
+- `src/engine/solo.ts` … 一人麻雀(鳴きなし・リーチとツモアガリあり・18巡)の進行と振り返り(毎巡の打牌と最善手、受け入れの差、テンパイ巡目)。採点は牌効率だけで役や打点は見ない
 - `src/engine/records.ts` … 学習記録のデータ操作(回答の追加・集計・推移・間違えた問題・お気に入り・書き出しと読み込み)
 - `src/app/records/` … 学習記録の保存先(localStorage)。使えない環境ではメモリだけで動き、画面に注意を出す(サイトは壊さない)
 - `src/drills/` … ドリルの定義(`DrillDefinition`)と一覧(`registry.ts`)。新しいドリルは定義を作って登録すると、学習記録・解き直し・お気に入りにつながる
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
+- `src/pages/solo/` … 一人麻雀(`/practice/solo`)の対局画面と振り返り。振り返りの局面は何切るのお気に入り(復習リスト)に追加できる
 - `src/pages/efficiency/` … 何切るドリル(`/practice/efficiency`)の問題表示と解説
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
 - `src/` … 画面(React コンポーネント)
