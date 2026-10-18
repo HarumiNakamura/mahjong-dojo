@@ -1,5 +1,5 @@
 import { Link } from '../app/Link'
-import { LEARN_PAGE, PRACTICE_PAGES, RECORDS_PAGE } from '../app/routes'
+import { LEARN_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE } from '../app/routes'
 import { Hand } from '../components/tile/Hand'
 import { parseTiles } from '../engine/tiles'
 import './pages.css'
@@ -44,7 +44,7 @@ export function HomePage() {
       <section className="home-section">
         <h2>読む・ふりかえる</h2>
         <ul className="card-list">
-          {[LEARN_PAGE, RECORDS_PAGE].map((page) => (
+          {[LEARN_PAGE, SCORE_TABLE_PAGE, RECORDS_PAGE].map((page) => (
             <li key={page.path}>
               <Link to={page.path} className="card">
                 <span className="card-title">

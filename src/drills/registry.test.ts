@@ -34,3 +34,15 @@ describe('待ち当て', () => {
     expect(drill.describeAnswer(restored, [])).toBe('待ちなし')
   })
 })
+
+describe('点数計算', () => {
+  it('保存した形(JSON)から同じ問題・同じキーに戻せ、正解を判定できる', async () => {
+    const { generateScoreQuestion, expectedPoints } = await import('../engine/scoreQuestion')
+    const drill = findDrill('score')!
+    const q = generateScoreQuestion('advanced', createRng(6))
+    const restored = drill.fromData(JSON.parse(JSON.stringify(drill.toData(q))))
+    expect(drill.keyOf(restored)).toBe(drill.keyOf(q))
+    expect(drill.judge(restored, { points: expectedPoints(q) })).toBe(true)
+    expect(drill.describeCorrect(restored)).toMatch(/点|\//)
+  })
+})

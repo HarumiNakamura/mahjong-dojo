@@ -28,8 +28,7 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
   {
     path: '/practice/score',
     title: '点数計算',
-    description: '符と翻から点数を求める練習です。',
-    comingSoon: true,
+    description: '役・翻と符・点数を段階的に答える練習です。点数早見表もあります。',
   },
   {
     path: '/practice/defense',
@@ -56,6 +55,12 @@ export const RECORDS_PAGE: PageInfo = {
   path: '/records',
   title: '学習記録',
   description: 'これまでの正解率や間違えた問題を確認し、解き直せます。記録はこの端末のブラウザに保存されます。',
+}
+
+export const SCORE_TABLE_PAGE: PageInfo = {
+  path: '/score-table',
+  title: '点数早見表',
+  description: '符と翻から点数を引ける表です(Mリーグルール版。親・子の切り替えあり)。',
 }
 
 export interface NavItem {
