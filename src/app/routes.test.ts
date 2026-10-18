@@ -19,7 +19,8 @@ describe('ページ構成', () => {
   })
 
   it('準備中のページはパスから見つかる', () => {
-    expect(findComingSoonPage('/practice/judgment')?.title).toBe('判断')
+    expect(findComingSoonPage('/practice/judgment')).toBeUndefined()
+    expect(findComingSoonPage('/practice/judgment/plan')?.title).toBe('配牌方針クイズ')
     expect(findComingSoonPage('/practice/score')).toBeUndefined()
     expect(findComingSoonPage('/practice/waits')).toBeUndefined()
     expect(findComingSoonPage(LEARN_PAGE.path)).toBe(LEARN_PAGE)

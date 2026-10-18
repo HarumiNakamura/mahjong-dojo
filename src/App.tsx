@@ -10,8 +10,10 @@ import { DevDrillPage } from './pages/DevDrillPage'
 import { DevTilesPage } from './pages/DevTilesPage'
 import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
+import { JudgmentPage } from './pages/JudgmentPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PracticePage } from './pages/PracticePage'
+import { PushFoldPage } from './pages/PushFoldPage'
 import { RecordsPage } from './pages/records/RecordsPage'
 import { ScoreDrillPage } from './pages/ScoreDrillPage'
 import { ScoreTablePage } from './pages/ScoreTablePage'
@@ -36,6 +38,10 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '待ち当て', element: <WaitsDrillPage /> }
     case '/practice/defense':
       return { title: '守備', element: <DefenseDrillPage /> }
+    case '/practice/judgment':
+      return { title: '判断', element: <JudgmentPage /> }
+    case '/practice/judgment/pushfold':
+      return { title: '押し引きジャッジ', element: <PushFoldPage /> }
     case '/practice/solo':
       return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':

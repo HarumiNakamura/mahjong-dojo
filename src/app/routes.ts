@@ -38,7 +38,27 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
   {
     path: '/practice/judgment',
     title: '判断',
-    description: '押すか引くか、配牌からどう進めるかを考える練習です。',
+    description: '押すか降りるか、配牌からの方針、鳴くかどうかを考える練習です。',
+  },
+]
+
+/** 判断の練習(/practice/judgment の中の各ドリル) */
+export const JUDGMENT_PAGES: readonly PageInfo[] = [
+  {
+    path: '/practice/judgment/pushfold',
+    title: '押し引きジャッジ',
+    description: '相手のリーチに対して、危険な牌を切って押すか、降りるか。アガリ率と放銃率から考えます。',
+  },
+  {
+    path: '/practice/judgment/plan',
+    title: '配牌方針クイズ',
+    description: '配牌を見て、リーチ・タンヤオ・役牌・染め手・七対子・守備寄りのどれを目指すかを選びます。',
+    comingSoon: true,
+  },
+  {
+    path: '/practice/judgment/call',
+    title: '鳴き判断クイズ',
+    description: '他の人の捨て牌をポン・チーするか、スルーするかを判断します。',
     comingSoon: true,
   },
 ]
@@ -83,5 +103,5 @@ export const NAV_ITEMS: readonly NavItem[] = [
 
 /** 準備中ページの情報をパスから探す */
 export function findComingSoonPage(path: string): PageInfo | undefined {
-  return [...PRACTICE_PAGES, LEARN_PAGE, RECORDS_PAGE].find((p) => p.path === path && p.comingSoon)
+  return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE].find((p) => p.path === path && p.comingSoon)
 }

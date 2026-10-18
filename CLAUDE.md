@@ -72,6 +72,8 @@
 - `src/engine/danger.ts` … 守備の判定(他家リーチの局面作り、牌ごとの根拠:現物・字牌・スジ・両スジ・宣言牌のスジ・壁/ノーチャンス・ワンチャンス・片スジ・無スジと危険度。複数リーチはまとめる)。危険度の数値は `src/data/danger-table.ts`、考え方は `docs/defense.md`
 - `src/engine/safetyQuestion.ts` … 安パイ並べの問題作り(初級=現物あり・中級=スジ/壁・上級=リーチ2人)と判定(並べ替えは危険度のグループ順。同じ危険度の中の順番は問わない。かんたんモードは一番安全な1枚)
 - `src/engine/betaori.ts`・`betaoriQuestion.ts` … ベタオリサバイバル(リーチ後、流局まで1巡ずつ切る。放銃で即終了。他家は乱数なしの簡易プレイヤーなので、シードと打牌の並びから再現できる)と振り返り(毎巡の危険度と最善、現物の残り方)。ドリルとしては放銃せずに終われたら正解
+- `src/engine/pushfold.ts` … 押し引きの概算(押しの期待値=アガリ率×打点−放銃率×相手の打点−相手ツモの支払い、降りの期待値=−相手ツモの支払い。差が小さければどちらも正解)。数値は `src/data/pushfold-table.ts`、考え方は `docs/pushfold.md`
+- `src/engine/pushfoldQuestion.ts` … 押し引きジャッジの問題作り(テンパイ/イーシャンテンで、形を保つには危険牌を切るしかない局面)
 - `src/engine/solo.ts` … 一人麻雀(鳴きなし・リーチとツモアガリあり・18巡)の進行と振り返り(毎巡の打牌と最善手、受け入れの差、テンパイ巡目)。採点は牌効率だけで役や打点は見ない
 - `src/engine/records.ts` … 学習記録のデータ操作(回答の追加・集計・推移・間違えた問題・お気に入り・書き出しと読み込み)
 - `src/app/records/` … 学習記録の保存先(localStorage)。使えない環境ではメモリだけで動き、画面に注意を出す(サイトは壊さない)
@@ -81,6 +83,7 @@
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック
 - `src/pages/solo/` … 一人麻雀(`/practice/solo`)の対局画面と振り返り。振り返りの局面は何切るのお気に入り(復習リスト)に追加できる
 - `src/pages/defense/` … 守備の練習(`/practice/defense`):安パイ並べとベタオリサバイバル。安パイ並べは並べ替え(押したまま動かす/タップで選んで置く)、河の根拠の強調、スジ表(現物からスジへの線・壁)、リーチ者の手牌公開
+- `src/pages/judgment/` … 判断の練習(`/practice/judgment` に一覧)。押し引きジャッジ(`/practice/judgment/pushfold`)
 - `src/pages/efficiency/` … 何切るドリル(`/practice/efficiency`)の問題表示と解説
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
 - `src/` … 画面(React コンポーネント)
