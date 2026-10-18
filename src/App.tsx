@@ -35,7 +35,7 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
     case '/practice/waits':
       return { title: '待ち当て', element: <WaitsDrillPage /> }
     case '/practice/defense':
-      return { title: '守備(安パイ並べ)', element: <DefenseDrillPage /> }
+      return { title: '守備', element: <DefenseDrillPage /> }
     case '/practice/solo':
       return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':

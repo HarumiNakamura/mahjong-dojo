@@ -360,3 +360,97 @@
   font-size: 13px;
   color: var(--text-muted);
 }
+
+/* ベタオリサバイバル */
+.def-start {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.def-start p {
+  margin: 0;
+}
+
+.def-wall {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.def-last {
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--correct-bg);
+  font-size: 15px;
+}
+
+.def-last--warn {
+  background: var(--surface-2);
+}
+
+.def-end {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--correct-bg);
+  color: var(--correct);
+  font-weight: 700;
+}
+
+.def-end--dealIn {
+  background: var(--wrong-bg);
+  color: var(--wrong);
+}
+
+.def-subheading {
+  margin: 8px 0 0;
+  font-size: 17px;
+}
+
+.def-stock {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.def-stock-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 0 18px;
+  max-width: 32px;
+}
+
+.def-stock-num,
+.def-stock-turn {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--text-muted);
+}
+
+.def-stock-bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: var(--accent);
+}
+
+.def-stock-bar--empty {
+  background: var(--wrong);
+}
+
+.def-row-mark--ok {
+  color: var(--correct);
+}
+
+.def-turn-detail {
+  padding: 4px 0 8px;
+}
+
+.def-turn-detail .hand {
+  padding-top: 4px;
+}
