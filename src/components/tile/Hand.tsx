@@ -14,12 +14,16 @@ interface HandProps {
   onPreview?: (index: number | null) => void
   /** 長押し・マウスで見ている牌の位置 */
   previewed?: number | null
+  /** 牌の下に出す短い表示(位置ごと。null なら出さない) */
+  captions?: readonly (string | null)[]
+  /** 押せない牌(リーチ中など) */
+  isDisabled?: (index: number) => boolean
 }
 
 const LONG_PRESS_MS = 400
 
 /** 手牌。13〜14枚を横一列に並べ、画面幅に合わせて牌の大きさを変える。 */
-export function Hand({ tiles, drawn, selected = null, onSelect, onPreview, previewed = null }: HandProps) {
+export function Hand({ tiles, drawn, selected = null, onSelect, onPreview, previewed = null, captions, isDisabled }: HandProps) {
   const all = drawn ? [...tiles, drawn] : [...tiles]
   const timer = useRef<number | null>(null)
   // 長押しのあとに続くクリック(タップ)は、回答として扱わない
@@ -37,11 +41,14 @@ export function Hand({ tiles, drawn, selected = null, onSelect, onPreview, previ
         const isDrawn = drawn != null && i === tiles.length
         const className =
           `hand-tile${isDrawn ? ' hand-tile--drawn' : ''}${selected === i ? ' hand-tile--selected' : ''}` +
-          (previewed === i ? ' hand-tile--previewed' : '')
+          (previewed === i ? ' hand-tile--previewed' : '') +
+          (isDisabled?.(i) ? ' hand-tile--disabled' : '')
+        const caption = captions?.[i] ? <span className="hand-caption">{captions[i]}</span> : null
         if (!onSelect) {
           return (
             <span key={i} className={className}>
               <Tile tile={tile} />
+              {caption}
             </span>
           )
         }
@@ -51,6 +58,7 @@ export function Hand({ tiles, drawn, selected = null, onSelect, onPreview, previ
             type="button"
             className={className}
             aria-pressed={selected === i}
+            disabled={isDisabled?.(i)}
             aria-label={`${tileName(tile)}${isDrawn ? '(ツモ牌)' : ''}`}
             onClick={() => {
               if (longPressed.current) {
@@ -82,6 +90,7 @@ export function Hand({ tiles, drawn, selected = null, onSelect, onPreview, previ
             }}
           >
             <Tile tile={tile} />
+            {caption}
           </button>
         )
       })}

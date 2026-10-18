@@ -16,6 +16,11 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
     description: '何を切れば早くテンパイできるか。受け入れ枚数で比べて練習します。',
   },
   {
+    path: '/practice/solo',
+    title: '一人麻雀',
+    description: '配牌から18巡、1人でツモって切ります。終わったら牌効率で1巡ずつ振り返ります。',
+  },
+  {
     path: '/practice/waits',
     title: '待ち',
     description: 'テンパイした手の待ち牌をすべて見つける練習です。',
