@@ -1,6 +1,5 @@
 import { tileName, type Tile as TileData } from '../../engine/tiles'
 import { TILE_H, TILE_W, TileArt } from './TileArt'
-import { useTileDesign } from './tileDesignContext'
 import { useTileSettings } from './tileSettings'
 import './tile.css'
 
@@ -15,7 +14,6 @@ interface TileProps {
 /** 牌1枚。幅は親要素の CSS 変数 --tile-w で決まる。 */
 export function Tile({ tile, sideways = false, showLabel }: TileProps) {
   const settings = useTileSettings()
-  const design = useTileDesign()
   const label = showLabel ?? settings.showLabel
   const name = tileName(tile)
   return (
@@ -28,10 +26,10 @@ export function Tile({ tile, sideways = false, showLabel }: TileProps) {
       >
         {sideways ? (
           <g transform={`translate(${TILE_H} 0) rotate(90)`}>
-            <TileArt tile={tile} design={design} />
+            <TileArt tile={tile} />
           </g>
         ) : (
-          <TileArt tile={tile} design={design} />
+          <TileArt tile={tile} />
         )}
       </svg>
       {label && (
