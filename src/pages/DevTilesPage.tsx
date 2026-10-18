@@ -4,6 +4,8 @@ import { Discards } from '../components/tile/Discards'
 import { Hand } from '../components/tile/Hand'
 import { Tile } from '../components/tile/Tile'
 import { useTileSettings } from '../components/tile/tileSettings'
+import { TileDesignContext } from '../components/tile/tileDesignContext'
+import { TILE_DESIGNS } from '../components/tile/tileDesigns'
 import './DevTilesPage.css'
 
 const SUIT_ROWS = [
@@ -13,6 +15,7 @@ const SUIT_ROWS = [
   { suit: 'z', title: '字牌(東南西北白發中)' },
 ] as const
 
+const FIVES = parseTiles('50m50p50s')
 const SAMPLE_HAND = parseTiles('3m71p406s2m95s1z8p6z3m')
 const SAMPLE_DRAWN = parseTiles('7z')[0]
 const SAMPLE_DISCARDS = parseTiles('1z9m4z1p8s2z5m7p3s9p6z1s4m')
@@ -37,7 +40,37 @@ export function DevTilesPage() {
       </label>
 
       <section>
-        <h2>全34種</h2>
+        <h2>デザイン案の比較</h2>
+        <p className="dev-tiles-note">3つの案を見比べて、1つを選んでください。選ばれなかった案は削除します。</p>
+        {Object.values(TILE_DESIGNS).map((design) => (
+          <TileDesignContext.Provider key={design.id} value={design.id}>
+            <div className="dev-design">
+              <h3 className="dev-design-title">{design.name}</h3>
+              <p className="dev-tiles-note">{design.summary}</p>
+              {SUIT_ROWS.map(({ suit }) => (
+                <div key={suit} className="dev-tiles-row dev-design-row">
+                  {ALL_KINDS.filter((k) => suitOf(k) === suit).map((kind) => (
+                    <Tile key={kind} tile={{ kind, red: false }} />
+                  ))}
+                </div>
+              ))}
+              <p className="dev-design-caption">普通の5と赤5(小さいサイズ・普通のサイズ)</p>
+              {[24, 34].map((w) => (
+                <div key={w} className="dev-tiles-row dev-design-row" style={{ ['--tile-w' as string]: `${w}px` }}>
+                  {FIVES.map((t, i) => (
+                    <Tile key={i} tile={t} />
+                  ))}
+                </div>
+              ))}
+              <p className="dev-design-caption">手牌の大きさ</p>
+              <Hand tiles={SAMPLE_HAND} drawn={SAMPLE_DRAWN} />
+            </div>
+          </TileDesignContext.Provider>
+        ))}
+      </section>
+
+      <section>
+        <h2>全34種(案A)</h2>
         {SUIT_ROWS.map(({ suit, title }) => (
           <div key={suit} className="dev-tiles-group">
             <h3>{title}</h3>
