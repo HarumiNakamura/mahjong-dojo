@@ -5,7 +5,7 @@
 import type { ReactElement } from 'react'
 import { rankOf, suitOf, type Tile } from '../../engine/tiles'
 import type { Glyph, GlyphChar } from './glyphs.generated'
-import { DEFAULT_TILE_DESIGN, TILE_DESIGNS, type TileDesign, type TileDesignId } from './tileDesigns'
+import { TILE_STYLE as S } from './tileStyle'
 
 export const TILE_W = 60
 export const TILE_H = 80
@@ -28,11 +28,11 @@ function GlyphPath({ glyph, cx, cy, size, color }: { glyph: Glyph; cx: number; c
 
 // ---- 萬子 ----
 
-function Manzu({ rank, red, design }: { rank: number; red: boolean; design: TileDesign }) {
+function Manzu({ rank, red }: { rank: number; red: boolean }) {
   return (
     <>
-      <GlyphPath glyph={design.glyphs[KANJI_NUMBERS[rank - 1]]} cx={30} cy={22} size={27} color={red ? design.red : design.ink} />
-      <GlyphPath glyph={design.glyphs['萬']} cx={30} cy={54} size={31} color={design.red} />
+      <GlyphPath glyph={S.glyphs[KANJI_NUMBERS[rank - 1]]} cx={30} cy={22} size={27} color={red ? S.red : S.ink} />
+      <GlyphPath glyph={S.glyphs['萬']} cx={30} cy={54} size={31} color={S.red} />
     </>
   )
 }
@@ -115,23 +115,23 @@ const PIN_LAYOUTS: Record<number, Pin[]> = {
   ],
 }
 
-function Pinzu({ rank, red, design }: { rank: number; red: boolean; design: TileDesign }) {
+function Pinzu({ rank, red }: { rank: number; red: boolean }) {
   if (rank === 1) {
     // 一筒は大きな花のような円
     return (
       <g>
-        <circle cx={30} cy={CY} r={21} fill={design.green} />
-        <circle cx={30} cy={CY} r={17.5} fill={design.face} />
-        <circle cx={30} cy={CY} r={14} fill={design.blue} />
-        <circle cx={30} cy={CY} r={9} fill={design.face} />
-        <circle cx={30} cy={CY} r={5.5} fill={design.red} />
+        <circle cx={30} cy={CY} r={21} fill={S.green} />
+        <circle cx={30} cy={CY} r={17.5} fill={S.face} />
+        <circle cx={30} cy={CY} r={14} fill={S.blue} />
+        <circle cx={30} cy={CY} r={9} fill={S.face} />
+        <circle cx={30} cy={CY} r={5.5} fill={S.red} />
       </g>
     )
   }
   return (
     <>
       {PIN_LAYOUTS[rank].map(([cx, cy, r, color], i) => (
-        <PinCircle key={i} cx={cx} cy={cy} r={r} color={red ? design.red : design[color]} face={design.face} />
+        <PinCircle key={i} cx={cx} cy={cy} r={r} color={red ? S.red : S[color]} face={S.face} />
       ))}
     </>
   )
@@ -216,29 +216,29 @@ const SOU_LAYOUTS: Record<number, Stick[]> = {
   ],
 }
 
-function Bird({ design }: { design: TileDesign }) {
+function Bird() {
   // 一索は鳥
   return (
     <g transform="translate(0 1)">
-      <path d="M22 44 L7 54 L11 58 L21 51 L9 63 L14 66 L24 54 Z" fill={design.blue} />
-      <ellipse cx={30} cy={43} rx={13} ry={11} fill={design.green} />
-      <path d="M22 41 Q31 33 39 41 Q31 47 22 41 Z" fill={design.face} opacity={0.35} />
-      <circle cx={40} cy={26} r={7.5} fill={design.green} />
-      <circle cx={38} cy={17} r={3.2} fill={design.red} />
-      <circle cx={42} cy={25} r={1.8} fill={design.face} />
-      <path d="M46.5 24 L54 27.5 L46.5 30 Z" fill={design.red} />
-      <path d="M34 34 L37 32" stroke={design.green} strokeWidth={5} />
-      <path d="M27 53 L25 63 M34 53 L36 63" stroke={design.red} strokeWidth={2.4} strokeLinecap="round" />
+      <path d="M22 44 L7 54 L11 58 L21 51 L9 63 L14 66 L24 54 Z" fill={S.blue} />
+      <ellipse cx={30} cy={43} rx={13} ry={11} fill={S.green} />
+      <path d="M22 41 Q31 33 39 41 Q31 47 22 41 Z" fill={S.face} opacity={0.35} />
+      <circle cx={40} cy={26} r={7.5} fill={S.green} />
+      <circle cx={38} cy={17} r={3.2} fill={S.red} />
+      <circle cx={42} cy={25} r={1.8} fill={S.face} />
+      <path d="M46.5 24 L54 27.5 L46.5 30 Z" fill={S.red} />
+      <path d="M34 34 L37 32" stroke={S.green} strokeWidth={5} />
+      <path d="M27 53 L25 63 M34 53 L36 63" stroke={S.red} strokeWidth={2.4} strokeLinecap="round" />
     </g>
   )
 }
 
-function Souzu({ rank, red, design }: { rank: number; red: boolean; design: TileDesign }) {
-  if (rank === 1) return <Bird design={design} />
+function Souzu({ rank, red }: { rank: number; red: boolean }) {
+  if (rank === 1) return <Bird />
   return (
     <>
       {SOU_LAYOUTS[rank].map(([cx, cy, len, color, angle], i) => (
-        <BambooStick key={i} cx={cx} cy={cy} len={len} color={red ? design.red : design[color]} face={design.face} angle={angle} />
+        <BambooStick key={i} cx={cx} cy={cy} len={len} color={red ? S.red : S[color]} face={S.face} angle={angle} />
       ))}
     </>
   )
@@ -246,51 +246,41 @@ function Souzu({ rank, red, design }: { rank: number; red: boolean; design: Tile
 
 // ---- 字牌 ----
 
-function Honor({ rank, design }: { rank: number; design: TileDesign }) {
-  if (rank === 5) {
-    // 白は青い枠だけ(何もない牌と区別するため)
-    return <rect x={13.5} y={15.5} width={33} height={45} rx={3} fill="none" stroke={design.blue} strokeWidth={3} />
-  }
-  const color = rank === 6 ? design.green : rank === 7 ? design.red : design.ink
-  return <GlyphPath glyph={design.glyphs[HONORS[rank - 1]!]} cx={30} cy={CY} size={43} color={color} />
+function Honor({ rank }: { rank: number }) {
+  // 白は何も描かない
+  if (rank === 5) return null
+  const color = rank === 6 ? S.green : rank === 7 ? S.red : S.ink
+  return <GlyphPath glyph={S.glyphs[HONORS[rank - 1]!]} cx={30} cy={CY} size={43} color={color} />
 }
 
 // ---- 赤5の印 ----
 
-function RedMark({ design }: { design: TileDesign }) {
+/** 赤5は右上に赤いひし形の印を付け、小さく表示しても普通の5と見分けられるようにする */
+function RedMark() {
   const right = FACE.x + FACE.w
   const top = FACE.y
-  const r = design.radius
-  switch (design.redMark) {
-    case 'dot':
-      return <circle cx={right - 7.5} cy={top + 7.5} r={4} fill={design.red} />
-    case 'corner':
-      return <path d={`M${right - 15} ${top} H${right - r} A${r} ${r} 0 0 1 ${right} ${top + r} V${top + 15} Z`} fill={design.red} />
-    case 'diamond':
-      return <path d={`M${right - 7.5} ${top + 2} L${right - 2.5} ${top + 7.5} L${right - 7.5} ${top + 13} L${right - 12.5} ${top + 7.5} Z`} fill={design.red} />
-  }
+  return <path d={`M${right - 7.5} ${top + 2} L${right - 2.5} ${top + 7.5} L${right - 7.5} ${top + 13} L${right - 12.5} ${top + 7.5} Z`} fill={S.red} />
 }
 
 /** 牌の表面の絵柄(座標系 60×80 の <g>)。 */
-export function TileArt({ tile, design: designId = DEFAULT_TILE_DESIGN }: { tile: Tile; design?: TileDesignId }): ReactElement {
-  const design = TILE_DESIGNS[designId]
+export function TileArt({ tile }: { tile: Tile }): ReactElement {
   const suit = suitOf(tile.kind)
   const rank = rankOf(tile.kind)
-  let body: ReactElement
-  if (suit === 'm') body = <Manzu rank={rank} red={tile.red} design={design} />
-  else if (suit === 'p') body = <Pinzu rank={rank} red={tile.red} design={design} />
-  else if (suit === 's') body = <Souzu rank={rank} red={tile.red} design={design} />
-  else body = <Honor rank={rank} design={design} />
+  let body: ReactElement | null
+  if (suit === 'm') body = <Manzu rank={rank} red={tile.red} />
+  else if (suit === 'p') body = <Pinzu rank={rank} red={tile.red} />
+  else if (suit === 's') body = <Souzu rank={rank} red={tile.red} />
+  else body = <Honor rank={rank} />
   const { x, y, w, h } = FACE
-  const r = design.radius
+  const r = S.radius
   return (
     <g>
       {/* 影と側面(厚み)は控えめに */}
-      <rect x={x} y={y + 4 + 1} width={w} height={h - 4 + design.depth} rx={r} fill={design.shadow} />
-      <rect x={x} y={y + 4} width={w} height={h - 4 + design.depth} rx={r} fill={design.side} />
-      <rect x={x} y={y} width={w} height={h} rx={r} fill={design.face} stroke={design.edge} strokeWidth={1} />
+      <rect x={x} y={y + 4 + 1} width={w} height={h - 4 + S.depth} rx={r} fill={S.shadow} />
+      <rect x={x} y={y + 4} width={w} height={h - 4 + S.depth} rx={r} fill={S.side} />
+      <rect x={x} y={y} width={w} height={h} rx={r} fill={S.face} stroke={S.edge} strokeWidth={1} />
       {body}
-      {tile.red && <RedMark design={design} />}
+      {tile.red && <RedMark />}
     </g>
   )
 }

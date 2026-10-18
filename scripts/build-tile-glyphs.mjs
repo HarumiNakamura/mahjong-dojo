@@ -16,8 +16,6 @@ const CHARS = '一二三四五六七八九萬東南西北發中'
 
 /** 使うフォント(id: [パッケージ名, 太さ]) */
 const FONTS = {
-  yujiSyuku: ['yuji-syuku', 400],
-  zenAntique: ['zen-antique', 400],
   shipporiMinchoB1: ['shippori-mincho-b1', 800],
 }
 

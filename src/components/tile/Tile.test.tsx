@@ -4,6 +4,7 @@ import { ALL_KINDS, parseTiles, RED_FIVES, tileName } from '../../engine/tiles'
 import { Discards } from './Discards'
 import { Hand } from './Hand'
 import { Tile } from './Tile'
+import { TileArt } from './TileArt'
 
 describe('Tile', () => {
   it('34種と赤5をすべて描画でき、牌名が読み上げ用に付く', () => {
@@ -40,36 +41,37 @@ describe('Discards', () => {
   })
 })
 
-describe('牌のデザイン', () => {
-  it('どのデザイン案でも34種と赤5をすべて描け、文字は端末のフォント(text 要素)を使わない', async () => {
-    const { TileArt } = await import('./TileArt')
-    const { TILE_DESIGNS } = await import('./tileDesigns')
-    const tiles = [...ALL_KINDS.map((kind) => ({ kind, red: false })), ...RED_FIVES]
-    for (const id of Object.keys(TILE_DESIGNS) as (keyof typeof TILE_DESIGNS)[]) {
-      for (const tile of tiles) {
-        const html = renderToStaticMarkup(
-          <svg>
-            <TileArt tile={tile} design={id} />
-          </svg>,
-        )
-        expect(html).not.toContain('<text')
-        // 文字のある牌(萬子・東南西北發中)はフォントから作ったパスで描く
-        const hasGlyph = tile.kind < 9 || (tile.kind >= 27 && tile.kind !== 31)
-        if (hasGlyph) expect(html).toContain('<path')
-      }
+describe('牌の絵柄', () => {
+  const art = (tile: { kind: number; red: boolean }) =>
+    renderToStaticMarkup(
+      <svg>
+        <TileArt tile={tile} />
+      </svg>,
+    )
+
+  it('34種と赤5をすべて描け、文字は端末のフォント(text 要素)を使わない', () => {
+    for (const tile of [...ALL_KINDS.map((kind) => ({ kind, red: false })), ...RED_FIVES]) {
+      const html = art(tile)
+      expect(html).not.toContain('<text')
+      // 文字のある牌(萬子・東南西北發中)はフォントから作ったパスで描く
+      const hasGlyph = tile.kind < 9 || (tile.kind >= 27 && tile.kind !== 31)
+      if (hasGlyph) expect(html).toContain('<path')
     }
   })
 
-  it('赤5だけに印が付き、普通の5とは絵柄が違う', async () => {
-    const { TileArt } = await import('./TileArt')
-    const { TILE_DESIGNS } = await import('./tileDesigns')
-    for (const id of Object.keys(TILE_DESIGNS) as (keyof typeof TILE_DESIGNS)[]) {
-      for (const red of RED_FIVES) {
-        const normal = renderToStaticMarkup(<TileArt tile={{ kind: red.kind, red: false }} design={id} />)
-        const redHtml = renderToStaticMarkup(<TileArt tile={red} design={id} />)
-        expect(redHtml).not.toBe(normal)
-        expect(redHtml).toContain(TILE_DESIGNS[id].red)
-      }
+  it('白は何も描かない(表面と厚みだけ)', () => {
+    const html = art({ kind: 31, red: false })
+    expect(html).not.toContain('<path')
+    expect(html).not.toContain('<circle')
+    expect(html.match(/<rect/g)).toHaveLength(3)
+  })
+
+  it('赤5だけに赤い印が付く', () => {
+    for (const red of RED_FIVES) {
+      const normal = art({ kind: red.kind, red: false })
+      const redHtml = art(red)
+      expect(redHtml).not.toBe(normal)
+      expect(redHtml.match(/<path/g)!.length).toBe((normal.match(/<path/g) ?? []).length + 1)
     }
   })
 })
