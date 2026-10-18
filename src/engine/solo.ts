@@ -9,6 +9,7 @@ import type { Difficulty, EfficiencyQuestion } from './efficiencyQuestion'
 import type { Rng } from './random'
 import { calcShantenFromTiles } from './shanten'
 import { sortTiles, type Tile } from './tiles'
+import { isFormalTenpai } from './waits'
 import { createWall } from './wall'
 
 /** 1局のツモの回数 */
@@ -210,12 +211,7 @@ export function summarizeSolo(game: SoloGame): SoloSummary {
   const tenpaiTurns = game.logs.filter((l) => l.tenpai).map((l) => l.turn)
   const agari = game.end?.reason === 'agari'
   // 流局時のテンパイ: 待ちを自分ですべて使っている形はノーテン(docs/rules.md 7章)
-  let tenpaiAtEnd = agari
-  if (!agari && game.logs.length > 0) {
-    const last = game.logs[game.logs.length - 1]
-    const option = last.judgement?.analysis.options.find((o) => o.tile.kind === last.discard.kind)
-    tenpaiAtEnd = option ? option.tenpai : last.tenpai
-  }
+  const tenpaiAtEnd = agari || (game.logs.length > 0 && isFormalTenpai(game.hand))
   return {
     turns,
     scored: scoredTurns.length,

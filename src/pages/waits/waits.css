@@ -1,0 +1,283 @@
+/* 待ちの色分け(検証済みの8色。ダークモードは暗い背景向けの段階) */
+:root {
+  --wait-1: #2a78d6;
+  --wait-2: #eb6834;
+  --wait-3: #1baf7a;
+  --wait-4: #eda100;
+  --wait-5: #e87ba4;
+  --wait-6: #008300;
+  --wait-7: #6250d6;
+  --wait-8: #e34948;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --wait-1: #3987e5;
+    --wait-2: #d95926;
+    --wait-3: #199e70;
+    --wait-4: #c98500;
+    --wait-5: #d55181;
+    --wait-6: #008300;
+    --wait-7: #9085e9;
+    --wait-8: #e66767;
+  }
+}
+
+.waits-q {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.waits-q .drill-prompt {
+  margin: 0;
+}
+
+.waits-hand .hand {
+  padding-top: 0;
+}
+
+.waits-choices {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 3px;
+}
+
+.waits-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 3px 1px;
+  font: inherit;
+  background: var(--surface-2);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.waits-choice .tile {
+  --tile-w: 100%;
+  max-width: 36px;
+}
+
+.waits-choice--selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.waits-choice--hit {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+}
+
+.waits-choice--missed {
+  border-color: var(--wrong);
+  border-style: dashed;
+}
+
+.waits-choice--extra {
+  border-color: var(--wrong);
+  background: var(--wrong-bg);
+}
+
+.waits-choice:disabled {
+  cursor: default;
+}
+
+.waits-choice-mark {
+  min-height: 1.2em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.waits-submit {
+  margin-top: 4px;
+}
+
+/* ---- 解説 ---- */
+
+.waits-legend-note {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.waits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.waits-item {
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--wait-color);
+  border-radius: 8px;
+}
+
+.waits-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+}
+
+.waits-item-head .tile {
+  --tile-w: 26px;
+}
+
+.waits-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--wait-color);
+}
+
+.waits-shape {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.waits-pattern + .waits-pattern {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+.waits-pattern-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.waits-group {
+  display: inline-flex;
+  gap: 1px;
+  padding: 2px;
+  border-radius: 6px;
+}
+
+.waits-group .tile {
+  --tile-w: 22px;
+}
+
+.waits-group--other {
+  border: 2px solid var(--border);
+}
+
+.waits-wait-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.waits-group--waiting {
+  border: 3px solid var(--wait-color);
+}
+
+.waits-group--win {
+  border: 3px dashed var(--wait-color);
+  opacity: 0.85;
+}
+
+.waits-plus {
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.waits-pattern-text {
+  margin: 4px 0 0;
+  font-size: 0.9375rem;
+}
+
+.waits-more {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* ---- タイムアタック ---- */
+
+.waits-ta-start p {
+  margin-top: 0;
+}
+
+.waits-ta-time {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.waits-ta-time--low {
+  color: var(--wrong);
+}
+
+.waits-ta-last {
+  margin: 0;
+  padding: 6px 12px;
+  font-weight: 700;
+  border-radius: 8px;
+}
+
+.waits-ta-last--good {
+  color: var(--correct);
+  background: var(--correct-bg);
+}
+
+.waits-ta-last--bad {
+  color: var(--wrong);
+  background: var(--wrong-bg);
+}
+
+.waits-ta-open {
+  margin-top: 8px;
+  min-height: 44px;
+}
+
+.waits-ta-explain {
+  margin-top: 10px;
+}
+
+.waits-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.waits-mode {
+  min-height: 48px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.waits-mode[aria-pressed='true'] {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.waits-choice-legend {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.waits-choice-mark {
+  font-size: 0.875rem;
+}

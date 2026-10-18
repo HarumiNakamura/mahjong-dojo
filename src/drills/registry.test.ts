@@ -21,3 +21,16 @@ describe('ドリルの登録', () => {
     expect(drill.describeAnswer(restored, correct)).toMatch(/切り$/)
   })
 })
+
+describe('待ち当て', () => {
+  it('保存した形(JSON)から同じ問題・同じキーに戻せ、正解を判定できる', async () => {
+    const { generateWaitsQuestion } = await import('../engine/waitsQuestion')
+    const drill = findDrill('waits')!
+    const q = generateWaitsQuestion(7, createRng(4))
+    const restored = drill.fromData(JSON.parse(JSON.stringify(drill.toData(q))))
+    expect(drill.keyOf(restored)).toBe(drill.keyOf(q))
+    const correct = q.result.waits.map((w) => w.kind)
+    expect(drill.judge(restored, correct)).toBe(true)
+    expect(drill.describeAnswer(restored, [])).toBe('待ちなし')
+  })
+})

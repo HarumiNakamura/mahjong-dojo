@@ -19,7 +19,8 @@ describe('ページ構成', () => {
   })
 
   it('準備中のページはパスから見つかる', () => {
-    expect(findComingSoonPage('/practice/waits')?.title).toBe('待ち')
+    expect(findComingSoonPage('/practice/score')?.title).toBe('点数計算')
+    expect(findComingSoonPage('/practice/waits')).toBeUndefined()
     expect(findComingSoonPage(LEARN_PAGE.path)).toBe(LEARN_PAGE)
     // 学習記録はできあがったので準備中ではない
     expect(findComingSoonPage(RECORDS_PAGE.path)).toBeUndefined()
