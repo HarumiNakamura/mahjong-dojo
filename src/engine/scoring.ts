@@ -655,3 +655,28 @@ export function honbaPerPayer(result: ScoreResult): number {
   const honba = result.honbaPoints / 300
   return result.payment.type === 'ron' ? honba * 300 : honba * 100
 }
+
+/** 切り上げ満貫(30符4翻・60符3翻)の対象か */
+export function isKiriageMangan(han: number, fu: number): boolean {
+  return RULES.kiriageMangan && ((fu === 30 && han === 4) || (fu === 60 && han === 3))
+}
+
+export interface PointsTableEntry {
+  limit: LimitName | null
+  basePoints: number
+  /** ロンの点数 */
+  ron: number
+  /** ツモの支払い(親のアガリは fromDealer が null) */
+  tsumo: { fromDealer: number | null; fromNonDealer: number }
+  /** ツモの合計 */
+  tsumoTotal: number
+}
+
+/** 翻・符・親子から点数を求める(早見表・解説用。役満は yakumanMultiplier に倍数を渡す) */
+export function pointsFor(han: number, fu: number, dealer: boolean, yakumanMultiplier = 0): PointsTableEntry {
+  const { limit, basePoints } = basePointsOf(han, fu, yakumanMultiplier)
+  const ron = paymentOf(basePoints, dealer, false)
+  const tsumo = paymentOf(basePoints, dealer, true)
+  const t = tsumo.payment as { type: 'tsumo'; fromDealer: number | null; fromNonDealer: number }
+  return { limit, basePoints, ron: ron.points, tsumo: { fromDealer: t.fromDealer, fromNonDealer: t.fromNonDealer }, tsumoTotal: tsumo.points }
+}

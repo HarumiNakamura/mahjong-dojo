@@ -12,6 +12,8 @@ import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PracticePage } from './pages/PracticePage'
 import { RecordsPage } from './pages/records/RecordsPage'
+import { ScoreDrillPage } from './pages/ScoreDrillPage'
+import { ScoreTablePage } from './pages/ScoreTablePage'
 import { SoloPage } from './pages/SoloPage'
 import { WaitsDrillPage } from './pages/WaitsDrillPage'
 import { ReviewPage } from './pages/records/ReviewPage'
@@ -25,6 +27,10 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { title: '練習', element: <PracticePage /> }
     case '/practice/efficiency':
       return { title: '何切る(牌効率)', element: <EfficiencyDrillPage /> }
+    case '/practice/score':
+      return { title: '点数計算', element: <ScoreDrillPage /> }
+    case '/score-table':
+      return { title: '点数早見表', element: <ScoreTablePage /> }
     case '/practice/waits':
       return { title: '待ち当て', element: <WaitsDrillPage /> }
     case '/practice/solo':
