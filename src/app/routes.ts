@@ -23,8 +23,7 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
   {
     path: '/practice/waits',
     title: '待ち',
-    description: 'テンパイした手の待ち牌をすべて見つける練習です。',
-    comingSoon: true,
+    description: 'テンパイした手の待ち牌をすべて見つける練習です。4枚形から清一色まで、タイムアタックもあります。',
   },
   {
     path: '/practice/score',
