@@ -51,6 +51,9 @@
 - `src/engine/` … 麻雀ロジック(画面から独立、テスト必須)
 - `src/engine/rules.ts` … ルール設定(採用ルールの値はここだけに書く)
 - `docs/rules.md` … ルールの詳細説明
+- `src/engine/tiles.ts` … 牌の表現(34種+赤5、文字列表記の読み書き、枚数配列、理牌)
+- `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像やフォントを使わず SVG で自作する
+- `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用)
 - `src/` … 画面(React コンポーネント)
 
 ## 牌の表記

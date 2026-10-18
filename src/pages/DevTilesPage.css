@@ -1,0 +1,73 @@
+.dev-tiles {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 16px 48px;
+}
+
+.dev-tiles h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.dev-tiles h2 {
+  font-size: 1.1rem;
+  margin: 28px 0 8px;
+  border-bottom: 2px solid #d8d2c2;
+}
+
+.dev-tiles h3 {
+  font-size: 0.9rem;
+  margin: 12px 0 4px;
+  color: #555;
+}
+
+.dev-tiles-note {
+  margin: 4px 0 12px;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.dev-tiles-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #d8d2c2;
+  border-radius: 8px;
+}
+
+.dev-tiles-toggle input {
+  width: 20px;
+  height: 20px;
+}
+
+.dev-tiles-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: flex-start;
+  --tile-w: 34px;
+}
+
+.dev-tiles-sizes {
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.dev-tiles-status {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+.dev-tiles-button {
+  margin-top: 12px;
+  min-height: 44px;
+  padding: 0 20px;
+  font: inherit;
+  font-weight: 700;
+  border: 1px solid #1d5bb0;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d5bb0;
+}

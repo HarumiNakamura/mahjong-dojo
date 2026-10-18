@@ -1,0 +1,96 @@
+/* 幅は親から --tile-w で指定する(初期値40px) */
+.tile {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--tile-w, 40px);
+  flex: none;
+}
+
+.tile--sideways {
+  width: calc(var(--tile-w, 40px) * 4 / 3);
+}
+
+.tile-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tile-label {
+  margin-top: 1px;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #444;
+  white-space: nowrap;
+}
+
+.tile-label--red {
+  color: #d6262b;
+}
+
+/* 手牌: 幅に合わせて縮む横一列 */
+.hand {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1px;
+  padding-top: 12px;
+  width: 100%;
+}
+
+.hand-tile {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.hand-tile {
+  cursor: pointer;
+}
+
+.hand-tile .tile {
+  --tile-w: 100%;
+}
+
+.hand-tile--drawn {
+  margin-left: 6px;
+}
+
+.hand-tile--selected {
+  transform: translateY(-10px);
+}
+
+.hand-tile--selected .tile-svg {
+  filter: drop-shadow(0 0 2px #e8a317) drop-shadow(0 0 2px #e8a317);
+}
+
+button.hand-tile:focus-visible {
+  outline: 2px solid #1d5bb0;
+  outline-offset: 1px;
+}
+
+/* 河: 6枚ごとに改行 */
+.discards {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.discards-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.discards .tile {
+  --tile-w: 30px;
+}
