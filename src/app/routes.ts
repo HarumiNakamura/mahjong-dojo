@@ -53,7 +53,6 @@ export const JUDGMENT_PAGES: readonly PageInfo[] = [
     path: '/practice/judgment/plan',
     title: '配牌方針クイズ',
     description: '配牌を見て、リーチ・タンヤオ・役牌・染め手・七対子・守備寄りのどれを目指すかを選びます。',
-    comingSoon: true,
   },
   {
     path: '/practice/judgment/call',
