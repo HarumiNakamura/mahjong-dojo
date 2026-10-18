@@ -7,6 +7,7 @@ import { AboutPage } from './pages/AboutPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 import { DevDrillPage } from './pages/DevDrillPage'
 import { DevTilesPage } from './pages/DevTilesPage'
+import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PracticePage } from './pages/PracticePage'
@@ -18,6 +19,8 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
       return { element: <HomePage /> }
     case '/practice':
       return { title: '練習', element: <PracticePage /> }
+    case '/practice/efficiency':
+      return { title: '何切る(牌効率)', element: <EfficiencyDrillPage /> }
     case '/about':
       return { title: 'このサイトについて', element: <AboutPage /> }
     case '/dev/tiles':

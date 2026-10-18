@@ -14,7 +14,6 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
     path: '/practice/efficiency',
     title: '牌効率',
     description: '何を切れば早くテンパイできるか。受け入れ枚数で比べて練習します。',
-    comingSoon: true,
   },
   {
     path: '/practice/waits',
