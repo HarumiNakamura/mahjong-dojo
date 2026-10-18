@@ -74,7 +74,7 @@ export interface SituationOptions {
  * 簡易プレイヤーの打牌: シャンテン数が一番進む牌のうち、まわりにつながる牌が少ない(孤立した)牌を切る。
  * リーチ者に当たる牌は切らない(当たり牌しかなければ null)。
  */
-function chooseDiscard(hand14: Tile[], avoid: ReadonlySet<number>, rng: Rng): number | null {
+export function chooseDiscard(hand14: Tile[], avoid: ReadonlySet<number>, rng?: Rng): number | null {
   const counts = tilesToCounts(hand14)
   const linkScore = (k: number) => {
     if (isHonor(k)) return counts[k] * 3
@@ -100,7 +100,8 @@ function chooseDiscard(hand14: Tile[], avoid: ReadonlySet<number>, rng: Rng): nu
     }
   }
   if (best.length === 0) return null
-  const kind = best[randomInt(rng, best.length)]
+  // rng がなければ一番小さい種類(同じ局面なら必ず同じ打牌になる)
+  const kind = rng ? best[randomInt(rng, best.length)] : best[0]
   const normal = hand14.findIndex((t) => t.kind === kind && !t.red)
   return normal >= 0 ? normal : hand14.findIndex((t) => t.kind === kind)
 }
