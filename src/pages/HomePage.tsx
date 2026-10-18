@@ -2,6 +2,7 @@ import { Link } from '../app/Link'
 import { LEARN_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE } from '../app/routes'
 import { Hand } from '../components/tile/Hand'
 import { parseTiles } from '../engine/tiles'
+import { ProgressSections } from './home/ProgressSections'
 import './pages.css'
 
 const SAMPLE_HAND = parseTiles('123m406p789s1122z')
@@ -23,6 +24,8 @@ export function HomePage() {
           練習をはじめる
         </Link>
       </section>
+
+      <ProgressSections />
 
       <section className="home-section">
         <h2>練習メニュー</h2>

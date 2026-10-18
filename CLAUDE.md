@@ -76,10 +76,13 @@
 - `src/engine/pushfoldQuestion.ts` … 押し引きジャッジの問題作り(テンパイ/イーシャンテンで、形を保つには危険牌を切るしかない局面)
 - `src/engine/plan.ts`・`planQuestion.ts` … 配牌方針の採点(門前リーチ・タンヤオ・役牌・染め手・七対子・守備寄りを、シャンテン数・役牌の対子・ドラ・色の偏り・么九牌・対子の数から0〜100点で採点。最高点から10点以内はすべて正解)。問題はシードで決まり、一人麻雀と同じ山なので `/practice/solo?seed=…&plan=…` で続きを打てる
 - `src/engine/call.ts`・`callQuestion.ts` … 鳴き判断(ポン・チー・スルー)。鳴いたあとの役(役牌・断么九・混一色/清一色)、シャンテン数が進むか、翻数の変化、巡目で判断。役がない鳴き・進まない鳴きは不正解。喰い替え(現物・スジ)の打牌は選べない
+- `src/engine/progress.ts` … 学習の進み具合(ロードマップ:役・待ち→牌効率→守備→押し引き・鳴き・配牌方針、分野ごとの正解率=弱点マップ、次のおすすめ、連続日数、今日の練習の5問の選び方)。すべて学習記録から計算し、記録0件でも動く
 - `src/engine/solo.ts` … 一人麻雀(鳴きなし・リーチとツモアガリあり・18巡)の進行と振り返り(毎巡の打牌と最善手、受け入れの差、テンパイ巡目)。採点は牌効率だけで役や打点は見ない
 - `src/engine/records.ts` … 学習記録のデータ操作(回答の追加・集計・推移・間違えた問題・お気に入り・書き出しと読み込み)
 - `src/app/records/` … 学習記録の保存先(localStorage)。使えない環境ではメモリだけで動き、画面に注意を出す(サイトは壊さない)
 - `src/drills/` … ドリルの定義(`DrillDefinition`)と一覧(`registry.ts`)。新しいドリルは定義を作って登録すると、学習記録・解き直し・お気に入りにつながる
+- `src/drills/daily.ts`・`src/pages/TodayPage.tsx` … 今日の練習(`/today`。日付で決まる5問を、いろいろなドリルから1問ずつ)
+- `src/pages/home/` … ホームのロードマップ・弱点マップ・今日の練習
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
 - `src/pages/score/` … 点数計算ドリル(`/practice/score`)と点数早見表(`/score-table`)の表示・解説
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック
