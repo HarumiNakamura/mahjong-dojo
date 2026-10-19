@@ -4,7 +4,7 @@ description: 両面待ちが強い理由と、嵌張・辺張・シャンポン�
 order: 130
 category: 牌効率
 drills: /practice/efficiency, /practice/waits
-related: waits, ukeire, efficiency
+related: waits, ukeire, efficiency, riichi
 ---
 ## 良形と愚形の分け方
 
