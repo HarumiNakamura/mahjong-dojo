@@ -60,7 +60,7 @@ related: betaori, safe-tiles, riichi, all-last
 
 ### 4. 相手の打点
 
-リーチの平均打点は、子で約7,000点、{{親}}で約10,500点です。
+リーチの平均打点は、子で約7,000点、{{親}}(オヤ)で約10,500点です。
 親のリーチは打点が高いので、子のリーチよりも降りに傾きます。
 
 @drill /practice/judgment/pushfold
