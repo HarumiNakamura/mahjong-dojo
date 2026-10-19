@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { Term } from '../../components/term/Term'
 import type { Paipu } from '@kobalab/majiang-core'
 import { Link } from '../../app/Link'
 import { loadPaipuRecords } from '../../app/paipuStore'
@@ -88,12 +89,26 @@ function FindingCard({ paipu, gameId, f, rank }: { paipu: Paipu; gameId: string;
 
 function RatesTable({ now, before }: { now: GameRates; before: GameRates }) {
   const pct = (v: number | null) => (v === null ? '—' : `${v}%`)
-  const rows: { label: string; a: string; b: string }[] = [
-    { label: 'アガリ率', a: pct(now.hule), b: pct(before.hule) },
-    { label: '放銃率', a: pct(now.fangchong), b: pct(before.fangchong) },
-    { label: '副露率', a: pct(now.fulou), b: pct(before.fulou) },
-    { label: 'リーチ率', a: pct(now.lizhi), b: pct(before.lizhi) },
-    { label: '平均打点', a: now.averageWin === null ? '—' : yen(now.averageWin), b: before.averageWin === null ? '—' : yen(before.averageWin) },
+  const rows: { label: ReactNode; key: string; a: string; b: string }[] = [
+    { key: 'hule', label: 'アガリ率', a: pct(now.hule), b: pct(before.hule) },
+    {
+      key: 'fangchong',
+      label: (
+        <>
+          <Term id="houjuu">放銃</Term>率
+        </>
+      ),
+      a: pct(now.fangchong), b: pct(before.fangchong) },
+    {
+      key: 'fulou',
+      label: (
+        <>
+          <Term id="fuuro">副露</Term>率
+        </>
+      ),
+      a: pct(now.fulou), b: pct(before.fulou) },
+    { key: 'lizhi', label: 'リーチ率', a: pct(now.lizhi), b: pct(before.lizhi) },
+    { key: 'win', label: '平均打点', a: now.averageWin === null ? '—' : yen(now.averageWin), b: before.averageWin === null ? '—' : yen(before.averageWin) },
   ]
   return (
     <table className="play-result-table review-rates">
@@ -106,7 +121,7 @@ function RatesTable({ now, before }: { now: GameRates; before: GameRates }) {
       </thead>
       <tbody>
         {rows.map((r) => (
-          <tr key={r.label}>
+          <tr key={r.key}>
             <td>{r.label}</td>
             <td>{r.a}</td>
             <td>{before.games ? r.b : '—'}</td>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Term } from '../../components/term/Term'
 import { Hand } from '../../components/tile/Hand'
 import { Tile } from '../../components/tile/Tile'
 import { dealsIn, riichiSeats, riichiWaits, SEAT_NAMES, type DefenseSituation, type TileSafety } from '../../engine/danger'
@@ -124,7 +125,7 @@ export function SafetyExplanation({ question: q, answer }: { question: SafetyQue
           : 'この手牌には、実際に当たる牌はありませんでした。'}
       </p>
       <p className="def-rule">
-        覚え方:まず現物、次に字牌(見えている枚数が多いもの)とスジ・壁。無スジの4・5・6が一番危険です。
+        覚え方:まず<Term id="genbutsu">現物</Term>、次に<Term id="jihai">字牌</Term>(見えている枚数が多いもの)と<Term id="suji">スジ</Term>・<Term id="kabe">壁</Term>。<Term id="musuji">無スジ</Term>の4・5・6が一番危険です。
       </p>
     </div>
   )

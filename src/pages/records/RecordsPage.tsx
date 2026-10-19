@@ -1,4 +1,5 @@
 import { useRef, useState, type ChangeEvent } from 'react'
+import { Term } from '../../components/term/Term'
 import { Link } from '../../app/Link'
 import { StorageNotice } from '../../app/records/StorageNotice'
 import { useRecords } from '../../app/records/useRecords'
@@ -82,7 +83,9 @@ function GameSection({
             <dd>{s.huleRate === null ? '-' : `${s.huleRate}%`}</dd>
           </div>
           <div>
-            <dt>放銃率</dt>
+            <dt>
+              <Term id="houjuu">放銃</Term>率
+            </dt>
             <dd>{s.fangchongRate === null ? '-' : `${s.fangchongRate}%`}</dd>
           </div>
         </dl>

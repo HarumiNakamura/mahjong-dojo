@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Term } from '../../components/term/Term'
 import { Discards } from '../../components/tile/Discards'
 import { Hand } from '../../components/tile/Hand'
 import { Tile } from '../../components/tile/Tile'
@@ -23,7 +24,7 @@ function OptionBoard({ title, option }: { title: string; option: DiscardOption }
   return (
     <div className="eff-option">
       <p className="eff-preview-text">
-        <strong>{title}</strong>:{shantenLabel(option.shanten)}・受け入れ
+        <strong>{title}</strong>:{shantenLabel(option.shanten)}・<Term id="ukeire">受け入れ</Term>
         <strong>
           {option.tiles.length}種{option.total}枚
         </strong>
