@@ -158,3 +158,117 @@
 .article-tiles .hand-tile {
   max-width: 36px;
 }
+
+/* 用語集 */
+.glossary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.glossary-views {
+  display: flex;
+  gap: 8px;
+}
+
+.glossary-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.glossary-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.glossary-chip[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.glossary-group h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  scroll-margin-top: 72px;
+}
+
+.glossary-count {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.glossary-group dl {
+  margin: 0;
+}
+
+.glossary-entry {
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 72px;
+}
+
+.glossary-entry:target {
+  background: var(--accent-soft);
+  border-radius: 6px;
+}
+
+.glossary-entry dt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+
+.glossary-word {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.glossary-reading {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.glossary-aliases {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.glossary-entry dd {
+  margin: 4px 0 0;
+}
+
+.glossary-meaning {
+  margin: 0;
+}
+
+.glossary-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  margin-top: 4px;
+}
+
+.glossary-tiles .tile {
+  --tile-w: 24px;
+}
+
+.glossary-more {
+  margin: 4px 0 0;
+  font-size: 14px;
+}

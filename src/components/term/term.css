@@ -1,0 +1,73 @@
+/* 用語部品: 点線の下線 */
+.term {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.term[aria-expanded='true'] {
+  background: var(--accent-soft);
+  border-radius: 3px;
+}
+
+.term-popup {
+  position: fixed;
+  z-index: 100;
+  width: min(320px, calc(100vw - 16px));
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 6px 20px var(--shadow);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.term-popup:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.term-popup p {
+  margin: 0;
+}
+
+.term-popup-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.term-popup-reading {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.term-popup-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  margin-top: 4px;
+}
+
+.term-popup-tiles .tile {
+  --tile-w: 22px;
+}
+
+.term-popup-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 6px !important;
+  font-size: 14px;
+}
+
+.term-popup-links a {
+  display: inline-block;
+  min-height: 32px;
+  padding-top: 4px;
+}

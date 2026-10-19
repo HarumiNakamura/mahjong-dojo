@@ -3,7 +3,9 @@ import { Link } from '../../app/Link'
 import { findPageInfo } from '../../app/routes'
 import type { Block, Inline } from '../../content/markdown'
 import { parseTiles } from '../../engine/tiles'
+import { Term } from '../term/Term'
 import { Hand } from '../tile/Hand'
+import { Glossary } from './Glossary'
 import { Tile } from '../tile/Tile'
 import './article.css'
 
@@ -27,6 +29,12 @@ export function InlineNodes({ nodes }: { nodes: readonly Inline[] }) {
             <a key={i} href={n.href} target="_blank" rel="noopener noreferrer">
               <InlineNodes nodes={n.children} />
             </a>
+          )
+        if (n.type === 'term')
+          return (
+            <Term key={i} id={n.key}>
+              {n.text}
+            </Term>
           )
         return (
           <span key={i} className="article-inline-tiles">
@@ -127,6 +135,8 @@ export function ArticleBody({ blocks }: { blocks: readonly Block[] }) {
             )
           case 'drill':
             return <DrillCard key={i} path={b.path} />
+          case 'glossary':
+            return <Glossary key={i} />
         }
       })}
     </div>
