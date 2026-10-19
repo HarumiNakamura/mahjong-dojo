@@ -154,3 +154,7 @@
   margin: 0;
   padding-left: 1.2em;
 }
+
+.article-tiles .hand-tile {
+  max-width: 36px;
+}
