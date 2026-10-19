@@ -13,7 +13,6 @@ const CallPage = lazy(() => import('./pages/CallPage').then((m) => ({ default: m
 const DefenseDrillPage = lazy(() => import('./pages/DefenseDrillPage').then((m) => ({ default: m.DefenseDrillPage })))
 const DevDrillPage = lazy(() => import('./pages/DevDrillPage').then((m) => ({ default: m.DevDrillPage })))
 const DevOgPage = lazy(() => import('./pages/DevOgPage').then((m) => ({ default: m.DevOgPage })))
-const DevThemePage = lazy(() => import('./pages/dev/DevThemePage').then((m) => ({ default: m.DevThemePage })))
 const DevTilesPage = lazy(() => import('./pages/DevTilesPage').then((m) => ({ default: m.DevTilesPage })))
 const EfficiencyDrillPage = lazy(() => import('./pages/EfficiencyDrillPage').then((m) => ({ default: m.EfficiencyDrillPage })))
 const JudgmentPage = lazy(() => import('./pages/JudgmentPage').then((m) => ({ default: m.JudgmentPage })))
@@ -83,8 +82,6 @@ function resolvePage(path: string): { title?: string | null; element: ReactNode 
       return { title: '運営者情報・お問い合わせ', element: <ContactPage /> }
     case '/disclaimer':
       return { title: '免責事項', element: <DisclaimerPage /> }
-    case '/dev/theme':
-      return { title: 'デザイン3案の比較', element: <DevThemePage /> }
     case '/dev/tiles':
       return { title: '牌の表示確認', element: <DevTilesPage /> }
     case '/dev/drill':
@@ -108,6 +105,9 @@ function resolvePage(path: string): { title?: string | null; element: ReactNode 
   return { title: 'ページが見つかりません', element: <NotFoundPage /> }
 }
 
+/** PC で本文を広く使うページ(一覧と記事) */
+const isWide = (path: string) => ['/', '/practice', '/practice/judgment', '/learn'].includes(path) || /^\/learn\/[a-z0-9-]+$/.test(path)
+
 function App() {
   const path = usePath()
   const { title, element } = resolvePage(path)
@@ -115,7 +115,7 @@ function App() {
     <TileSettingsProvider>
       {/* key でページごとに状態をリセットする */}
       {/* CPU対戦は操作ボタンが画面の下にあるので、広告枠を出さない */}
-      <Layout title={title} hideAd={path === '/play' || path === '/play/replay'}>
+      <Layout title={title} hideAd={path === '/play' || path === '/play/replay'} wide={isWide(path)}>
         <div key={path}>
           <Suspense fallback={<p className="page-loading">読み込み中…</p>}>{element}</Suspense>
         </div>

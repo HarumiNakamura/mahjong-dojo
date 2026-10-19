@@ -4,8 +4,8 @@ import { useRecords } from '../../app/records/useRecords'
 import { areaStats, countDailyDone, gameAreaStats, MIN_ANSWERS, recommend, REVIEW_CATEGORY_AREAS, roadmapProgress, streakDays } from '../../engine/progress'
 import { localDate } from '../../engine/records'
 import { loadDailyKeys } from '../../app/dailyCache'
-
-const STATUS_LABELS = { notStarted: '未着手', inProgress: '練習中', cleared: 'クリア' } as const
+import { FirstSteps } from './FirstSteps'
+import { RoadmapPath } from './RoadmapPath'
 
 /** ホームの「今日の練習」「ロードマップ」「弱点マップ」。すべて学習記録から計算する */
 export function ProgressSections() {
@@ -18,12 +18,24 @@ export function ProgressSections() {
   const streak = streakDays(attempts, now)
   const done = dailyKeys ? countDailyDone(dailyKeys, attempts, date) : 0
   const roadmap = roadmapProgress(attempts, data.games)
-  const nextStep = roadmap.findIndex((p) => p.status !== 'cleared')
   const stats = areaStats(attempts)
   const rec = recommend(attempts, data.games)
   const gameStats = gameAreaStats(data.games)
   const reviewedGames = gameStats[0]?.games ?? 0
   const hasGameCategory = (areaId: string) => Object.values(REVIEW_CATEGORY_AREAS).includes(areaId)
+
+  // 記録がない初めての人には、今日の練習・弱点マップのかわりに3ステップを出す
+  if (attempts.length === 0 && data.games.length === 0) {
+    return (
+      <>
+        <FirstSteps />
+        <section className="home-section">
+          <h2>学習ロードマップ</h2>
+          <RoadmapPath steps={roadmap} />
+        </section>
+      </>
+    )
+  }
 
   return (
     <>
@@ -46,30 +58,7 @@ export function ProgressSections() {
 
       <section className="home-section">
         <h2>学習ロードマップ</h2>
-        <ol className="roadmap">
-          {roadmap.map((p, i) => (
-            <li
-              key={p.step.id}
-              className={`roadmap-step roadmap-step--${p.status}${i === nextStep ? ' roadmap-step--next' : ''}`}
-            >
-              <Link to={p.step.path} className="roadmap-link">
-                <span className="roadmap-num" aria-hidden="true">
-                  {p.status === 'cleared' ? '✓' : i + 1}
-                </span>
-                <span className="roadmap-body">
-                  <span className="roadmap-title">
-                    {p.step.label}
-                    <span className="roadmap-status">{i === nextStep ? '次はここ' : STATUS_LABELS[p.status]}</span>
-                  </span>
-                  <span className="roadmap-text">{p.step.description}</span>
-                  <span className="roadmap-bar" role="img" aria-label={`進み具合 ${p.percent}%`}>
-                    <span className="roadmap-bar-fill" style={{ width: `${p.percent}%` }} />
-                  </span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ol>
+        <RoadmapPath steps={roadmap} />
         <p className="home-note">各分野で20問以上・正解率70%以上になるとクリアです。CPU対戦は3半荘打つとクリアです(練習モードを除く)。</p>
       </section>
 

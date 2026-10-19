@@ -1,45 +1,29 @@
 import { Link } from '../app/Link'
+import { LEARN_PAGE, PLAY_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE } from '../app/routes'
+import { IconCard } from '../components/card/IconCard'
 import { SITE_NAME } from '../config/site'
-import { LEARN_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE } from '../app/routes'
-import { Hand } from '../components/tile/Hand'
-import { parseTiles } from '../engine/tiles'
+import { HomeQuiz } from './home/HomeQuiz'
 import { ProgressSections } from './home/ProgressSections'
 import './pages.css'
-
-const SAMPLE_HAND = parseTiles('123m406p789s1122z')
 
 export function HomePage() {
   return (
     <>
       <section className="home-hero">
         <h1 className="home-title">{SITE_NAME}</h1>
-        <p className="home-lead">
-          麻雀を覚えたばかりの人のための練習サイトです。
-          <br />
-          解説を読んで、すぐ手を動かして、なぜ正解なのかを画面で確かめられます。
-        </p>
-        <div className="home-hand" aria-label="手牌の例">
-          <Hand tiles={SAMPLE_HAND} />
-        </div>
-        <Link to="/practice" className="button button--primary button--block">
-          練習をはじめる
-        </Link>
+        <p className="home-lead">麻雀を覚えたばかりの人のための練習サイトです。解説を読んで、すぐ手を動かして、なぜ正解なのかを画面で確かめられます。</p>
       </section>
+
+      <HomeQuiz />
 
       <ProgressSections />
 
       <section className="home-section">
         <h2>練習メニュー</h2>
-        <ul className="card-list">
-          {PRACTICE_PAGES.map((page) => (
-            <li key={page.path}>
-              <Link to={page.path} className="card">
-                <span className="card-title">
-                  {page.title}
-                  {page.comingSoon && <span className="badge">準備中</span>}
-                </span>
-                <span className="card-text">{page.description}</span>
-              </Link>
+        <ul className="icon-card-grid icon-card-grid--3">
+          {[...PRACTICE_PAGES, PLAY_PAGE].map((page) => (
+            <li key={page.path} className={page.featured ? 'icon-card-grid-featured' : undefined}>
+              <IconCard to={page.path} title={page.title} text={page.description} icon={page.icon} featured={page.featured} />
             </li>
           ))}
         </ul>
@@ -47,16 +31,14 @@ export function HomePage() {
 
       <section className="home-section">
         <h2>読む・ふりかえる</h2>
-        <ul className="card-list">
-          {[LEARN_PAGE, SCORE_TABLE_PAGE, RECORDS_PAGE].map((page) => (
+        <ul className="icon-card-grid icon-card-grid--3">
+          {[
+            { ...LEARN_PAGE, icon: '1z' },
+            { ...SCORE_TABLE_PAGE, icon: '7z' },
+            { ...RECORDS_PAGE, icon: '9p' },
+          ].map((page) => (
             <li key={page.path}>
-              <Link to={page.path} className="card">
-                <span className="card-title">
-                  {page.title}
-                  {page.comingSoon && <span className="badge">準備中</span>}
-                </span>
-                <span className="card-text">{page.description}</span>
-              </Link>
+              <IconCard to={page.path} title={page.title} text={page.description} icon={page.icon} />
             </li>
           ))}
         </ul>

@@ -262,7 +262,7 @@
   color: var(--text);
   background: var(--surface);
   border: 2px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 

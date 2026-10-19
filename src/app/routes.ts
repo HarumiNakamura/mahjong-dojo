@@ -7,36 +7,47 @@ export interface PageInfo {
   description: string
   /** まだ作っていないページ */
   comingSoon?: boolean
+  /** カードのアイコンに描く牌(牌の文字列表記) */
+  icon?: string
+  /** 初めての人に最初にやってほしい練習(カードを大きくする) */
+  featured?: boolean
 }
 
 export const PRACTICE_PAGES: readonly PageInfo[] = [
   {
     path: '/practice/efficiency',
+    icon: '35m',
+    featured: true,
     title: '牌効率',
     description: '何を切れば早くテンパイできるか。受け入れ枚数で比べて練習します。',
   },
   {
     path: '/practice/solo',
+    icon: '0p',
     title: '一人麻雀',
     description: '配牌から18巡、1人でツモって切ります。終わったら牌効率で1巡ずつ振り返ります。',
   },
   {
     path: '/practice/waits',
+    icon: '23s',
     title: '待ち',
     description: 'テンパイした手の待ち牌をすべて見つける練習です。4枚形から清一色まで、タイムアタックもあります。',
   },
   {
     path: '/practice/score',
+    icon: '7z',
     title: '点数計算',
     description: '役・翻と符・点数を段階的に答える練習です。点数早見表もあります。',
   },
   {
     path: '/practice/defense',
+    icon: '1z',
     title: '守備',
     description: '相手のリーチに対して、手牌を安全な順に並べる練習と、流局まで逃げ切るベタオリサバイバルです。',
   },
   {
     path: '/practice/judgment',
+    icon: '5z',
     title: '判断',
     description: '押すか降りるか、配牌からの方針、鳴くかどうかを考える練習です。',
   },
@@ -46,16 +57,19 @@ export const PRACTICE_PAGES: readonly PageInfo[] = [
 export const JUDGMENT_PAGES: readonly PageInfo[] = [
   {
     path: '/practice/judgment/pushfold',
+    icon: '9m',
     title: '押し引きジャッジ',
     description: '相手のリーチに対して、危険な牌を切って押すか、降りるか。アガリ率と放銃率から考えます。',
   },
   {
     path: '/practice/judgment/plan',
+    icon: '19s',
     title: '配牌方針クイズ',
     description: '配牌を見て、リーチ・タンヤオ・役牌・染め手・七対子・守備寄りのどれを目指すかを選びます。',
   },
   {
     path: '/practice/judgment/call',
+    icon: '66z',
     title: '鳴き判断クイズ',
     description: '他の人の捨て牌をポン・チーするか、スルーするかを判断します。',
   },
@@ -64,6 +78,7 @@ export const JUDGMENT_PAGES: readonly PageInfo[] = [
 /** CPU対戦(実戦。練習の仕上げ) */
 export const PLAY_PAGE: PageInfo = {
   path: '/play',
+    icon: '1234z',
   title: 'CPU対戦',
   description: 'CPU 3人と東南戦(半荘)を打ちます。終わったら、分かれ目や押し引きを振り返れます。難易度は3段階、ヒントつきの練習モードもあります。',
 }
@@ -76,6 +91,7 @@ export const LEARN_PAGE: PageInfo = {
 
 export const TODAY_PAGE: PageInfo = {
   path: '/today',
+    icon: '5p',
   title: '今日の練習',
   description: '毎日入れ替わる5問を、いろいろな分野から1問ずつ解きます。',
 }

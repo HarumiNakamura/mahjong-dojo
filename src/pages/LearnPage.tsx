@@ -1,6 +1,11 @@
-import { Link } from '../app/Link'
+import { IconCard } from '../components/card/IconCard'
 import { ARTICLE_CATEGORIES, ARTICLES } from '../content/articles'
 import './pages.css'
+
+/** 分類ごとのアイコン(牌) */
+const CATEGORY_ICONS: Record<string, string> = { 基本: '1z', 牌効率: '35m', 守備: '7z', 点数: '5z', 判断: '9m', その他: '0p' }
+/** 初めての人に最初に読んでほしい記事(大きく出す) */
+const FIRST_ARTICLE = 'flow'
 
 /** 解説記事の一覧 */
 export function LearnPage() {
@@ -16,13 +21,10 @@ export function LearnPage() {
         return (
           <section key={cat} className="home-section">
             <h2>{cat}</h2>
-            <ul className="card-list">
+            <ul className="icon-card-grid icon-card-grid--3">
               {list.map((a) => (
-                <li key={a.slug}>
-                  <Link to={a.path} className="card">
-                    <span className="card-title">{a.meta.title}</span>
-                    <span className="card-text">{a.meta.description}</span>
-                  </Link>
+                <li key={a.slug} className={a.slug === FIRST_ARTICLE ? 'icon-card-grid-featured' : undefined}>
+                  <IconCard to={a.path} title={a.meta.title} text={a.meta.description} icon={CATEGORY_ICONS[cat]} featured={a.slug === FIRST_ARTICLE} />
                 </li>
               ))}
             </ul>

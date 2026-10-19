@@ -20,10 +20,12 @@ interface LayoutProps {
   children: ReactNode
   /** 広告枠を出さない(操作ボタンが画面の下にあるページ) */
   hideAd?: boolean
+  /** PC では本文を広く使う(一覧・記事。記事は目次を右に固定する) */
+  wide?: boolean
 }
 
 /** サイト共通の枠: ヘッダー・ナビゲーション・本文・広告枠・フッター */
-export function Layout({ title, children, hideAd = false }: LayoutProps) {
+export function Layout({ title, children, hideAd = false, wide = false }: LayoutProps) {
   const path = usePath()
   // メニューを開いたときのページ。別のページに移ったら自動的に閉じた扱いになる
   const [menuOpenedAt, setMenuOpenedAt] = useState<string | null>(null)
@@ -100,7 +102,7 @@ export function Layout({ title, children, hideAd = false }: LayoutProps) {
       </header>
       {menuOpen && <div className="nav-backdrop" onClick={close} aria-hidden="true" />}
 
-      <main id="main" className="site-main" tabIndex={-1}>
+      <main id="main" className={`site-main${wide ? ' site-main--wide' : ''}`} tabIndex={-1}>
         {children}
       </main>
 
