@@ -23,7 +23,7 @@ describe('ページ構成', () => {
     expect(findComingSoonPage('/practice/judgment/call')).toBeUndefined()
     expect(findComingSoonPage('/practice/score')).toBeUndefined()
     expect(findComingSoonPage('/practice/waits')).toBeUndefined()
-    expect(findComingSoonPage(LEARN_PAGE.path)).toBe(LEARN_PAGE)
+    expect(findComingSoonPage(LEARN_PAGE.path)).toBeUndefined()
     // 学習記録はできあがったので準備中ではない
     expect(findComingSoonPage(RECORDS_PAGE.path)).toBeUndefined()
     expect(findComingSoonPage('/practice/efficiency')).toBeUndefined()

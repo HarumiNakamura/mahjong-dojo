@@ -1,0 +1,160 @@
+/* 解説記事 */
+.article-body {
+  line-height: 1.85;
+}
+
+.article-body h2 {
+  margin: 32px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--accent);
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.article-body h3 {
+  margin: 24px 0 4px;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.article-body p {
+  margin: 8px 0;
+}
+
+.article-body ul,
+.article-body ol {
+  margin: 8px 0;
+  padding-left: 1.4em;
+}
+
+.article-body li {
+  margin: 2px 0;
+}
+
+.article-note {
+  padding: 8px 12px;
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent-soft);
+}
+
+.article-inline-tiles {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1px;
+  margin: 0 2px;
+  vertical-align: -6px;
+}
+
+.article-inline-tiles .tile {
+  --tile-w: 20px;
+}
+
+.article-tiles {
+  margin: 12px 0;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.article-tiles .hand {
+  padding-top: 0;
+}
+
+.article-tiles figcaption {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.article-table-wrap {
+  margin: 12px 0;
+  overflow-x: auto;
+}
+
+.article-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.article-table th,
+.article-table td {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.article-table th {
+  background: var(--surface-2);
+}
+
+.article-drill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 16px 0;
+  padding: 12px;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.article-drill p {
+  margin: 0;
+}
+
+.article-drill-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.article-drill-title {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.article-drill-text {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.article-drill .button {
+  margin-top: 8px;
+}
+
+.article-toc {
+  margin: 16px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.article-toc p {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.article-toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+
+.article-section-title {
+  margin: 32px 0 8px;
+  font-size: 20px;
+}
+
+.article-related {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.article-tiles .hand-tile {
+  max-width: 36px;
+}

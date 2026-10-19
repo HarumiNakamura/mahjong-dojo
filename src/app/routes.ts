@@ -65,7 +65,12 @@ export const LEARN_PAGE: PageInfo = {
   path: '/learn',
   title: '解説',
   description: '麻雀の基本から、牌効率・守備・点数計算の考え方までを読んで学べます。',
-  comingSoon: true,
+}
+
+export const TODAY_PAGE: PageInfo = {
+  path: '/today',
+  title: '今日の練習',
+  description: '毎日入れ替わる5問を、いろいろな分野から1問ずつ解きます。',
 }
 
 export const RECORDS_PAGE: PageInfo = {
@@ -102,4 +107,9 @@ export const NAV_ITEMS: readonly NavItem[] = [
 /** 準備中ページの情報をパスから探す */
 export function findComingSoonPage(path: string): PageInfo | undefined {
   return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE].find((p) => p.path === path && p.comingSoon)
+}
+
+/** パスからページの情報を探す(記事のドリル案内などに使う) */
+export function findPageInfo(path: string): PageInfo | undefined {
+  return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE, SCORE_TABLE_PAGE, TODAY_PAGE].find((p) => p.path === path)
 }

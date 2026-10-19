@@ -91,6 +91,8 @@
 - `src/pages/judgment/` … 判断の練習(`/practice/judgment` に一覧)。押し引きジャッジ(`/practice/judgment/pushfold`)・配牌方針クイズ(`/practice/judgment/plan`)・鳴き判断クイズ(`/practice/judgment/call`)
 - `src/pages/efficiency/` … 何切るドリル(`/practice/efficiency`)の問題表示と解説
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
+- `src/content/` … 解説記事。`articles/*.md` に1記事1ファイルで書く(`markdown.ts` の小さな Markdown:見出し・段落・箇条書き・表・`>` 補足・`[[123m]]` 文中の牌・`@tiles` 手牌の図・`@drill` ドリルの案内)。先頭の `---` に title・description・order・category・drills(記事の最後の「この記事のドリル」)・related(関連記事)。本文は1,500〜3,000文字(`articles.test.ts` で文字数・リンク・牌の表記を確認)
+- `src/pages/LearnPage.tsx`・`ArticlePage.tsx`・`src/components/article/` … 記事一覧(`/learn`)と記事ページ(`/learn/<ファイル名>`)
 - `src/` … 画面(React コンポーネント)
 
 ## デザイン

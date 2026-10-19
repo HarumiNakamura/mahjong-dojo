@@ -5,6 +5,8 @@ import { Layout } from './components/layout/Layout'
 import { TileSettingsProvider } from './components/tile/TileSettingsProvider'
 import { AboutPage } from './pages/AboutPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
+import { findArticle } from './content/articles'
+import { ArticlePage } from './pages/ArticlePage'
 import { CallPage } from './pages/CallPage'
 import { DefenseDrillPage } from './pages/DefenseDrillPage'
 import { DevDrillPage } from './pages/DevDrillPage'
@@ -12,6 +14,7 @@ import { DevTilesPage } from './pages/DevTilesPage'
 import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
 import { JudgmentPage } from './pages/JudgmentPage'
+import { LearnPage } from './pages/LearnPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { PlanPage } from './pages/PlanPage'
 import { PracticePage } from './pages/PracticePage'
@@ -60,6 +63,10 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
     case '/dev/drill':
       return { title: 'ドリル部品の確認', element: <DevDrillPage /> }
   }
+  if (path === '/learn') return { title: '解説', element: <LearnPage /> }
+  const learn = path.match(/^\/learn\/([a-z0-9-]+)$/)
+  const article = learn ? findArticle(learn[1]) : undefined
+  if (article) return { title: article.meta.title, element: <ArticlePage article={article} /> }
   if (path === '/records') return { title: '学習記録', element: <RecordsPage /> }
   const review = path.match(/^\/records\/review\/([a-z0-9-]+)\/(mistakes|favorites)$/)
   if (review) {
