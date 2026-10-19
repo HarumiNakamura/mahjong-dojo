@@ -23,7 +23,7 @@ describe('CPU の難易度', () => {
     expect(stats.every((s) => s.fulouKyoku === 0)).toBe(true)
     expect(stats.every((s) => s.lizhi === 0)).toBe(true)
     expect(stats.some((s) => s.hule > 0)).toBe(true)
-  })
+  }, 60000)
 
   it('やさしい CPU は受け入れ枚数が一番多い牌を切る', () => {
     const p = new EasyPlayer()

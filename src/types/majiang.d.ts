@@ -199,3 +199,9 @@ declare module '@kobalab/majiang-ai/legacy' {
   const legacy: (version: string) => new () => Player
   export default legacy
 }
+
+declare module 'majiang-ai-legacy-0201' {
+  import type { Player } from '@kobalab/majiang-core'
+  const Player0201: new () => Player
+  export default Player0201
+}

@@ -59,7 +59,6 @@ export function PlayTable({ session }: { session: GameSession }) {
     (fn) => human.subscribe(fn),
     () => human.version,
   )
-  const [selected, setSelected] = useState<number | null>(null)
   const [lizhiMode, setLizhiMode] = useState(false)
   const [choice, setChoice] = useState<{ kind: 'chi' | 'peng' | 'gang'; options: string[] } | null>(null)
   const [enlarged, setEnlarged] = useState(false)
@@ -70,7 +69,6 @@ export function PlayTable({ session }: { session: GameSession }) {
   const me = human._menfeng
   const req = human.request
   const reply = (r: HumanReply) => {
-    setSelected(null)
     setLizhiMode(false)
     setChoice(null)
     human.reply(r)
@@ -83,7 +81,6 @@ export function PlayTable({ session }: { session: GameSession }) {
   const canDiscard = (i: number) => dapaiOf(all[i], view.drawn !== null && i === all.length - 1, discardOptions) !== null
   const onTile = (i: number) => {
     if (!canDiscard(i)) return
-    if (selected !== i) return setSelected(i)
     const p = dapaiOf(all[i], view.drawn !== null && i === all.length - 1, discardOptions)!
     reply({ dapai: lizhiMode ? `${p}*` : p })
   }
@@ -164,13 +161,11 @@ export function PlayTable({ session }: { session: GameSession }) {
         </p>
         <River pai={model.he[me]._pai} large={enlarged} />
         <div className="play-hand">
-          <Hand
-            tiles={view.tiles}
-            drawn={view.drawn}
-            selected={selected}
-            onSelect={discardOptions.length ? onTile : undefined}
-            isDisabled={discardOptions.length ? (i) => !canDiscard(i) : undefined}
-          />
+          {discardOptions.length ? (
+            <Hand tiles={view.tiles} drawn={view.drawn} onPick={onTile} pickLabel={lizhiMode ? 'を切ってリーチ' : 'を切る'} isDisabled={(i) => !canDiscard(i)} />
+          ) : (
+            <Hand tiles={view.tiles} drawn={view.drawn} full />
+          )}
           {view.melds.length > 0 && (
             <div className="play-my-melds">
               {model.shoupai[me]._fulou.map((m, i) => (
@@ -211,7 +206,7 @@ export function PlayTable({ session }: { session: GameSession }) {
               </button>
             )}
             {req.lizhi.length > 0 && (
-              <button type="button" className="button" aria-pressed={lizhiMode} onClick={() => { setLizhiMode((v) => !v); setSelected(null) }}>
+              <button type="button" className="button" aria-pressed={lizhiMode} onClick={() => setLizhiMode((v) => !v)}>
                 {lizhiMode ? 'リーチをやめる' : 'リーチ'}
               </button>
             )}

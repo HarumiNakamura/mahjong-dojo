@@ -44,15 +44,11 @@ export function SafetyQuestionView({ question, answered, answer, onAnswer }: Que
       {question.mode === 'pick' ? (
         <>
           <p className="drill-prompt">一番安全な牌はどれですか?</p>
-          <Hand
-            tiles={s.myHand}
-            drawn={s.drawn}
-            selected={answer ? question.tiles.findIndex((t) => t.kind === answer[0]) : null}
-            onSelect={(i) => {
-              if (!answered) onAnswer([question.tiles[i].kind])
-            }}
-          />
-          {!answered && <p className="eff-hint">牌をタップして回答します。</p>}
+          {answered ? (
+            <Hand tiles={s.myHand} drawn={s.drawn} selected={answer ? question.tiles.findIndex((t) => t.kind === answer[0]) : null} full />
+          ) : (
+            <Hand tiles={s.myHand} drawn={s.drawn} onPick={(i) => onAnswer([question.tiles[i].kind])} pickLabel="にする" />
+          )}
         </>
       ) : (
         <>

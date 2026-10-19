@@ -59,6 +59,7 @@
 - `src/engine/efficiencyQuestion.ts` … 何切るの問題作り(山から配牌し、簡易プレイヤーで数巡進めた局面を難易度で切り出す)
 - `src/engine/efficiencyExplain.ts` … 何切るの解説文(テンプレート)
 - `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像を使わず SVG で自作する
+  - 手牌から1枚選ぶ画面は `Hand` の `onPick` を使う(2段階タップ:選ぶ → もう一度タップか決定ボタン。「1回のタップで決定」の設定つき)。手牌は画面幅いっぱいに大きく並べ、押せる範囲は高さ44px以上(測定結果は `docs/ui-check.md`)
   - 牌の文字は端末のフォントに頼らず、SIL OFL のフォント(npm の @fontsource)から必要な文字だけを SVG のパスに変換して使う(`npm run build:glyphs` → `glyphs.generated.ts`)
   - 使ったフォントとライセンスは `docs/licenses.md` に記録する
 - `src/app/` … ページ構成(`routes.ts`)と画面切り替え(`router.ts`・`Link.tsx`。ライブラリは使わない)
@@ -92,7 +93,7 @@
   - `result.ts` … 半荘の最終成績(順位点・同点の等分・南4局流局時の供託)を自前で計算
   - `convert.ts` … サイトの牌とライブラリの表記の変換。`selfplay.ts` … CPU 同士の自動対局と成績の集計
   - `scoringCrosscheck.ts` … 自前の点数計算とライブラリの点数の突き合わせ
-  - `difficulty.ts` … 難易度(やさしい=`easyPlayer.ts` の受け入れ最大・守備と鳴きなし、ふつう=majiang-ai legacy 0201、つよい=最新版)。強さの差は `docs/cpu-stats.md`
+  - `difficulty.ts` … 難易度(やさしい=`easyPlayer.ts` の受け入れ最大・守備と鳴きとリーチなし、ふつう=majiang-ai legacy 0201、つよい=最新版)。強さの差は `docs/cpu-stats.md`。古い版は `legacy()` がブラウザで動かないので、`vite.config.ts` の別名(`majiang-ai-legacy-0201`)でファイルを直接読み込む
   - `hints.ts` … 練習モードのヒント(切る牌ごとの受け入れ枚数・リーチ者に対する危険度)。練習モードの成績は `practice` で分けて集計する
   - `humanPlayer.ts` … 対局の「自分」。ライブラリからの知らせに対してできる操作(打牌・リーチ・ツモ・カン・ロン・チー・ポン)を計算し、画面の操作を待つ。喰い替え・フリテン・役なしの判定はライブラリに任せる
   - `session.ts` … 自分 + CPU 3人の半荘を進める(CPU の速さの設定、鳴き・リーチの声の表示、局の始まりの途中保存と続きから、終局の知らせ)
