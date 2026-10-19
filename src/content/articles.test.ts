@@ -151,6 +151,28 @@ describe('解説記事', () => {
         for (const r of a.meta.related) expect(ARTICLES.some((x) => x.slug === r), `${a.slug}: related ${r}`).toBe(true)
       })
 
+      it('用語は初出だけに付け、漢字だけの用語には初出で読み仮名を付ける', () => {
+        const seen = new Set<string>()
+        const kanjiOnly = (t: string) => /^[\u4e00-\u9fff々]+$/.test(t)
+        const walk = (nodes: readonly Inline[]) =>
+          nodes.forEach((n, i) => {
+            if (n.type === 'strong' || n.type === 'link') walk(n.children)
+            if (n.type !== 'term') return
+            const id = findTerm(n.key)?.id ?? n.key
+            expect(seen.has(id), `${a.slug}: ${n.text} が2回目`).toBe(false)
+            seen.add(id)
+            const next = nodes[i + 1]
+            // 「四{{暗刻}}{{単騎}}(…)」のような複合語は、語全体の後ろに読み仮名を付ける
+            const compound = next?.type === 'term' || (next?.type === 'text' && /^[\u4e00-\u9fff]/.test(next.text))
+            if (kanjiOnly(n.text) && !compound) expect(next?.type === 'text' && /^[((]/.test(next.text), `${a.slug}: ${n.text} に読み仮名がない`).toBe(true)
+          })
+        for (const b of a.blocks) {
+          if (b.type === 'paragraph' || b.type === 'note') walk(b.children)
+          else if (b.type === 'list' || b.type === 'points') b.items.forEach(walk)
+          else if (b.type === 'table') [b.header, ...b.rows].flat().forEach(walk)
+        }
+      })
+
       it('用語({{…}})はすべて用語データにある', () => {
         for (const key of collect(a.blocks).terms) expect(findTerm(key), `${a.slug}: ${key}`).toBeDefined()
       })
