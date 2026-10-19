@@ -1,6 +1,7 @@
 ---
 title: 牌効率の基本
-description: 早くテンパイするための「牌効率」の考え方を、シャンテン数・孤立牌の切り順・受け入れ枚数の3つから説明します。
+seoTitle: 牌効率とは?初心者が最初に覚える3つの考え方
+description: 早くテンパイするための「牌効率」を、シャンテン数・孤立牌を切る順番・受け入れ枚数の3つから説明します。何切るドリルで練習もできます。
 order: 110
 category: 牌効率
 drills: /practice/efficiency, /practice/solo

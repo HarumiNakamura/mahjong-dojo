@@ -1,4 +1,5 @@
 import { SITE_INFO } from '../../app/siteInfo'
+import { SITE_NAME } from '../../config/site'
 import '../pages.css'
 
 /** 運営者情報とお問い合わせ */
@@ -12,7 +13,7 @@ export function ContactPage() {
         <tbody>
           <tr>
             <th scope="row">サイト名</th>
-            <td>麻雀道場(仮)</td>
+            <td>{SITE_NAME}</td>
           </tr>
           <tr>
             <th scope="row">運営者</th>

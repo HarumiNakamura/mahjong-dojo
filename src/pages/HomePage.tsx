@@ -1,4 +1,5 @@
 import { Link } from '../app/Link'
+import { SITE_NAME } from '../config/site'
 import { LEARN_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE } from '../app/routes'
 import { Hand } from '../components/tile/Hand'
 import { parseTiles } from '../engine/tiles'
@@ -11,7 +12,7 @@ export function HomePage() {
   return (
     <>
       <section className="home-hero">
-        <h1 className="home-title">麻雀道場(仮)</h1>
+        <h1 className="home-title">{SITE_NAME}</h1>
         <p className="home-lead">
           麻雀を覚えたばかりの人のための練習サイトです。
           <br />

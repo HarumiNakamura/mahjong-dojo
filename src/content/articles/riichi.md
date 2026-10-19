@@ -1,6 +1,7 @@
 ---
 title: リーチ判断
-description: テンパイしたときにリーチするか、黙ってテンパイを続ける(ダマ)かの考え方と、Mリーグルールでのリーチの決まりを説明します。
+seoTitle: リーチすべき?ダマとの違いとリーチ判断の基本
+description: テンパイしたときにリーチするか、黙ってテンパイを続ける(ダマ)かの判断基準と、Mリーグルールでのリーチの決まり(フリテンリーチなど)を説明します。
 order: 420
 category: 判断
 drills: /practice/judgment/pushfold, /practice/waits

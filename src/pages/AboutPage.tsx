@@ -1,4 +1,5 @@
 import { Link } from '../app/Link'
+import { SITE_NAME } from '../config/site'
 import './pages.css'
 
 export function AboutPage() {
@@ -6,7 +7,7 @@ export function AboutPage() {
     <article className="prose">
       <h1 className="page-title">このサイトについて</h1>
       <p>
-        麻雀道場(仮)は、麻雀を覚えたばかりの人が、牌効率・待ち・安パイ・押し引き・点数計算・配牌の方針を1つのサイトで学べるように作っている練習サイトです。
+        {SITE_NAME}は、麻雀を覚えたばかりの人が、牌効率・待ち・安パイ・押し引き・点数計算・配牌の方針を1つのサイトで学べるように作っている練習サイトです。
       </p>
 
       <h2>学び方</h2>

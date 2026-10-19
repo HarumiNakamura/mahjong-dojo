@@ -1,6 +1,7 @@
 ---
 title: CPU対戦の振り返りの見方
-description: CPU対戦のあとに出る振り返り(分かれ目・分類ごとの指摘・損失の目安)の読み方と、次の練習へのつなげ方を説明します。
+seoTitle: CPU対戦の振り返りの見方|分かれ目と損失の目安の読み方
+description: CPU対戦のあとに出る振り返り(一言まとめ・分かれ目・分類ごとの指摘・損失の目安)の読み方と、指摘から次の練習へつなげる方法を説明します。
 order: 460
 category: 判断
 drills: /play, /practice/judgment/pushfold

@@ -1,4 +1,5 @@
 import { Link } from '../../app/Link'
+import { SITE_NAME } from '../../config/site'
 import { ABOUT_ADS_URL, SITE_INFO } from '../../app/siteInfo'
 import '../pages.css'
 
@@ -8,7 +9,7 @@ export function PrivacyPage() {
     <article className="prose">
       <h1 className="page-title">プライバシーポリシー</h1>
       <p>
-        麻雀道場(仮)(以下「当サイト」)は、利用者の情報を次のとおり取り扱います。
+        {SITE_NAME}(以下「当サイト」)は、利用者の情報を次のとおり取り扱います。
       </p>
 
       <h2>学習記録の保存について</h2>

@@ -9,6 +9,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { buildArticleOgImages } from './article-og.mjs'
 
 const DIST = 'dist'
 const ssr = await import(pathToFileURL(join(process.cwd(), 'dist-ssr/entry-server.js')).href)
@@ -70,20 +71,28 @@ function headFor(path, meta) {
     `<meta name="twitter:title" content="${title}" />`,
     `<meta name="twitter:description" content="${description}" />`,
     `<meta name="twitter:image" content="${image}" />`,
+    // 構造化データ(記事はパンくずと記事の情報)
+    ...ssr.structuredData(path).map((d) => `<script type="application/ld+json">${JSON.stringify(d).replace(/</g, '\\u003c')}</script>`),
   ]
-  const { css, js } = meta.prerenderBody ? assetsOf(pageModule(path)) : { css: [], js: [] }
+  // 紹介だけを HTML にするページは、カードの見た目(練習メニューの CSS)を先に読む
+  const module = meta.prerenderBody ? pageModule(path) : shellPage(path, meta) ? 'src/pages/PracticePage.tsx' : null
+  const { css, js } = module ? assetsOf(module) : { css: [], js: [] }
   // ひな形にすでにある(サイト全体で使う)ファイルは入れない
   for (const c of css) if (!template.includes(`/${c}"`)) tags.push(`<link rel="stylesheet" href="/${c}" />`)
   for (const j of js) if (!template.includes(`/${j}"`)) tags.push(`<link rel="modulepreload" href="/${j}" />`)
   return tags.join('\n    ')
 }
 
-function page(path, meta, body) {
+/** 本文を HTML にできないが、検索に出すページ(ホーム・練習の入口・CPU対戦など)。紹介だけを HTML にする */
+const shellPage = (path, meta) => !meta.prerenderBody && !meta.noindex
+
+function page(path, meta, body, shell = false) {
   let html = template
     .replace(/<title>[\s\S]*?<\/title>\s*/, '')
     .replace(/<meta name="description"[^>]*>\s*/, '')
     .replace('</head>', `  ${headFor(path, meta)}\n  </head>`)
-  if (body) html = html.replace('<div id="root"></div>', `<div id="root">${body}</div>`)
+  // 紹介だけの HTML は、ブラウザで画面ができたら置きかえる(src/main.tsx が data-shell を見る)
+  if (body) html = html.replace('<div id="root"></div>', `<div id="root"${shell ? ' data-shell' : ''}>${body}</div>`)
   return html
 }
 
@@ -96,8 +105,9 @@ function write(file, text) {
 const paths = ssr.prerenderPaths()
 for (const path of paths) {
   const meta = ssr.pageMeta(path)
-  const body = meta.prerenderBody ? await ssr.render(path) : ''
-  write(path === '/' ? 'index.html' : `${path.slice(1)}.html`, page(path, meta, body))
+  const shell = shellPage(path, meta)
+  const body = meta.prerenderBody ? await ssr.render(path) : shell ? ssr.renderShell(path) : ''
+  write(path === '/' ? 'index.html' : `${path.slice(1)}.html`, page(path, meta, body, shell))
 }
 // 見つからないページ(Cloudflare が 404 の状態で返す)
 write('404.html', page('/404', ssr.pageMeta('/404'), ''))
@@ -110,5 +120,14 @@ const urls = ssr
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nDisallow: /dev/\nDisallow: /records/review/\n\nSitemap: ${ssr.SITE_URL}/sitemap.xml\n`)
 
+// 記事ごとの OGP 画像
+const ogCount = await buildArticleOgImages({
+  root: process.cwd(),
+  outDir: join(DIST, 'og/articles'),
+  siteName: ssr.SITE_NAME,
+  articles: ssr.articleOgInfo(),
+  tileArt: ssr.tileArtMarkup,
+})
+
 rmSync('dist-ssr', { recursive: true, force: true })
-console.log(`prerender: ${paths.length}ページ + 404.html・sitemap.xml・robots.txt`)
+console.log(`prerender: ${paths.length}ページ + 404.html・sitemap.xml・robots.txt・記事の OGP 画像 ${ogCount}枚`)

@@ -1,7 +1,7 @@
 // 解説記事用の小さな Markdown の読み取り(ライブラリを使わない・純粋な関数)
 //
 // 使える書き方:
-//   先頭の --- で囲んだ部分 … 記事の情報(title・description・order・category・drills・related)
+//   先頭の --- で囲んだ部分 … 記事の情報(title・seoTitle・description・order・category・drills・related)
 //   ## 見出し / ### 小見出し
 //   空行で区切った段落、- の箇条書き、1. の番号付き箇条書き、> の補足(注意書き)
 //   | 表 | の行(2行目は |---| の区切り)
@@ -29,7 +29,10 @@ export type Block =
   | { type: 'glossary' }
 
 export interface ArticleMeta {
+  /** 記事の見出し(h1) */
   title: string
+  /** 検索結果・ブラウザのタブに出す題名(検索されやすい言葉を含む30字前後。なければ title) */
+  seoTitle?: string
   description: string
   order: number
   /** 一覧で分ける分類(例: 基本・牌効率・守備) */
@@ -115,6 +118,7 @@ function parseMeta(lines: string[]): ArticleMeta {
   if (!title) throw new Error('記事に title がありません')
   return {
     title,
+    ...(map.get('seoTitle') ? { seoTitle: map.get('seoTitle') } : {}),
     description: map.get('description') ?? '',
     order: Number(map.get('order') ?? 999),
     category: map.get('category') ?? 'その他',

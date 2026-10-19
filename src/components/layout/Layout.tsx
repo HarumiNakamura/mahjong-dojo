@@ -1,11 +1,11 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { SITE_BASE_NAME, SITE_NAME, SITE_PROVISIONAL, siteTitle } from '../../config/site'
 import { Link } from '../../app/Link'
 import { usePath } from '../../app/router'
 import { JUDGMENT_PAGES, LEARN_PAGE, NAV_ITEMS, PLAY_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE, SITE_PAGES, TODAY_PAGE } from '../../app/routes'
 import { AdSlot } from './AdSlot'
 import './layout.css'
 
-const SITE_NAME = '麻雀道場(仮)'
 
 /** フッターに並べるリンク(サイトのすべてのページ) */
 const FOOTER_GROUPS = [
@@ -32,7 +32,7 @@ export function Layout({ title, children, hideAd = false }: LayoutProps) {
 
   useEffect(() => {
     if (title === null) return
-    document.title = title ? `${title} | ${SITE_NAME}` : SITE_NAME
+    document.title = siteTitle(title ?? '')
   }, [title])
 
   // Esc キーでメニューを閉じる
@@ -53,7 +53,8 @@ export function Layout({ title, children, hideAd = false }: LayoutProps) {
       <header className="site-header">
         <div className="site-header-inner">
           <Link to="/" className="site-logo" onClick={close}>
-            麻雀道場<span className="site-logo-sub">(仮)</span>
+            {SITE_BASE_NAME}
+            {SITE_PROVISIONAL && <span className="site-logo-sub">(仮)</span>}
           </Link>
           <button
             type="button"
