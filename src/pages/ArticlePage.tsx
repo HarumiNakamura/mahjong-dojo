@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { Link } from '../app/Link'
 import { ArticleBody, DrillCard } from '../components/article/ArticleBody'
 import { findArticle, type Article } from '../content/articles'
+import { NotFoundPage } from './NotFoundPage'
 import './pages.css'
 
 /** 解説記事のページ */
@@ -57,4 +59,14 @@ export function ArticlePage({ article }: { article: Article }) {
       </div>
     </article>
   )
+}
+
+/** /learn/<slug> のページ。記事がなければ「見つかりません」 */
+export function ArticleRoute({ slug }: { slug: string }) {
+  const article = findArticle(slug)
+  const title = article ? article.meta.title : 'ページが見つかりません'
+  useEffect(() => {
+    document.title = `${title} | 麻雀道場(仮)`
+  }, [title])
+  return article ? <ArticlePage article={article} /> : <NotFoundPage />
 }

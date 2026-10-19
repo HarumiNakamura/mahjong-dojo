@@ -26,6 +26,14 @@ GitHub の `main` ブランチに変更が入るたびに、Cloudflare が自動
 
 `main` にマージするだけで、自動でビルドと公開が行われます。結果は Cloudflare の画面の、Worker の **デプロイ(Deployments)** で確認できます。
 
+## ページの HTML と 404
+
+`npm run build` の最後に `scripts/prerender.mjs` が動き、ページごとの HTML(`dist/<パス>.html`)・`404.html`・`sitemap.xml`・`robots.txt` を作ります。
+
+- `wrangler.jsonc` の `html_handling: "auto-trailing-slash"` により、`/learn/flow` を開くと `dist/learn/flow.html` が返ります。どのページを直接開いても、再読み込みしても 404 になりません。
+- どのファイルにもないパスは `not_found_handling: "404-page"` により、`404.html` が「404」の状態で返ります(画面は「ページが見つかりません」)。
+- 新しいページを足したら、`src/app/seo.ts` の題名・説明とビルド時に作るページの一覧(`prerenderPaths`)にも追加します。
+
 ## うまくいかないとき
 
 - **ビルドが失敗する**:Cloudflare の画面でビルドログを開き、エラー文を確認します。手元で `npm run build` が通るか確かめてください。

@@ -290,8 +290,13 @@
   gap: 8px;
 }
 
-.weak-row--few {
-  opacity: 0.55;
+.weak-row--few .weak-label,
+.weak-row--few .weak-value {
+  color: var(--text-muted);
+}
+
+.weak-row--few .weak-bar-fill {
+  background: var(--border);
 }
 
 .weak-label {

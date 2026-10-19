@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { saveDailyKeys } from '../app/dailyCache'
 import { Link } from '../app/Link'
 import { StorageNotice } from '../app/records/StorageNotice'
 import { useRecords } from '../app/records/useRecords'
 import { Drill, type DrillResult } from '../components/drill/Drill'
-import { dailyDoneCount, dailyItems, type DailyItem } from '../drills/daily'
+import { dailyDoneCount, dailyItems, dailyKeyOf, type DailyItem } from '../drills/daily'
 import { shareFor } from '../drills/useDrillRecorder'
 import { streakDays } from '../engine/progress'
 import { addAttempt, localDate } from '../engine/records'
@@ -23,6 +24,8 @@ export function TodayPage() {
   const date = localDate(now)
   const [items] = useState(() => dailyItems(date))
   const { data, update } = useRecords()
+  // ホームで「今日は何問解いたか」を数えられるように、今日の5問のキーを覚えておく
+  useEffect(() => saveDailyKeys({ date, keys: items.map(dailyKeyOf) }), [date, items])
   const done = dailyDoneCount(items, data.attempts, date)
   const streak = streakDays(data.attempts, now)
 

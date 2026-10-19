@@ -3,8 +3,11 @@
   "name": "mahjong-dojo",
   "compatibility_date": "2026-10-01",
   // サーバー処理は持たず、ビルド済みの静的ファイル(dist/)だけを配信する
+  // ページはビルド時に dist/<パス>.html として作るので、/foo を直接開いても再読み込みしても foo.html が返る。
+  // どのファイルにもないパスは 404.html を「404」の状態で返す(画面ではサイトの「見つかりません」ページになる)
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
   }
 }

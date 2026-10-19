@@ -3,6 +3,12 @@ import { useSyncExternalStore } from 'react'
 
 const listeners = new Set<() => void>()
 
+/** ビルド時に HTML を作るときのパス(ブラウザでは使わない) */
+let serverPath = '/'
+export function setServerPath(path: string) {
+  serverPath = normalizePath(path)
+}
+
 /** 末尾の / を取り除く("/practice/" → "/practice") */
 export function normalizePath(path: string): string {
   return path.replace(/\/+$/, '') || '/'
@@ -22,7 +28,8 @@ export function usePath(): string {
   return useSyncExternalStore(
     subscribe,
     () => normalizePath(window.location.pathname),
-    () => '/',
+    // ビルド時の HTML 作りでは指定のパス、ブラウザで HTML を引き継ぐときは今のパス
+    () => (typeof window === 'undefined' ? serverPath : normalizePath(window.location.pathname)),
   )
 }
 

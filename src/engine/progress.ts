@@ -165,3 +165,11 @@ export function dailyPlan(date: string): { drill: DailyDrill; seed: number }[] {
     .slice(0, DAILY_COUNT)
     .map((drill) => ({ drill, seed: Math.floor(rng() * 2 ** 31) }))
 }
+
+/** 今日の練習のキーの一覧(`${ドリル}\n${問題のキー}`)のうち、その日に答えた問題の数 */
+export function countDailyDone(keys: readonly string[], attempts: readonly AttemptRecord[], date: string): number {
+  const answered = new Set(
+    attempts.filter((a) => localDate(new Date(a.answeredAt)) === date).map((a) => `${a.drill}\n${a.questionKey}`),
+  )
+  return keys.filter((k) => answered.has(k)).length
+}
