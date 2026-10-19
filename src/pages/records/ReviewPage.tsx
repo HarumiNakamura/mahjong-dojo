@@ -34,7 +34,7 @@ export function ReviewPage({ drillId, mode }: { drillId: string; mode: ReviewMod
 
 function Review({ drill, mode }: { drill: AnyDrillDefinition; mode: ReviewMode }) {
   const { data } = useRecords()
-  const { onResult, favorite } = useDrillRecorder(drill)
+  const { onResult, favorite, share } = useDrillRecorder(drill)
   // 始めた時点の問題を、ランダム順に固定する(解いている途中で一覧が変わらないように)
   const [questions] = useState(() => {
     const source = mode === 'mistakes' ? mistakes(data, drill.id).map((a) => a.question) : data.favorites.filter((f) => f.drill === drill.id).map((f) => f.question)
@@ -77,6 +77,7 @@ function Review({ drill, mode }: { drill: AnyDrillDefinition; mode: ReviewMode }
             renderExplanation={drill.renderExplanation}
             onResult={onResult}
             favorite={favorite}
+            share={share}
           />
           <div className="link-row">
             <Link to="/records" className="button">

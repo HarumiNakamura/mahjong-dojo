@@ -10,6 +10,7 @@ import { ArticlePage } from './pages/ArticlePage'
 import { CallPage } from './pages/CallPage'
 import { DefenseDrillPage } from './pages/DefenseDrillPage'
 import { DevDrillPage } from './pages/DevDrillPage'
+import { DevOgPage } from './pages/DevOgPage'
 import { DevTilesPage } from './pages/DevTilesPage'
 import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
@@ -22,6 +23,7 @@ import { PushFoldPage } from './pages/PushFoldPage'
 import { RecordsPage } from './pages/records/RecordsPage'
 import { ScoreDrillPage } from './pages/ScoreDrillPage'
 import { ScoreTablePage } from './pages/ScoreTablePage'
+import { SharedQuestionPage } from './pages/SharedQuestionPage'
 import { SoloPage } from './pages/SoloPage'
 import { TodayPage } from './pages/TodayPage'
 import { WaitsDrillPage } from './pages/WaitsDrillPage'
@@ -63,6 +65,10 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
     case '/dev/drill':
       return { title: 'ドリル部品の確認', element: <DevDrillPage /> }
   }
+  const og = path.match(/^\/dev\/og\/([a-z0-9-]+)$/)
+  if (og) return { title: 'OGP 画像', element: <DevOgPage id={og[1]} /> }
+  const shared = path.match(/^\/q\/([a-z0-9-]+)$/)
+  if (shared) return { title: '共有された問題', element: <SharedQuestionPage drillId={shared[1]} /> }
   if (path === '/learn') return { title: '解説', element: <LearnPage /> }
   const learn = path.match(/^\/learn\/([a-z0-9-]+)$/)
   const article = learn ? findArticle(learn[1]) : undefined

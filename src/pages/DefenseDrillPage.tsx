@@ -31,7 +31,7 @@ export function DefenseDrillPage() {
   const [playing, setPlaying] = useState(false)
   const [seed, setSeed] = useState(0)
   const rng = useMemo(() => createRng(seed), [seed])
-  const { onResult, favorite } = useDrillRecorder(safetyDrill)
+  const { onResult, favorite, share } = useDrillRecorder(safetyDrill)
   const betaori = useDrillRecorder(betaoriDrill)
   const newSeed = () => setSeed(Math.floor(Math.random() * 2 ** 31))
 
@@ -53,6 +53,7 @@ export function DefenseDrillPage() {
           renderExplanation={betaoriDrill.renderExplanation}
           onResult={betaori.onResult}
           favorite={betaori.favorite}
+          share={betaori.share}
         />
         <StorageNotice compact />
       </>
@@ -158,6 +159,7 @@ export function DefenseDrillPage() {
         renderExplanation={safetyDrill.renderExplanation}
         onResult={onResult}
         favorite={favorite}
+        share={share}
       />
       <StorageNotice compact />
     </>

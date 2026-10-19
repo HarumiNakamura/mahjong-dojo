@@ -18,7 +18,7 @@ const QUESTIONS_PER_SET = 10
 export function CallPage() {
   const [seed] = useState(() => Math.floor(Math.random() * 2 ** 31))
   const rng = useMemo(() => createRng(seed), [seed])
-  const { onResult, favorite } = useDrillRecorder(callDrill)
+  const { onResult, favorite, share } = useDrillRecorder(callDrill)
   return (
     <>
       <div className="eff-header">
@@ -38,6 +38,7 @@ export function CallPage() {
         renderExplanation={callDrill.renderExplanation}
         onResult={onResult}
         favorite={favorite}
+        share={share}
       />
       <StorageNotice compact />
     </>

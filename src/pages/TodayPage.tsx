@@ -4,6 +4,7 @@ import { StorageNotice } from '../app/records/StorageNotice'
 import { useRecords } from '../app/records/useRecords'
 import { Drill, type DrillResult } from '../components/drill/Drill'
 import { dailyDoneCount, dailyItems, type DailyItem } from '../drills/daily'
+import { shareFor } from '../drills/useDrillRecorder'
 import { streakDays } from '../engine/progress'
 import { addAttempt, localDate } from '../engine/records'
 import './defense/defense.css'
@@ -65,6 +66,10 @@ export function TodayPage() {
         )}
         renderExplanation={(r) => r.question.definition.renderExplanation({ ...r, question: r.question.question })}
         onResult={onResult}
+        share={{
+          path: (item) => shareFor(item.definition).path(item.question),
+          text: (item) => shareFor(item.definition).text(),
+        }}
       />
       <div className="link-row">
         <Link to="/" className="button">

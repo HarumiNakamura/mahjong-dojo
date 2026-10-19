@@ -18,7 +18,7 @@ const QUESTIONS_PER_SET = 10
 export function PlanPage() {
   const [seed] = useState(() => Math.floor(Math.random() * 2 ** 31))
   const rng = useMemo(() => createRng(seed), [seed])
-  const { onResult, favorite } = useDrillRecorder(planDrill)
+  const { onResult, favorite, share } = useDrillRecorder(planDrill)
   return (
     <>
       <div className="eff-header">
@@ -38,6 +38,7 @@ export function PlanPage() {
         renderExplanation={planDrill.renderExplanation}
         onResult={onResult}
         favorite={favorite}
+        share={share}
       />
       <StorageNotice compact />
     </>

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useRecords } from '../app/records/useRecords'
+import { sharePath } from '../app/share'
 import type { DrillResult } from '../components/drill/Drill'
 import { addAttempt, isFavorite, toggleFavorite } from '../engine/records'
 import type { DrillDefinition } from './types'
@@ -42,5 +43,13 @@ export function useDrillRecorder<Q, A>(definition: DrillDefinition<Q, A>) {
       ),
   }
 
-  return { onResult, favorite }
+  return { onResult, favorite, share: shareFor(definition) }
+}
+
+/** 問題を共有するためのパスと投稿文 */
+export function shareFor<Q, A>(definition: DrillDefinition<Q, A>) {
+  return {
+    path: (q: Q) => sharePath(definition.id, definition.toData(q)),
+    text: () => `麻雀道場(仮)の「${definition.title}」の問題です。あなたならどうする?`,
+  }
 }

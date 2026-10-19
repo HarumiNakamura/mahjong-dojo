@@ -16,7 +16,7 @@ export function ScoreDrillPage() {
   const [level, setLevel] = useState<ScoreLevel | null>(null)
   const [seed, setSeed] = useState(0)
   const rng = useMemo(() => createRng(seed), [seed])
-  const { onResult, favorite } = useDrillRecorder(scoreDrill)
+  const { onResult, favorite, share } = useDrillRecorder(scoreDrill)
 
   if (level === null) {
     return (
@@ -75,6 +75,7 @@ export function ScoreDrillPage() {
         renderExplanation={scoreDrill.renderExplanation}
         onResult={onResult}
         favorite={favorite}
+        share={share}
       />
       <StorageNotice compact />
     </>
