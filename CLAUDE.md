@@ -87,6 +87,11 @@
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
 - `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
 - `src/pages/site/`・`src/app/siteInfo.ts` … プライバシーポリシー(`/privacy`)・運営者情報とお問い合わせ(`/contact`)・免責事項(`/disclaimer`)。運営者名・お問い合わせフォーム(Google フォーム)・Google 広告設定の URL は `siteInfo.ts` に書く(空なら「準備中」と表示)。フッターにはすべてのページへのリンクを並べる
+- `src/game/` … CPU対戦(作成中。`/play` はメニュー・サイトマップに載せない)。対局の進行と CPU は `@kobalab/majiang-core`・`@kobalab/majiang-ai`(MIT。型定義は `src/types/majiang.d.ts`)
+  - `rule.ts` … ライブラリのルールを Mリーグに合わせた設定と補正(海底をツモった人のリーチ不可)。再現できない項目は `docs/game-rules-gap.md`
+  - `result.ts` … 半荘の最終成績(順位点・同点の等分・南4局流局時の供託)を自前で計算
+  - `convert.ts` … サイトの牌とライブラリの表記の変換。`selfplay.ts` … CPU 同士の自動対局と成績の集計
+  - `scoringCrosscheck.ts` … 自前の点数計算とライブラリの点数の突き合わせ
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
 - `src/pages/score/` … 点数計算ドリル(`/practice/score`)と点数早見表(`/score-table`)の表示・解説
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック
@@ -117,6 +122,7 @@ engine では `"123m456p789s1122z"` 形式の文字列を使う(m=萬子, p=筒�
 - `npm run lint` … リント
 - `npm run deploy` … ビルドして Cloudflare に公開
 - `npm run build:og` … OGP 画像(`public/og/*.png`)を作り直す(先に `npm run build`)
+- `npm run cpu:selfplay -- [半荘数] [CPU] [並列数]` … CPU 4人の自動対局を回して `docs/cpu-stats.md` に成績を書く(最新版 AI は1半荘約20秒。1,000半荘で約1.5時間)
 - `npm run report:scoring` … 点数計算のテスト結果を `docs/scoring-tests.md` に書き出す(点数計算を変えたら実行する)
 
 ## 作業ルール

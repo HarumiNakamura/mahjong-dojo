@@ -68,7 +68,7 @@ if (!isMainThread) {
     `| 立直率 | ${pct(all.lizhi, all.kyoku)} |`,
     `| 副露率 | ${pct(all.fulouKyoku, all.kyoku)} |`,
     `| 平均打点 | ${Math.round(all.huleDefen / all.hule).toLocaleString('ja-JP')}点 |`,
-    `| 平均順位(座席ごと) | ${perSeat.map((s, i) => `${['起家', '南家', '西家', '北家'][i]} ${(s.rankSum / s.hanchan).toFixed(2)}`).join('・')} |`,
+    `| 平均順位(プレイヤーごと。起家は半荘ごとにランダム) | ${perSeat.map((s, i) => `P${i + 1} ${(s.rankSum / s.hanchan).toFixed(2)}`).join('・')} |`,
     '',
     ...(errors.length ? ['エラーの内容(最初の10件):', '', ...errors.slice(0, 10).map((e) => `- ${e}`), ''] : []),
   ].join('\n')
