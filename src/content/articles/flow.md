@@ -1,6 +1,7 @@
 ---
 title: 麻雀の基本の流れ
-description: 4人で136枚の牌を使い、ツモと打牌をくり返してアガリを目指す麻雀の流れを順番に説明します。
+seoTitle: 麻雀のルールと流れ|初心者向けに1局の進み方をやさしく解説
+description: 麻雀は4人で136枚の牌を使い、ツモと打牌をくり返してアガリを目指すゲームです。牌の種類・アガリの形・役・流局・親と子まで順番に説明します。
 order: 10
 category: 基本
 drills: /practice/efficiency, /practice/waits

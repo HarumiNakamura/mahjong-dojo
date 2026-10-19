@@ -1,6 +1,7 @@
 ---
 title: 良形と愚形
-description: 両面待ちが強い理由と、嵌張・辺張・シャンポン・単騎との受け入れの差、愚形を良形に変えるコツを説明します。
+seoTitle: 良形と愚形とは?両面待ちが強い理由と愚形を良くするコツ
+description: 両面待ちが強い理由と、嵌張・辺張・シャンポン・単騎との受け入れ枚数の差、愚形を良形に変える打ち方を、牌の図を使って説明します。
 order: 130
 category: 牌効率
 drills: /practice/efficiency, /practice/waits

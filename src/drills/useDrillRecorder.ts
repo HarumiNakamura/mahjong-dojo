@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { SITE_NAME } from '../config/site'
 import { useRecords } from '../app/records/useRecords'
 import { sharePath } from '../app/share'
 import type { DrillResult } from '../components/drill/Drill'
@@ -50,6 +51,6 @@ export function useDrillRecorder<Q, A>(definition: DrillDefinition<Q, A>) {
 export function shareFor<Q, A>(definition: DrillDefinition<Q, A>) {
   return {
     path: (q: Q) => sharePath(definition.id, definition.toData(q)),
-    text: () => `麻雀道場(仮)の「${definition.title}」の問題です。あなたならどうする?`,
+    text: () => `${SITE_NAME}の「${definition.title}」の問題です。あなたならどうする?`,
   }
 }

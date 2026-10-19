@@ -2,6 +2,8 @@
 //
 // 画像は public/og/<id>.png(1200×630)。`npm run build:og` で /dev/og/<id> の画面を撮影して作る。
 
+import { SITE_NAME } from '../config/site'
+
 export interface OgCard {
   id: string
   title: string
@@ -11,7 +13,7 @@ export interface OgCard {
 }
 
 export const OG_CARDS: readonly OgCard[] = [
-  { id: 'default', title: '麻雀道場(仮)', text: '解説を読んで、すぐ手を動かして、なぜ正解かを画面で確かめる麻雀練習サイト', tiles: '123m406p789s1122z' },
+  { id: 'default', title: SITE_NAME, text: '解説を読んで、すぐ手を動かして、なぜ正解かを画面で確かめる麻雀練習サイト', tiles: '123m406p789s1122z' },
   { id: 'efficiency', title: '何切る(牌効率)', text: 'どれを切れば一番早くテンパイする?受け入れ枚数で答え合わせ', tiles: '234m3467p13s4566s1z' },
   { id: 'waits', title: '待ち当て', text: 'この手の待ちは何?すべて見つけられるかな', tiles: '1112345678999m' },
   { id: 'score', title: '点数計算', text: '役・符・点数を段階的に答える練習', tiles: '234567m777p45s11z6s' },

@@ -1,6 +1,7 @@
 ---
 title: 用語集
-description: 麻雀でよく使う言葉を、読み仮名・牌の例つきで、基本・牌と形・待ち・手役・守備・点数に分けて説明します。
+seoTitle: 麻雀用語集|読み方・牌の例つきで初心者向けに解説
+description: 麻雀でよく使う言葉を、読み仮名と牌の例つきで、基本・牌と形・待ち・手役・守備・点数に分けて一言で説明します。50音順でも探せます。
 order: 900
 category: その他
 drills: /practice/efficiency, /practice/waits

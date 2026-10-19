@@ -86,7 +86,8 @@
 - `src/pages/home/` … ホームのロードマップ・弱点マップ・今日の練習
 - `src/app/share.ts`・`src/components/drill/ShareButton.tsx`・`src/pages/SharedQuestionPage.tsx` … 問題の共有(`/q/<ドリル>?d=<問題データ>`。問題データは JSON を base64url にしたもの。URL のコピーと X への投稿)
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
-- `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
+- `src/config/site.ts` … サイト名・「(仮)」の有無・公開 URL・説明文(環境変数 `VITE_SITE_NAME`・`VITE_SITE_PROVISIONAL`・`VITE_SITE_URL` で上書き)。**サイト名と URL は必ずここから取る**(直書きしない)。独自ドメインへの移行は `docs/domain-migration.md`
+- `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。記事は検索向けの題名(先頭の `seoTitle`。一覧は `docs/seo-titles.md`)・パンくずと記事の構造化データ(JSON-LD)・記事ごとの OGP 画像(`scripts/article-og.mjs` がビルド時に `dist/og/articles/<記事>.png` を作る)。本文を HTML にできないホーム・練習の入口・CPU対戦などは、紹介(`src/shell/PageShell.tsx`)を HTML に入れ、ブラウザで置きかえる。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
 - `src/pages/site/`・`src/app/siteInfo.ts` … プライバシーポリシー(`/privacy`)・運営者情報とお問い合わせ(`/contact`)・免責事項(`/disclaimer`)。運営者名・お問い合わせフォーム(Google フォーム)・Google 広告設定の URL は `siteInfo.ts` に書く(空なら「準備中」と表示)。フッターにはすべてのページへのリンクを並べる
 - `src/game/` … CPU対戦(`/play`。メニュー・ホームのロードマップ・サイトマップに載せる)。対局の進行と CPU は `@kobalab/majiang-core`・`@kobalab/majiang-ai`(MIT。型定義は `src/types/majiang.d.ts`)
   - `rule.ts` … ライブラリのルールを Mリーグに合わせた設定と補正(海底をツモった人のリーチ不可)。再現できない項目は `docs/game-rules-gap.md`

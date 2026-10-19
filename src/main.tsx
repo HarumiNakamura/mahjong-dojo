@@ -9,6 +9,7 @@ const app = (
     <App />
   </StrictMode>
 )
-// ビルド時に本文まで HTML にしたページは、その HTML を引き継ぐ。それ以外は画面を作る
-if (root.hasChildNodes()) hydrateRoot(root, app)
+// ビルド時に本文まで HTML にしたページは、その HTML を引き継ぐ。
+// 紹介だけを HTML にしたページ(data-shell)と、HTML が空のページは画面を作る(紹介は置きかわる)
+if (root.hasChildNodes() && !root.hasAttribute('data-shell')) hydrateRoot(root, app)
 else createRoot(root).render(app)

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { siteTitle } from '../config/site'
 import { Link } from '../app/Link'
 import { ArticleBody, DrillCard } from '../components/article/ArticleBody'
 import { findArticle, type Article } from '../content/articles'
@@ -64,9 +65,10 @@ export function ArticlePage({ article }: { article: Article }) {
 /** /learn/<slug> のページ。記事がなければ「見つかりません」 */
 export function ArticleRoute({ slug }: { slug: string }) {
   const article = findArticle(slug)
-  const title = article ? article.meta.title : 'ページが見つかりません'
+  // 検索結果と同じ題名(記事は検索向けの題名)にする
+  const title = article ? (article.meta.seoTitle ?? article.meta.title) : 'ページが見つかりません'
   useEffect(() => {
-    document.title = `${title} | 麻雀道場(仮)`
+    document.title = siteTitle(title)
   }, [title])
   return article ? <ArticlePage article={article} /> : <NotFoundPage />
 }
