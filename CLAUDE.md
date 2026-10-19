@@ -92,6 +92,9 @@
   - `result.ts` … 半荘の最終成績(順位点・同点の等分・南4局流局時の供託)を自前で計算
   - `convert.ts` … サイトの牌とライブラリの表記の変換。`selfplay.ts` … CPU 同士の自動対局と成績の集計
   - `scoringCrosscheck.ts` … 自前の点数計算とライブラリの点数の突き合わせ
+  - `humanPlayer.ts` … 対局の「自分」。ライブラリからの知らせに対してできる操作(打牌・リーチ・ツモ・カン・ロン・チー・ポン)を計算し、画面の操作を待つ。喰い替え・フリテン・役なしの判定はライブラリに任せる
+  - `session.ts` … 自分 + CPU 3人の半荘を進める(CPU の速さの設定、鳴き・リーチの声の表示)
+- `src/pages/PlayPage.tsx`・`src/pages/play/` … CPU対戦の対局画面(`/play`。スマホ縦優先:上に点数・場・ドラ・残り枚数、中央に河(拡大できる)、下に自分の手牌と操作ボタン)と局・半荘の結果。広告枠は出さない
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
 - `src/pages/score/` … 点数計算ドリル(`/practice/score`)と点数早見表(`/score-table`)の表示・解説
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック
