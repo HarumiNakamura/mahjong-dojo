@@ -7,6 +7,11 @@ category: 牌効率
 drills: /practice/efficiency, /practice/waits
 related: waits, ukeire, efficiency, riichi
 ---
+@points
+- 良形と愚形の分け方と、待ち牌の枚数の差
+- 愚形を良形に変える「変化」と「くっつき」
+- 1シャンテンで残すターツの選び方
+
 ## 良形と愚形の分け方
 
 {{待ち}}や{{ターツ}}(あと1枚で{{面子}}(メンツ)になる2枚)の形には、強いものと弱いものがあります。

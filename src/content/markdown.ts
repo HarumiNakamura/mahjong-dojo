@@ -10,6 +10,8 @@
 //   @drill /practice/waits           … ドリルへの案内を埋め込む
 //   {{面子}} / {{めんつ|面子}}          … 用語(用語部品 Term。| の右は src/content/terms.ts の用語・別名・id)
 //   @glossary                        … 用語集(src/content/terms.ts の全用語)
+//   @figure table-overview           … 図解(src/content/figures.ts の図。代替テキストもそこに書く)
+//   @points の次の行から - の箇条書き   … 「この記事でわかること」の囲み(記事の冒頭に3行)
 
 export type Inline =
   | { type: 'text'; text: string }
@@ -27,6 +29,8 @@ export type Block =
   | { type: 'tiles'; tiles: string; caption: string }
   | { type: 'drill'; path: string }
   | { type: 'glossary' }
+  | { type: 'figure'; id: string }
+  | { type: 'points'; items: Inline[][] }
 
 export interface ArticleMeta {
   /** 記事の見出し(h1) */
@@ -174,6 +178,18 @@ export function parseArticle(source: string): ParsedArticle {
       i++
       continue
     }
+    if (t.startsWith('@figure ')) {
+      blocks.push({ type: 'figure', id: t.slice(8).trim() })
+      i++
+      continue
+    }
+    if (t === '@points') {
+      const items: Inline[][] = []
+      i++
+      while (i < lines.length && /^-\s+/.test(lines[i].trim())) items.push(parseInline(lines[i++].trim().replace(/^-\s+/, '')))
+      blocks.push({ type: 'points', items })
+      continue
+    }
     if (t === '@glossary') {
       blocks.push({ type: 'glossary' })
       i++
@@ -205,7 +221,7 @@ export function parseArticle(source: string): ParsedArticle {
     const parts: string[] = []
     while (i < lines.length) {
       const l = lines[i].trim()
-      if (l === '' || /^(#{2,3}\s|@tiles |@drill |@glossary$|\||-\s|\d+\.\s|>)/.test(l)) break
+      if (l === '' || /^(#{2,3}\s|@tiles |@drill |@figure |@points$|@glossary$|\||-\s|\d+\.\s|>)/.test(l)) break
       parts.push(l)
       i++
     }
@@ -221,13 +237,14 @@ export function inlineText(nodes: readonly Inline[]): string {
     .join('')
 }
 
-/** 本文の文字数(見出し・段落・箇条書き・表・補足・図の説明。空白は数えない) */
-export function articleLength(blocks: readonly Block[]): number {
+/** 本文の文字数(見出し・段落・箇条書き・表・補足・図の説明。空白は数えない)。figureText は図解の代替テキストを返す */
+export function articleLength(blocks: readonly Block[], figureText: (id: string) => string = () => ''): number {
   let text = ''
   for (const b of blocks) {
     if (b.type === 'heading') text += b.text
     else if (b.type === 'paragraph' || b.type === 'note') text += inlineText(b.children)
-    else if (b.type === 'list') text += b.items.map(inlineText).join('')
+    else if (b.type === 'list' || b.type === 'points') text += b.items.map(inlineText).join('')
+    else if (b.type === 'figure') text += figureText(b.id)
     else if (b.type === 'table') text += [b.header, ...b.rows].flat().map((c) => inlineText(c)).join('')
     else if (b.type === 'tiles') text += b.caption
   }

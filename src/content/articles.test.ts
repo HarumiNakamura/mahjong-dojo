@@ -3,6 +3,7 @@ import { findPageInfo, NAV_ITEMS } from '../app/routes'
 import { checkTileSet, parseTiles } from '../engine/tiles'
 import { ARTICLES } from './articles'
 import { findTerm } from './terms'
+import { FIGURES } from './figures'
 import { articleLength, parseArticle, parseInline, type Block, type Inline } from './markdown'
 
 describe('Markdown の読み取り', () => {
@@ -43,6 +44,13 @@ describe('Markdown の読み取り', () => {
     expect(() => parseArticle('本文だけ')).toThrow()
   })
 
+  it('@points は「この記事でわかること」、@figure は図解になる', () => {
+    const a = parseArticle('---\ntitle: t\n---\n@points\n- いち\n- **に**\n@figure fu-stack\n本文\n')
+    expect(a.blocks.map((b) => b.type)).toEqual(['points', 'figure', 'paragraph'])
+    expect(a.blocks[0]).toEqual({ type: 'points', items: [[{ type: 'text', text: 'いち' }], [{ type: 'strong', children: [{ type: 'text', text: 'に' }] }]] })
+    expect(a.blocks[1]).toEqual({ type: 'figure', id: 'fu-stack' })
+  })
+
   it('{{用語}} は用語部品、@glossary は用語集になる', () => {
     expect(parseInline('{{面子}}と{{めんつ|mentsu}}')).toEqual([
       { type: 'term', key: '面子', text: '面子' },
@@ -75,7 +83,7 @@ function collect(blocks: readonly Block[]) {
   }
   for (const b of blocks) {
     if (b.type === 'paragraph' || b.type === 'note') walk(b.children)
-    else if (b.type === 'list') b.items.forEach(walk)
+    else if (b.type === 'list' || b.type === 'points') b.items.forEach(walk)
     else if (b.type === 'table') [b.header, ...b.rows].flat().forEach(walk)
     else if (b.type === 'tiles') tiles.push(b.tiles)
     else if (b.type === 'drill') links.push(b.path)
@@ -102,9 +110,29 @@ describe('解説記事', () => {
     describe(a.meta.title, () => {
       it('本文は1,500〜3,000文字(用語集は用語データから作るので除く)', () => {
         if (a.blocks.some((b) => b.type === 'glossary')) return
-        const n = articleLength(a.blocks)
+        const n = articleLength(a.blocks, (id) => FIGURES[id]?.alt ?? '')
         expect(n, `${a.slug}: ${n}文字`).toBeGreaterThanOrEqual(1500)
         expect(n, `${a.slug}: ${n}文字`).toBeLessThanOrEqual(3000)
+      })
+
+      it('冒頭に「この記事でわかること」(3行)、最後に「まとめ」(3〜5行)がある', () => {
+        const first = a.blocks[0]
+        expect(first?.type, a.slug).toBe('points')
+        if (first?.type === 'points') expect(first.items, a.slug).toHaveLength(3)
+        const h2 = a.blocks.filter((b) => b.type === 'heading' && b.level === 2)
+        const last = h2[h2.length - 1]
+        expect(last?.type === 'heading' && last.text, a.slug).toBe('まとめ')
+        const after = a.blocks.slice(a.blocks.indexOf(last!) + 1).filter((b) => b.type !== 'drill')
+        expect(after.map((b) => b.type), a.slug).toContain('list')
+        const list = after.find((b) => b.type === 'list')
+        if (list?.type === 'list') {
+          expect(list.items.length, a.slug).toBeGreaterThanOrEqual(3)
+          expect(list.items.length, a.slug).toBeLessThanOrEqual(5)
+        }
+      })
+
+      it('図解はすべて登録されていて、代替テキストがある', () => {
+        for (const b of a.blocks) if (b.type === 'figure') expect(FIGURES[b.id]?.alt.length ?? 0, `${a.slug}: ${b.id}`).toBeGreaterThan(30)
       })
 
       it('説明・分類・ドリルがそろっている', () => {
