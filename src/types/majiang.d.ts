@@ -40,6 +40,8 @@ declare module '@kobalab/majiang-core' {
 
   export class He {
     _pai: string[]
+    /** その牌を切ったことがあるか(フリテンの判定) */
+    find(p: Pai): boolean | undefined
   }
 
   export interface HuleParam {
