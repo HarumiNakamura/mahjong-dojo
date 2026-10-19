@@ -7,6 +7,11 @@ category: 判断
 drills: /practice/judgment/pushfold, /practice/waits
 related: pushfold, good-shape, furiten
 ---
+@points
+- リーチのメリットとデメリット
+- ダマを選んでもよい場面
+- Mリーグルールでのリーチの決まり
+
 ## リーチのメリット
 
 {{門前}}(メンゼン)で{{テンパイ}}したら、{{リーチ}}するかどうかを決めます。

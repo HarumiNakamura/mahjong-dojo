@@ -5,6 +5,7 @@ import type { Block, Inline } from '../../content/markdown'
 import { parseTiles } from '../../engine/tiles'
 import { Term } from '../term/Term'
 import { Hand } from '../tile/Hand'
+import { ArticleFigure } from '../figures/ArticleFigure'
 import { Glossary } from './Glossary'
 import { Tile } from '../tile/Tile'
 import './article.css'
@@ -137,6 +138,21 @@ export function ArticleBody({ blocks }: { blocks: readonly Block[] }) {
             return <DrillCard key={i} path={b.path} />
           case 'glossary':
             return <Glossary key={i} />
+          case 'figure':
+            return <ArticleFigure key={i} id={b.id} />
+          case 'points':
+            return (
+              <section key={i} className="article-points" aria-label="この記事でわかること">
+                <p className="article-points-title">この記事でわかること</p>
+                <ul>
+                  {b.items.map((it, j) => (
+                    <li key={j}>
+                      <InlineNodes nodes={it} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
         }
       })}
     </div>

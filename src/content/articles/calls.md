@@ -7,6 +7,11 @@ category: 判断
 drills: /practice/judgment/call
 related: yaku, plan, efficiency
 ---
+@points
+- 鳴くかどうかを決める3つのポイント
+- 鳴いても残る役と、なくなる役
+- 喰い替えで切れない牌
+
 ## 鳴きの基本
 
 ほかの人の捨て牌をもらって{{面子}}(メンツ)を作ることを**{{鳴き}}**といいます。

@@ -7,6 +7,11 @@ category: その他
 drills: /practice/efficiency, /practice/waits
 related: flow, yaku, mleague-rules
 ---
+@points
+- 記事に出てくる用語の意味の調べ方
+- 分類ごと・50音順での探し方
+- 読み仮名と牌の例つきの一言説明
+
 ## 用語集の使い方
 
 麻雀にはたくさんの専門用語があります。記事やドリルでわからない言葉が出てきたら、ここで確かめてください。
@@ -20,3 +25,9 @@ related: flow, yaku, mleague-rules
 ## 用語の一覧
 
 @glossary
+
+## まとめ
+
+- わからない言葉は、この用語集で意味を確かめる
+- 記事の中で点線の下線がついた言葉は、タップすると意味が出る
+- くわしい説明がある言葉は、リンクから記事を読める

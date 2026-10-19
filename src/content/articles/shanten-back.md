@@ -7,6 +7,11 @@ category: 牌効率
 drills: /practice/efficiency, /practice/solo
 related: ukeire, good-shape, efficiency
 ---
+@points
+- シャンテン戻しとはどんな打ち方か
+- ドリルでシャンテン戻しが正解になる条件
+- 実戦で巡目・打点・相手のリーチをどう考えるか
+
 ## シャンテン戻しとは
 
 牌効率の基本は「{{シャンテン数}}を増やさない牌を切る」ことでした。

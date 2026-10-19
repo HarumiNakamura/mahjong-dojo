@@ -1,0 +1,154 @@
+/* 記事の図解。色はすべてデザイントークン(ライト・ダーク両対応) */
+.article-figure {
+  margin: 16px 0;
+  padding: 12px 8px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.article-figure-art {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.fig-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font-body);
+}
+
+.article-figure figcaption {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.fig-t--text {
+  fill: var(--text);
+}
+.fig-t--muted {
+  fill: var(--text-muted);
+}
+.fig-t--accent {
+  fill: var(--accent);
+}
+.fig-t--correct {
+  fill: var(--correct);
+}
+.fig-t--contrast {
+  fill: var(--accent-contrast);
+}
+
+.fig-fill-text {
+  fill: var(--text);
+}
+.fig-fill-accent {
+  fill: var(--accent);
+}
+
+.fig-line {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+.fig-line--thick {
+  stroke-width: 2.5;
+}
+.fig-line--accent {
+  stroke: var(--accent);
+}
+.fig-line--dash {
+  stroke-dasharray: 5 4;
+}
+
+.fig-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.fig-cross line {
+  stroke: var(--wrong);
+  stroke-width: 2.5;
+  opacity: 0.75;
+  stroke-linecap: round;
+}
+
+.fig-box {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.fig-box--accent {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+}
+
+.fig-panel {
+  fill: var(--surface-2);
+}
+.fig-panel--ok {
+  fill: var(--correct-bg);
+}
+
+/* 卓と山 */
+.fig-table {
+  fill: var(--scene);
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.fig-wall {
+  fill: var(--surface);
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+.fig-dead {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+.fig-outline-accent {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+/* 符の積み上げ */
+.fig-fu-1 {
+  fill: var(--accent);
+}
+.fig-fu-2 {
+  fill: var(--accent-hover);
+}
+.fig-fu-3 {
+  fill: var(--correct);
+}
+.fig-fu-4 {
+  fill: var(--focus);
+}
+.fig-roundup {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+/* 押し引き */
+.fig-zone-fold {
+  fill: var(--wrong-bg);
+}
+.fig-zone-push {
+  fill: var(--correct-bg);
+}
+.fig-dot {
+  fill: var(--text);
+}
+.fig-danger {
+  fill: var(--wrong);
+}
+.fig-safe {
+  fill: var(--correct);
+}
