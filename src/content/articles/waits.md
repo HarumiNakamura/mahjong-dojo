@@ -4,7 +4,7 @@ description: テンパイしたときの待ちの形(両面・嵌張・辺張・
 order: 30
 category: 基本
 drills: /practice/waits
-related: furiten, good-shape, yaku
+related: furiten, good-shape, yaku, riichi
 ---
 ## 待ちとは
 

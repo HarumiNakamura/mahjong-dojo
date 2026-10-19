@@ -4,7 +4,7 @@ description: 待ち牌を自分で捨てているとロンできない「フリ�
 order: 40
 category: 基本
 drills: /practice/waits
-related: waits, safe-tiles, betaori
+related: waits, safe-tiles, betaori, riichi
 ---
 ## フリテンとは
 

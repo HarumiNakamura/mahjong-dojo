@@ -4,7 +4,7 @@ description: 早くテンパイするための「牌効率」の考え方を、�
 order: 110
 category: 牌効率
 drills: /practice/efficiency, /practice/solo
-related: ukeire, good-shape, shanten-back
+related: ukeire, good-shape, shanten-back, plan
 ---
 ## 牌効率とは
 

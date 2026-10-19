@@ -4,7 +4,7 @@ description: 相手のリーチにアガリをあきらめて守りきる「ベ�
 order: 220
 category: 守備
 drills: /practice/defense
-related: safe-tiles, furiten
+related: safe-tiles, pushfold, tenpai-signs
 ---
 ## ベタオリとは
 
@@ -23,7 +23,7 @@ related: safe-tiles, furiten
 - 相手が親のリーチで、打点が高そう
 
 反対に、良い待ちでテンパイしているなら、危険な牌を切ってでも勝負(押し)する価値があります。
-押すか降りるかの考え方は、[押し引きジャッジ](/practice/judgment/pushfold)で練習できます。
+押すか降りるかの考え方は[押し引きの考え方](/learn/pushfold)で説明し、[押し引きジャッジ](/practice/judgment/pushfold)で練習できます。
 
 ## 安全な牌を切る順番
 

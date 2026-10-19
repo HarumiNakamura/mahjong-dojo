@@ -4,7 +4,7 @@ description: 相手のリーチに対して安全な牌を見つけるための�
 order: 210
 category: 守備
 drills: /practice/defense
-related: betaori, furiten, waits
+related: betaori, furiten, tenpai-signs
 ---
 ## 守備の基本は「安全な牌」を知ること
 

@@ -4,7 +4,7 @@ description: 4人で136枚の牌を使い、ツモと打牌をくり返してア
 order: 10
 category: 基本
 drills: /practice/efficiency, /practice/waits
-related: yaku, waits, efficiency
+related: yaku, waits, efficiency, glossary
 ---
 ## 麻雀はどんなゲーム?
 
