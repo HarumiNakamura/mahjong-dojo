@@ -33,13 +33,27 @@ export function usePath(): string {
   )
 }
 
-/** ページを移動する(ブラウザの「戻る」で戻れる) */
+/** ページの中の目印(#id)までスクロールする。ページの読み込みを待つため、見つかるまで少し待つ */
+export function scrollToHash(hash: string) {
+  const id = decodeURIComponent(hash.replace(/^#/, ''))
+  let tries = 0
+  const tick = () => {
+    const el = document.getElementById(id)
+    if (el) el.scrollIntoView({ block: 'start' })
+    else if (tries++ < 40) window.setTimeout(tick, 50)
+  }
+  tick()
+}
+
+/** ページを移動する(ブラウザの「戻る」で戻れる)。#目印 があればそこまでスクロールする */
 export function navigate(to: string) {
-  if (normalizePath(to) !== normalizePath(window.location.pathname)) {
+  const [path, hash] = to.split('#')
+  if (normalizePath(path) !== normalizePath(window.location.pathname) || (hash !== undefined && `#${hash}` !== window.location.hash)) {
     window.history.pushState(null, '', to)
     listeners.forEach((l) => l())
   }
-  window.scrollTo(0, 0)
+  if (hash) scrollToHash(hash)
+  else window.scrollTo(0, 0)
 }
 
 /** 今の URL のクエリ(?a=1&b=2)を読む。ページを開いたときの値を使う */

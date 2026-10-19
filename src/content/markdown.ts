@@ -8,12 +8,15 @@
 //   **太字**、[文字](/パス) のリンク、[[123m]] で文中に牌を表示
 //   @tiles 123m456p789s1122z 説明文   … 手牌の図(説明文は省略可)
 //   @drill /practice/waits           … ドリルへの案内を埋め込む
+//   {{面子}} / {{めんつ|面子}}          … 用語(用語部品 Term。| の右は src/content/terms.ts の用語・別名・id)
+//   @glossary                        … 用語集(src/content/terms.ts の全用語)
 
 export type Inline =
   | { type: 'text'; text: string }
   | { type: 'strong'; children: Inline[] }
   | { type: 'link'; href: string; children: Inline[] }
   | { type: 'tiles'; tiles: string }
+  | { type: 'term'; key: string; text: string }
 
 export type Block =
   | { type: 'heading'; level: 2 | 3; text: string; id: string }
@@ -23,6 +26,7 @@ export type Block =
   | { type: 'table'; header: Inline[][]; rows: Inline[][][] }
   | { type: 'tiles'; tiles: string; caption: string }
   | { type: 'drill'; path: string }
+  | { type: 'glossary' }
 
 export interface ArticleMeta {
   title: string
@@ -56,6 +60,16 @@ export function parseInline(text: string): Inline[] {
       if (end > i) {
         flush()
         out.push({ type: 'strong', children: parseInline(text.slice(i + 2, end)) })
+        i = end + 2
+        continue
+      }
+    }
+    if (text.startsWith('{{', i)) {
+      const end = text.indexOf('}}', i + 2)
+      if (end > i) {
+        flush()
+        const [shown, key] = text.slice(i + 2, end).split('|')
+        out.push({ type: 'term', key: (key ?? shown).trim(), text: shown.trim() })
         i = end + 2
         continue
       }
@@ -156,6 +170,11 @@ export function parseArticle(source: string): ParsedArticle {
       i++
       continue
     }
+    if (t === '@glossary') {
+      blocks.push({ type: 'glossary' })
+      i++
+      continue
+    }
     if (t.startsWith('|')) {
       const rows: string[] = []
       while (i < lines.length && lines[i].trim().startsWith('|')) rows.push(lines[i++])
@@ -182,7 +201,7 @@ export function parseArticle(source: string): ParsedArticle {
     const parts: string[] = []
     while (i < lines.length) {
       const l = lines[i].trim()
-      if (l === '' || /^(#{2,3}\s|@tiles |@drill |\||-\s|\d+\.\s|>)/.test(l)) break
+      if (l === '' || /^(#{2,3}\s|@tiles |@drill |@glossary$|\||-\s|\d+\.\s|>)/.test(l)) break
       parts.push(l)
       i++
     }
@@ -194,7 +213,7 @@ export function parseArticle(source: string): ParsedArticle {
 /** 文字だけを取り出す(文字数を数える・説明文に使う) */
 export function inlineText(nodes: readonly Inline[]): string {
   return nodes
-    .map((n) => (n.type === 'text' ? n.text : n.type === 'tiles' ? n.tiles : inlineText(n.children)))
+    .map((n) => (n.type === 'text' || n.type === 'term' ? n.text : n.type === 'tiles' ? n.tiles : inlineText(n.children)))
     .join('')
 }
 

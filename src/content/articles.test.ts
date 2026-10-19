@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { findPageInfo, NAV_ITEMS } from '../app/routes'
 import { checkTileSet, parseTiles } from '../engine/tiles'
 import { ARTICLES } from './articles'
+import { findTerm } from './terms'
 import { articleLength, parseArticle, parseInline, type Block, type Inline } from './markdown'
 
 describe('Markdown の読み取り', () => {
@@ -42,6 +43,16 @@ describe('Markdown の読み取り', () => {
     expect(() => parseArticle('本文だけ')).toThrow()
   })
 
+  it('{{用語}} は用語部品、@glossary は用語集になる', () => {
+    expect(parseInline('{{面子}}と{{めんつ|mentsu}}')).toEqual([
+      { type: 'term', key: '面子', text: '面子' },
+      { type: 'text', text: 'と' },
+      { type: 'term', key: 'mentsu', text: 'めんつ' },
+    ])
+    const a = parseArticle('---\ntitle: t\n---\n説明\n@glossary\n')
+    expect(a.blocks.map((b) => b.type)).toEqual(['paragraph', 'glossary'])
+  })
+
   it('閉じていない ** や [ はそのまま文字にする', () => {
     expect(parseInline('5**と[だけ')).toEqual([{ type: 'text', text: '5**と[だけ' }])
   })
@@ -51,6 +62,7 @@ describe('Markdown の読み取り', () => {
 function collect(blocks: readonly Block[]) {
   const links: string[] = []
   const tiles: string[] = []
+  const terms: string[] = []
   const walk = (nodes: readonly Inline[]) => {
     for (const n of nodes) {
       if (n.type === 'link') {
@@ -58,6 +70,7 @@ function collect(blocks: readonly Block[]) {
         walk(n.children)
       } else if (n.type === 'strong') walk(n.children)
       else if (n.type === 'tiles') tiles.push(n.tiles)
+      else if (n.type === 'term') terms.push(n.key)
     }
   }
   for (const b of blocks) {
@@ -67,7 +80,7 @@ function collect(blocks: readonly Block[]) {
     else if (b.type === 'tiles') tiles.push(b.tiles)
     else if (b.type === 'drill') links.push(b.path)
   }
-  return { links, tiles }
+  return { links, tiles, terms }
 }
 
 describe('解説記事', () => {
@@ -87,7 +100,8 @@ describe('解説記事', () => {
 
   for (const a of ARTICLES) {
     describe(a.meta.title, () => {
-      it('本文は1,500〜3,000文字', () => {
+      it('本文は1,500〜3,000文字(用語集は用語データから作るので除く)', () => {
+        if (a.blocks.some((b) => b.type === 'glossary')) return
         const n = articleLength(a.blocks)
         expect(n, `${a.slug}: ${n}文字`).toBeGreaterThanOrEqual(1500)
         expect(n, `${a.slug}: ${n}文字`).toBeLessThanOrEqual(3000)
@@ -107,6 +121,10 @@ describe('解説記事', () => {
           expect(sitePaths.has(l.split('#')[0]), `${a.slug}: ${l}`).toBe(true)
         }
         for (const r of a.meta.related) expect(ARTICLES.some((x) => x.slug === r), `${a.slug}: related ${r}`).toBe(true)
+      })
+
+      it('用語({{…}})はすべて用語データにある', () => {
+        for (const key of collect(a.blocks).terms) expect(findTerm(key), `${a.slug}: ${key}`).toBeDefined()
       })
 
       it('牌の表記が正しい(4枚を超えない)', () => {
