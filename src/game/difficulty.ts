@@ -1,6 +1,6 @@
 // CPU対戦の難易度と、それぞれの CPU
 //
-// やさしい: 受け入れ枚数が一番多い牌を切るだけ(守備・鳴きなし)。src/game/easyPlayer.ts
+// やさしい: 受け入れ枚数が一番多い牌を切るだけ(守備・鳴き・リーチなし)。src/game/easyPlayer.ts
 // ふつう: majiang-ai の古い版(legacy 0201)
 // つよい: majiang-ai の最新版
 // 強さの差は docs/cpu-stats.md(つよい CPU 1人 + その難易度の CPU 3人で 1,000半荘)
@@ -13,7 +13,7 @@ import { EasyPlayer } from './easyPlayer'
 export type Difficulty = 'easy' | 'normal' | 'strong'
 
 export const DIFFICULTIES: { id: Difficulty; label: string; description: string }[] = [
-  { id: 'easy', label: 'やさしい', description: '牌効率だけで打ちます。守らず、鳴きません。' },
+  { id: 'easy', label: 'やさしい', description: '牌効率だけで打ちます。守らず、鳴かず、リーチもしません。' },
   { id: 'normal', label: 'ふつう', description: '守備や鳴きもする、少し古い CPU です。' },
   { id: 'strong', label: 'つよい', description: '押し引きも上手な、いちばん強い CPU です。' },
 ]

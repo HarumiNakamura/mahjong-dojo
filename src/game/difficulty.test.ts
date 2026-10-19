@@ -13,7 +13,7 @@ describe('CPU の難易度', () => {
     expect(difficultyLabel('latest')).toBe('つよい')
   })
 
-  it('やさしい CPU だけで半荘を最後まで打てる(鳴かない・リーチはする)', () => {
+  it('やさしい CPU だけで半荘を最後まで打てる(鳴かない・リーチしない)', () => {
     const stats = newStats()
     for (const seed of [1, 2]) {
       const { paipu, final } = playCpuHanchan(makeCpu('easy'), seed)
@@ -21,7 +21,7 @@ describe('CPU の難易度', () => {
       addPaipuStats(stats, paipu)
     }
     expect(stats.every((s) => s.fulouKyoku === 0)).toBe(true)
-    expect(stats.some((s) => s.lizhi > 0)).toBe(true)
+    expect(stats.every((s) => s.lizhi === 0)).toBe(true)
     expect(stats.some((s) => s.hule > 0)).toBe(true)
   })
 

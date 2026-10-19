@@ -1,7 +1,7 @@
 // CPU対戦「やさしい」の CPU
 //
 // 受け入れ枚数が一番多い牌を切る(何切るドリルと同じ判定)。守備はしない(リーチを受けても押す)。
-// 鳴かない。テンパイしたらリーチし、アガれるときはアガる。
+// 鳴かない・リーチしない(役があるテンパイならダマでアガる)。初心者が相手のリーチに悩まずに打てるように。
 
 import Majiang from '@kobalab/majiang-core'
 import { judgeDiscards } from '../engine/efficiency'
@@ -45,9 +45,7 @@ export class EasyPlayer extends Majiang.Player {
     if (zimo.l !== this._menfeng) return this.reply()
     const shoupai = this.shoupai
     if (this.allow_hule(shoupai, null, gangzimo)) return this.reply({ hule: '-' })
-    const p = this.chooseDapai()
-    const lizhi = !shoupai.lizhi && this.allow_lizhi(shoupai, p.slice(0, 2))
-    this.reply({ dapai: lizhi ? `${p}*` : p })
+    this.reply({ dapai: this.chooseDapai() })
   }
 
   action_dapai(dapai: { l: number; p: string }) {
