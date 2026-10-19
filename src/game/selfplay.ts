@@ -22,6 +22,10 @@ export interface GameSave {
   log: Record<string, unknown>[][]
   /** 対局中に「この判断を後で見る」を押した場面(古い保存にはない) */
   marks?: GameMark[]
+  /** CPU の難易度(src/game/difficulty.ts。古い保存にはない = つよい) */
+  cpu?: string
+  /** 練習モード(ヒントあり) */
+  practice?: boolean
 }
 
 /** 牌譜の場面(局の番号と手数) */
@@ -109,10 +113,10 @@ export function withSeed<T>(seed: number, fn: () => T): T {
   }
 }
 
-/** CPU 4人で半荘を1回、最後まで同期的に打つ */
-export function playCpuHanchan(makePlayer: () => Player, seed: number): { paipu: Paipu; final: FinalResult } {
+/** CPU 4人で半荘を1回、最後まで同期的に打つ(makePlayer を4つ渡すと、プレイヤーごとに違う CPU にできる) */
+export function playCpuHanchan(makePlayer: (() => Player) | readonly (() => Player)[], seed: number): { paipu: Paipu; final: FinalResult } {
   return withSeed(seed, () => {
-    const players = [0, 1, 2, 3].map(makePlayer)
+    const players = [0, 1, 2, 3].map((i) => (Array.isArray(makePlayer) ? makePlayer[i]() : (makePlayer as () => Player)()))
     let paipu: Paipu | null = null
     const game = new MleagueGame(players, (p) => (paipu = p), MLEAGUE_RULE)
     game.do_sync()

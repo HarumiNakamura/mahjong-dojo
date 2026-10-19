@@ -6,7 +6,7 @@ import type { FinalResult } from './result'
 import { addPaipuStats, newStats } from './selfplay'
 
 /** 自分(プレイヤー 0)の成績を取り出す */
-export function gameRecordOf(paipu: Paipu, final: FinalResult, cpu: string, playedAt: Date, id: string): GameRecord {
+export function gameRecordOf(paipu: Paipu, final: FinalResult, cpu: string, playedAt: Date, id: string, practice = false): GameRecord {
   const stats = newStats()
   addPaipuStats(stats, paipu)
   const me = stats[0]
@@ -23,5 +23,6 @@ export function gameRecordOf(paipu: Paipu, final: FinalResult, cpu: string, play
     lizhi: me.lizhi,
     fulouKyoku: me.fulouKyoku,
     huleDefen: me.huleDefen,
+    ...(practice ? { practice: true } : {}),
   }
 }

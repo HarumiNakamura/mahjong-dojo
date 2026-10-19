@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from '../../app/Link'
 import { usePath } from '../../app/router'
-import { JUDGMENT_PAGES, LEARN_PAGE, NAV_ITEMS, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE, SITE_PAGES, TODAY_PAGE } from '../../app/routes'
+import { JUDGMENT_PAGES, LEARN_PAGE, NAV_ITEMS, PLAY_PAGE, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE, SITE_PAGES, TODAY_PAGE } from '../../app/routes'
 import { AdSlot } from './AdSlot'
 import './layout.css'
 
@@ -9,7 +9,7 @@ const SITE_NAME = '麻雀道場(仮)'
 
 /** フッターに並べるリンク(サイトのすべてのページ) */
 const FOOTER_GROUPS = [
-  { title: '練習', links: [{ path: '/practice', title: '練習メニュー' }, ...PRACTICE_PAGES, ...JUDGMENT_PAGES, TODAY_PAGE] },
+  { title: '練習', links: [{ path: '/practice', title: '練習メニュー' }, ...PRACTICE_PAGES, ...JUDGMENT_PAGES, TODAY_PAGE, PLAY_PAGE] },
   { title: '読む・ふりかえる', links: [LEARN_PAGE, SCORE_TABLE_PAGE, RECORDS_PAGE] },
   { title: 'このサイト', links: [{ path: '/', title: 'ホーム' }, ...SITE_PAGES] },
 ]

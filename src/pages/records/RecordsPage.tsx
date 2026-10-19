@@ -56,7 +56,8 @@ function GameSection({
   bookmarks: readonly SceneBookmark[]
   onRemoveBookmark: (id: string) => void
 }) {
-  const s = gameSummary(games)
+  // 練習モードの対局は通算成績(/play/stats)で分けて見る
+  const s = gameSummary(games.filter((g) => !g.practice))
   const [replayable] = useState(() => new Set(loadPaipuRecords().map((r) => r.id)))
   const recent = games.slice(-5).reverse()
   return (
@@ -85,6 +86,9 @@ function GameSection({
             <dd>{s.fangchongRate === null ? '-' : `${s.fangchongRate}%`}</dd>
           </div>
         </dl>
+        <p className="rec-empty">
+          練習モードを除いた成績です。<Link to="/play/stats">難易度ごとの通算成績</Link>
+        </p>
         <h3 className="rec-subheading">最近の対局</h3>
         <ul className="rec-games">
           {recent.map((g) => (

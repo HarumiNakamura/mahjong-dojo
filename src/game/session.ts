@@ -21,6 +21,10 @@ export interface GameSession {
   /** 声(ポン・チー・リーチ・ロン・ツモ)。座席(その局の l)と言葉。1.5秒で消える */
   lastSay: { l: number; name: string } | null
   setSpeed(speed: GameSpeed): void
+  /** 練習モード(受け入れ枚数・危険度のヒントを出す) */
+  practice: boolean
+  /** CPU の難易度(表示用) */
+  cpu: string
   /** 終わったら呼ばれる */
   onEnd?: (paipu: Paipu) => void
 }
@@ -34,9 +38,12 @@ export interface SessionOptions {
   onKyokuStart?: (save: GameSave) => void
   /** 半荘が終わった直前(結果を出す前)に呼ばれる */
   onGameEnd?: (paipu: Paipu, final: FinalResult) => void
+  practice?: boolean
+  /** CPU の難易度(表示用。CPU そのものは makeCpu で決める) */
+  cpu?: string
 }
 
-export function startSession({ speed, makeCpu = () => new AI(), resume, onKyokuStart, onGameEnd }: SessionOptions): GameSession {
+export function startSession({ speed, makeCpu = () => new AI(), resume, onKyokuStart, onGameEnd, practice = false, cpu = 'strong' }: SessionOptions): GameSession {
   const human = new HumanPlayer()
   const players: Player[] = [human, makeCpu(), makeCpu(), makeCpu()]
   const session = {} as GameSession
@@ -69,6 +76,8 @@ export function startSession({ speed, makeCpu = () => new AI(), resume, onKyokuS
     game,
     human,
     lastSay: null,
+    practice,
+    cpu,
     setSpeed: (s: GameSpeed) => {
       game.speed = s
     },

@@ -26,6 +26,7 @@ const SharedQuestionPage = lazy(() => import('./pages/SharedQuestionPage').then(
 const SoloPage = lazy(() => import('./pages/SoloPage').then((m) => ({ default: m.SoloPage })))
 const TodayPage = lazy(() => import('./pages/TodayPage').then((m) => ({ default: m.TodayPage })))
 const WaitsDrillPage = lazy(() => import('./pages/WaitsDrillPage').then((m) => ({ default: m.WaitsDrillPage })))
+const PlayStatsPage = lazy(() => import('./pages/play/PlayStatsPage').then((m) => ({ default: m.PlayStatsPage })))
 const GameReviewPage = lazy(() => import('./pages/play/GameReviewPage').then((m) => ({ default: m.GameReviewPage })))
 const ReplayPage = lazy(() => import('./pages/play/ReplayPage').then((m) => ({ default: m.ReplayPage })))
 const PlayPage = lazy(() => import('./pages/PlayPage').then((m) => ({ default: m.PlayPage })))
@@ -71,6 +72,8 @@ function resolvePage(path: string): { title?: string | null; element: ReactNode 
       return { title: 'CPU対戦', element: <PlayPage /> }
     case '/play/replay':
       return { title: 'CPU対戦の牌譜', element: <ReplayPage /> }
+    case '/play/stats':
+      return { title: 'CPU対戦の成績', element: <PlayStatsPage /> }
     case '/play/review':
       return { title: 'CPU対戦の振り返り', element: <GameReviewPage /> }
     case '/privacy':

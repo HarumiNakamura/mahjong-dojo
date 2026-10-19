@@ -15,6 +15,8 @@ export function parseGameSave(value: unknown): GameSave | null {
   if (v.marks !== undefined && !(Array.isArray(v.marks) && v.marks.every((m) => typeof m === 'object' && m !== null && isInt(m.kyoku, 0, 99) && isInt(m.step, 0, 9999)))) {
     return null
   }
+  if (v.cpu !== undefined && typeof v.cpu !== 'string') return null
+  if (v.practice !== undefined && typeof v.practice !== 'boolean') return null
   // 持ち点と供託の合計は 100,000点
   const total = (v.defen as number[]).reduce((a, b) => a + b, 0) + (v.lizhibang as number) * 1000
   if (total !== 100000) return null

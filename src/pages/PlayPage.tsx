@@ -9,6 +9,7 @@ import { gameRecordOf } from '../game/gameRecord'
 import { kyokuLabel, replayUrl, reviewUrl } from '../game/replay'
 import { describeSave } from '../game/save'
 import type { GameSave } from '../game/selfplay'
+import { DIFFICULTIES, difficultyLabel, isDifficulty, makeCpu, type Difficulty } from '../game/difficulty'
 import { startSession, type GameSession, type GameSpeed } from '../game/session'
 import { PlayResult } from './play/PlayResult'
 import { PlayTable } from './play/PlayTable'
@@ -21,9 +22,46 @@ const SPEEDS: { value: GameSpeed; label: string }[] = [
   { value: 5, label: 'ゆっくり' },
 ]
 
-/** CPU対戦(作成中。メニューやサイトマップにはまだ載せていない) */
+function DifficultyOptions({
+  difficulty,
+  onDifficulty,
+  practice,
+  onPractice,
+}: {
+  difficulty: Difficulty
+  onDifficulty: (d: Difficulty) => void
+  practice: boolean
+  onPractice: (v: boolean) => void
+}) {
+  return (
+    <fieldset className="play-options">
+      <legend>CPU の強さ</legend>
+      {DIFFICULTIES.map((d) => (
+        <label key={d.id} className="play-option">
+          <input type="radio" name="difficulty" value={d.id} checked={difficulty === d.id} onChange={() => onDifficulty(d.id)} />
+          <span>
+            <strong>{d.label}</strong>
+            <span className="play-option-text">{d.description}</span>
+          </span>
+        </label>
+      ))}
+      <label className="play-option play-option--practice">
+        <input type="checkbox" checked={practice} onChange={(e) => onPractice(e.target.checked)} />
+        <span>
+          <strong>練習モード</strong>
+          <span className="play-option-text">切る牌ごとの受け入れ枚数と、リーチ者に対する危険度のヒントを出します。成績はふつうの対局と分けて記録します。</span>
+        </span>
+      </label>
+    </fieldset>
+  )
+}
+
+/** CPU対戦 */
 export function PlayPage() {
   const [speed, setSpeed] = usePersistentSetting<number>('mahjong-dojo:play-speed', 3)
+  const [difficultySetting, setDifficulty] = usePersistentSetting<string>('mahjong-dojo:play-difficulty', 'normal')
+  const difficulty: Difficulty = isDifficulty(difficultySetting) ? difficultySetting : 'normal'
+  const [practice, setPractice] = usePersistentSetting<boolean>('mahjong-dojo:play-practice', false)
   const [session, setSession] = useState<GameSession | null>(null)
   const [saved, setSaved] = useState<GameSave | null>(() => loadGameSave())
   const { update } = useRecords()
@@ -38,16 +76,22 @@ export function PlayPage() {
     if (!resume) clearGameSave()
     setSaved(null)
     setEndedId(null)
+    // 続きからは、保存したときの難易度・練習モードで打つ
+    const cpu = resume ? (resume.cpu ?? 'strong') : difficulty
+    const practiceMode = resume ? resume.practice === true : practice
     const s = startSession({
       speed: speed as GameSpeed,
       resume,
+      makeCpu: makeCpu(cpu),
+      practice: practiceMode,
+      cpu,
       // 局が始まるたびに保存する(ページを閉じても、その局の最初から続けられる)
-      onKyokuStart: storeGameSave,
+      onKyokuStart: (save) => storeGameSave({ ...save, cpu, practice: practiceMode }),
       onGameEnd: (paipu, final) => {
         clearGameSave()
         const now = new Date()
         const id = `game-${now.getTime()}`
-        update((d) => addGame(d, gameRecordOf(paipu, final, 'latest', now, id)))
+        update((d) => addGame(d, gameRecordOf(paipu, final, cpu, now, id, practiceMode)))
         addPaipuRecords([{ id, playedAt: now.toISOString(), paipu: JSON.parse(JSON.stringify(paipu)) }])
         // 対局中に「この判断を後で見る」を押した場面を、復習リストに入れる
         const marks = s.game.marks.map((m) => ({
@@ -102,6 +146,10 @@ export function PlayPage() {
       </div>
       {session ? (
         <>
+          <p className="play-mode">
+            CPU:{difficultyLabel(session.cpu)}
+            {session.practice && <span className="play-tag">練習モード</span>}
+          </p>
           <PlayTable key={String(session.game.model.title) + session.game.model.qijia} session={session} />
           <PlayResult session={session} onRestart={() => start(null)} replayHref={endedId ? replayUrl(endedId) : null} reviewHref={endedId ? reviewUrl(endedId) : null} />
           <div className="play-controls">
@@ -123,13 +171,15 @@ export function PlayPage() {
             <li>局が始まるたびに、このブラウザに途中経過を保存します。ページを閉じても続きから打てます。</li>
           </ul>
           <p>
-            <Link to="/play/replay">これまでの牌譜を見る</Link>
+            <Link to="/play/stats">これまでの成績</Link>・<Link to="/play/replay">牌譜</Link>
           </p>
           {saved ? (
             <>
               <button type="button" className="button button--primary button--block" onClick={() => start(saved)}>
-                続きから({describeSave(saved)})
+                続きから({describeSave(saved)}・{difficultyLabel(saved.cpu ?? 'strong')}
+                {saved.practice ? '・練習モード' : ''})
               </button>
+              <DifficultyOptions difficulty={difficulty} onDifficulty={setDifficulty} practice={practice} onPractice={setPractice} />
               <button
                 type="button"
                 className="button button--block"
@@ -141,9 +191,12 @@ export function PlayPage() {
               </button>
             </>
           ) : (
-            <button type="button" className="button button--primary button--block" onClick={() => start(null)}>
-              対局を始める
-            </button>
+            <>
+              <DifficultyOptions difficulty={difficulty} onDifficulty={setDifficulty} practice={practice} onPractice={setPractice} />
+              <button type="button" className="button button--primary button--block" onClick={() => start(null)}>
+                対局を始める
+              </button>
+            </>
           )}
         </div>
       )}

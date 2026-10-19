@@ -61,6 +61,13 @@ export const JUDGMENT_PAGES: readonly PageInfo[] = [
   },
 ]
 
+/** CPU対戦(実戦。練習の仕上げ) */
+export const PLAY_PAGE: PageInfo = {
+  path: '/play',
+  title: 'CPU対戦',
+  description: 'CPU 3人と東南戦(半荘)を打ちます。終わったら、分かれ目や押し引きを振り返れます。難易度は3段階、ヒントつきの練習モードもあります。',
+}
+
 export const LEARN_PAGE: PageInfo = {
   path: '/learn',
   title: '解説',
@@ -99,6 +106,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
     label: '練習',
     children: PRACTICE_PAGES.map((p) => ({ path: p.path, label: p.title })),
   },
+  { path: PLAY_PAGE.path, label: PLAY_PAGE.title },
   { path: LEARN_PAGE.path, label: LEARN_PAGE.title },
   { path: RECORDS_PAGE.path, label: RECORDS_PAGE.title },
   { path: '/about', label: 'このサイトについて' },
@@ -119,5 +127,5 @@ export const SITE_PAGES: readonly PageInfo[] = [
 
 /** パスからページの情報を探す(記事のドリル案内などに使う) */
 export function findPageInfo(path: string): PageInfo | undefined {
-  return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE, SCORE_TABLE_PAGE, TODAY_PAGE, ...SITE_PAGES].find((p) => p.path === path)
+  return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, PLAY_PAGE, LEARN_PAGE, RECORDS_PAGE, SCORE_TABLE_PAGE, TODAY_PAGE, ...SITE_PAGES].find((p) => p.path === path)
 }
