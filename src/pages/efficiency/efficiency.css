@@ -34,6 +34,9 @@
 }
 
 .eff-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   padding: 10px;
   background: var(--surface-2);
   border-radius: 10px;
@@ -204,4 +207,24 @@
 .eff-table th,
 .eff-table td {
   font-size: 0.875rem;
+}
+
+.eff-option + .eff-option {
+  margin-top: 8px;
+}
+
+.eff-hint-open {
+  font-size: 15px;
+}
+
+.eff-hint-toggle {
+  align-self: flex-end;
+  min-height: 40px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
 }

@@ -76,9 +76,9 @@ export function SoloPlay({ game, onChange, practice }: Props) {
       </div>
 
       <p className="drill-prompt solo-prompt">
-        {riichiMode ? 'リーチ:切る牌を選んでください(テンパイになる牌だけ選べます)' : inRiichi ? 'リーチ中はツモ切りです' : '切る牌をタップしてください'}
+        {riichiMode ? 'リーチ:切る牌を選んでください(テンパイになる牌だけ選べます)' : inRiichi ? 'リーチ中はツモ切りです' : '切る牌をタップして選び、もう一度タップ(または下のボタン)で決定します'}
       </p>
-      <Hand tiles={game.hand} drawn={game.drawn} onSelect={discard} captions={captions} isDisabled={isDisabled} />
+      <Hand tiles={game.hand} drawn={game.drawn} onPick={discard} pickLabel={riichiMode ? 'を切ってリーチ' : 'を切る'} captions={captions} isDisabled={isDisabled} />
 
       {practice && (
         <p className="solo-practice-note">

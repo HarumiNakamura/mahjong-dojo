@@ -8,11 +8,14 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { availableParallelism } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads'
+import legacy from '@kobalab/majiang-ai/legacy'
 import { difficultyLabel, makeCpu } from '../src/game/difficulty'
 import { addPaipuStats, mergeStats, newStats, playCpuHanchan, type PlayerStats } from '../src/game/selfplay'
 
 const seatsOf = (cpu: string) => (cpu.includes(',') ? cpu.split(',') : [cpu, cpu, cpu, cpu])
-const makePlayer = (cpu: string) => seatsOf(cpu).map(makeCpu)
+// 0101 などの版の番号は majiang-ai の古い版(自動対局は Node.js なので legacy で読める)
+const cpuOf = (c: string) => (/^\d{4}$/.test(c) ? () => new (legacy(c))() : makeCpu(c))
+const makePlayer = (cpu: string) => seatsOf(cpu).map(cpuOf)
 const cpuName = (c: string) => (c === 'latest' || c === 'strong' ? 'つよい(majiang-ai 最新版)' : c === 'easy' ? 'やさしい' : c === 'normal' ? 'ふつう(majiang-ai 0201)' : `majiang-ai ${difficultyLabel(c)}`)
 
 if (!isMainThread) {

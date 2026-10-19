@@ -6,7 +6,7 @@
 // 強さの差は docs/cpu-stats.md(つよい CPU 1人 + その難易度の CPU 3人で 1,000半荘)
 
 import AI from '@kobalab/majiang-ai'
-import legacy from '@kobalab/majiang-ai/legacy'
+import Normal from 'majiang-ai-legacy-0201'
 import type { Player } from '@kobalab/majiang-core'
 import { EasyPlayer } from './easyPlayer'
 
@@ -23,9 +23,10 @@ export const NORMAL_LEGACY_VERSION = '0201'
 
 export function makeCpu(difficulty: string): () => Player {
   if (difficulty === 'easy') return () => new EasyPlayer()
-  if (difficulty === 'normal') return () => new (legacy(NORMAL_LEGACY_VERSION))()
+  // 「ふつう」はブラウザで動かすので、版のファイルを直接読み込む(vite.config.ts の別名)
+  if (difficulty === 'normal') return () => new Normal()
   if (difficulty === 'strong' || difficulty === 'latest') return () => new AI()
-  return () => new (legacy(difficulty))()
+  throw new Error(`知らない難易度です: ${difficulty}`)
 }
 
 export const isDifficulty = (v: unknown): v is Difficulty => v === 'easy' || v === 'normal' || v === 'strong'

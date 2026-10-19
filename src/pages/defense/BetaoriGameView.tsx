@@ -12,16 +12,14 @@ const name = (kind: number) => tileName({ kind, red: false })
 /** ベタオリサバイバルの対局画面。終わったら打牌の並びを回答として渡す */
 export function BetaoriGameView({ question, answered, onAnswer }: QuestionViewProps<BetaoriQuestion, number[]>) {
   const [game, setGame] = useState<BetaoriGame>(question.game)
-  const [selected, setSelected] = useState<number | null>(null)
   const s = game.situation
   const tiles = [...s.myHand, s.drawn]
   const last = game.turns.at(-1)
 
-  const discard = () => {
-    if (selected === null || game.end) return
-    const next = discardBetaori(game, tiles[selected].kind)
+  const discard = (i: number) => {
+    if (game.end) return
+    const next = discardBetaori(game, tiles[i].kind)
     setGame(next)
-    setSelected(null)
     if (next.end) onAnswer(next.turns.map((t) => t.discard.kind))
   }
 
@@ -52,10 +50,7 @@ export function BetaoriGameView({ question, answered, onAnswer }: QuestionViewPr
         !answered && (
           <>
             <p className="drill-prompt">安全だと思う牌を切ってください</p>
-            <Hand tiles={s.myHand} drawn={s.drawn} selected={selected} onSelect={(i) => setSelected(i === selected ? null : i)} />
-            <button type="button" className="button button--primary button--block" disabled={selected === null} onClick={discard}>
-              {selected === null ? '牌をタップして選んでください' : `${tileName(tiles[selected])}を切る`}
-            </button>
+            <Hand tiles={s.myHand} drawn={s.drawn} onPick={discard} />
           </>
         )
       )}

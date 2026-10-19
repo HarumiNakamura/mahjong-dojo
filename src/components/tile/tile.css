@@ -78,6 +78,51 @@ button.hand-tile:focus-visible {
   outline-offset: 1px;
 }
 
+/*
+ * 手牌から選ぶ画面: 本文の余白をはみ出して画面幅いっぱい(左右4px)に並べる。
+ * 幅360pxで14枚が1列に収まる最大の大きさ(約24px)になる。PC では最大560px
+ */
+.hand--full {
+  --hand-w: min(100vw - 8px, 560px);
+  width: var(--hand-w);
+  margin-inline: calc((100% - var(--hand-w)) / 2);
+  gap: 0;
+}
+
+.hand--full .hand-tile {
+  max-width: 56px;
+}
+
+.hand--full .hand-tile--drawn {
+  margin-left: 4px;
+}
+
+/* 押せる範囲は高さ44px以上(牌が小さくても押しやすく) */
+button.hand-tile {
+  min-height: 44px;
+  justify-content: flex-end;
+}
+
+.hand-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hand-pick-button {
+  margin-top: 4px;
+}
+
+.hand-pick-setting {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-end;
+  min-height: 32px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
 /* 河: 6枚ごとに改行 */
 .discards {
   display: flex;
@@ -137,7 +182,8 @@ button.hand-tile {
 
 .ukeire-cell .tile {
   --tile-w: 100%;
-  max-width: 34px;
+  /* 参考の表示なので、手牌(約24px〜)より小さくする */
+  max-width: 20px;
 }
 
 .ukeire-cell--active {

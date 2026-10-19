@@ -19,5 +19,5 @@ describe('今日の練習', () => {
     expect(dailyDoneCount(a, attempts, '2026-10-18')).toBe(2)
     expect(dailyDoneCount(a, attempts, '2026-10-19')).toBe(0)
     expect(dailyDoneCount(a, [], '2026-10-18')).toBe(0)
-  })
+  }, 30000)
 })

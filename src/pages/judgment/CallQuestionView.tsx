@@ -27,7 +27,6 @@ export function MeldTiles({ option, tile }: { option: CallOption; tile: CallQues
 export function CallQuestionView({ question: q, answered, answer, onAnswer }: QuestionViewProps<CallQuestion, CallAnswer>) {
   const s = q.situation
   const [option, setOption] = useState<CallOption | null>(null)
-  const [selected, setSelected] = useState<number | null>(null)
   const chosen =
     answered && answer && answer.type !== 'skip'
       ? (q.analysis.options.find((o) => o.type === answer.type && o.using.join() === [...answer.using].sort((a, b) => a - b).join()) ?? null)
@@ -73,10 +72,7 @@ export function CallQuestionView({ question: q, answered, answer, onAnswer }: Qu
                 type="button"
                 className="button button--block"
                 disabled={answered}
-                onClick={() => {
-                  setOption(o)
-                  setSelected(null)
-                }}
+                onClick={() => setOption(o)}
               >
                 <span className="call-choice-label">{o.type === 'pon' ? 'ポン' : 'チー'}</span>
                 {o.type === 'chi' && (
@@ -102,12 +98,15 @@ export function CallQuestionView({ question: q, answered, answer, onAnswer }: Qu
             {callLabel(chosen.type, chosen.using)}:
             <MeldTiles option={chosen} tile={s.tile} />
           </p>
-          <Hand
-            tiles={rest}
-            selected={answered && answer?.type !== 'skip' && answer ? rest.findIndex((t) => t.kind === answer.discard) : selected}
-            onSelect={answered ? undefined : (i) => setSelected(i)}
-            isDisabled={(i) => chosen.forbidden.includes(rest[i].kind)}
-          />
+          {answered ? (
+            <Hand tiles={rest} selected={answer && answer.type !== 'skip' ? rest.findIndex((t) => t.kind === answer.discard) : null} full />
+          ) : (
+            <Hand
+              tiles={rest}
+              onPick={(i) => onAnswer({ type: chosen.type, using: chosen.using, discard: rest[i].kind })}
+              isDisabled={(i) => chosen.forbidden.includes(rest[i].kind)}
+            />
+          )}
           {!answered && (
             <>
               <p className="eff-hint">
@@ -118,16 +117,6 @@ export function CallQuestionView({ question: q, answered, answer, onAnswer }: Qu
               <div className="call-choices">
                 <button type="button" className="button button--block" onClick={() => setOption(null)}>
                   戻る
-                </button>
-                <button
-                  type="button"
-                  className="button button--primary button--block"
-                  disabled={selected === null || chosen.forbidden.includes(rest[selected].kind)}
-                  onClick={() =>
-                    selected !== null && onAnswer({ type: chosen.type, using: chosen.using, discard: rest[selected].kind })
-                  }
-                >
-                  {selected === null ? '牌を選んでください' : `${tileName(rest[selected])}を切る`}
                 </button>
               </div>
             </>
