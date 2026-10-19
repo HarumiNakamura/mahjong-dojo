@@ -1,0 +1,425 @@
+/* デザイン3案の比較(/dev/theme)。.tp の中だけに効く。色・フォントは CSS 変数(src/dev/themes.ts) */
+
+.tp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.tp-controls > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tp-switch {
+  min-height: 44px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.tp-switch[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.tp-concept {
+  margin: 12px 0 4px;
+}
+
+.tp-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+
+.tp-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  border: 1px solid #888;
+  border-radius: 3px;
+  vertical-align: -3px;
+}
+
+/* ---- 見本の画面 ---- */
+.tp {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.tp--narrow {
+  max-width: 390px;
+  margin-inline: auto;
+}
+
+.tp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--header-bg);
+  color: var(--header-text);
+}
+
+.tp-logo {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  font-size: 22px;
+}
+
+.tp-menu {
+  font-size: 14px;
+}
+
+.tp-screens {
+  display: grid;
+  gap: 24px;
+  padding: 16px;
+}
+
+.tp:not(.tp--narrow) .tp-screens {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tp-label {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.tp-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tp-h1,
+.tp-h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  line-height: 1.4;
+}
+
+.tp-h1 {
+  font-size: 28px;
+}
+
+.tp-h2 {
+  font-size: 21px;
+}
+
+.tp-muted {
+  display: block;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.tp-crumb {
+  margin: 0;
+}
+
+.tp-lead {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.tp-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tp-hero p {
+  margin: 0;
+}
+
+.tp-scene {
+  padding: 10px 8px;
+  border-radius: var(--radius);
+  background: var(--scene);
+  color: var(--scene-text);
+}
+
+.tp-scene .hand {
+  padding-top: 4px;
+}
+
+/* 見本の中では、手牌は見本の枠の幅に合わせる(本番は画面幅いっぱい) */
+.tp .hand--full {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.tp-pick .hand {
+  padding: 14px 4px 8px;
+  border-radius: var(--radius);
+  background: var(--scene);
+}
+
+.tp-button {
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--accent);
+  font: inherit;
+  font-weight: 700;
+}
+
+.tp-button--primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.tp-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.tp-card > span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.tp-card--big {
+  grid-column: 1 / -1;
+  padding: 16px;
+  font-size: 18px;
+}
+
+.tp-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius);
+  background: var(--scene);
+}
+
+.tp-icon .tile {
+  --tile-w: 22px;
+}
+
+.tp-card--big .tp-icon {
+  width: 72px;
+  height: 72px;
+}
+
+.tp-card--big .tp-icon .tile {
+  --tile-w: 30px;
+}
+
+.tp-term {
+  text-decoration: underline dotted var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.tp-figure {
+  margin: 0;
+}
+
+.tp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.tp-table th {
+  background: var(--surface-2);
+  text-align: left;
+}
+
+.tp-table th,
+.tp-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tp-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 4px solid var(--accent-2);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.tp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.tp-badge {
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+
+.tp-dora {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tp-dora .tile {
+  --tile-w: 20px;
+}
+
+.tp-prompt {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  font-size: 20px;
+}
+
+.tp-result {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.tp-result p {
+  margin: 0 0 8px;
+}
+
+.tp-ok {
+  padding: 0 8px;
+  border-radius: 4px;
+  background: var(--correct);
+  color: var(--surface);
+  font-weight: 700;
+}
+
+.tp-bars {
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.tp-bar-row {
+  display: grid;
+  grid-template-columns: 3em 1fr 3em;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-bar {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.tp-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.tp-bar-fill--sub {
+  background: var(--text-muted);
+}
+
+.tp-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ---- 案ごとの飾り ---- */
+
+/* A 道場: 見出しの下に朱の線、カードは直線的 */
+.tp--dojo .tp-h2 {
+  padding-bottom: 4px;
+  border-bottom: 3px solid var(--accent);
+}
+
+.tp--dojo .tp-h1 {
+  padding-left: 12px;
+  border-left: 6px solid var(--accent);
+}
+
+.tp--dojo .tp-header {
+  border-bottom: 4px solid var(--accent);
+}
+
+/* B 雀卓: フェルトの場面と、点棒の赤い線 */
+.tp--jantaku .tp-scene {
+  box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.tp--jantaku .tp-card--big {
+  border-top: 6px solid var(--accent-2);
+}
+
+.tp--jantaku .tp-h2::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 4px;
+  background: var(--accent-2);
+  vertical-align: 4px;
+}
+
+/* C 藍: 青海波の模様と金の差し色 */
+.tp--ai .tp-header {
+  background-color: var(--header-bg);
+  background-image: radial-gradient(circle at 50% 100%, transparent 9px, rgba(255, 255, 255, 0.08) 10px, transparent 11px);
+  background-size: 22px 11px;
+}
+
+.tp--ai .tp-card {
+  border-left: 5px solid var(--accent-2);
+}
+
+.tp--ai .tp-h2 {
+  color: var(--accent);
+}
