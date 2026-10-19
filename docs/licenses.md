@@ -18,3 +18,16 @@
 | ツール | 用途 | ライセンス |
 | --- | --- | --- |
 | opentype.js(`opentype.js`) | フォントから文字の形を読み取り、SVG のパスに変換する(開発時のみ使用) | MIT License |
+
+## CPU対戦に使っているライブラリ
+
+CPU対戦(`/play`)の対局の進行と CPU の思考には、次のライブラリを使っています(`src/game/`)。
+
+| ライブラリ | 取得元(npm) | 使用箇所 | 著作権表示 | ライセンス |
+| --- | --- | --- | --- | --- |
+| 電脳麻将 基本ライブラリ | `@kobalab/majiang-core` 1.4.1 | 対局の進行・アガリ判定 | Copyright(C) 2021 Satoshi Kobayashi | MIT License |
+| 電脳麻将 思考ルーチン | `@kobalab/majiang-ai` 1.3.0 | CPU の打牌・鳴き・リーチの判断 | Copyright(C) 2021 Satoshi Kobayashi | MIT License |
+
+- リポジトリ: https://github.com/kobalab/majiang-core 、https://github.com/kobalab/majiang-ai
+- MIT License の全文: https://github.com/kobalab/majiang-core/blob/master/LICENSE
+- ルールは Mリーグ公式ルールに合わせて設定しています(`src/game/rule.ts`)。ライブラリで再現できない項目は `docs/game-rules-gap.md` にまとめています。

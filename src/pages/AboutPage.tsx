@@ -63,6 +63,24 @@ export function AboutPage() {
         サイトを続けるため、ページの下部に広告(Google アドセンス)を掲載する予定です。問題・牌・ボタンの近くには置かず、操作の邪魔にならない場所にします。
       </p>
 
+      <h2>クレジット</h2>
+      <ul>
+        <li>
+          牌の文字:Shippori Mincho B1(SIL Open Font License 1.1、Copyright 2021 The Shippori Mincho Project Authors)
+        </li>
+        <li>
+          CPU対戦の対局の進行と CPU の思考:
+          <a href="https://github.com/kobalab/majiang-core" target="_blank" rel="noopener noreferrer">
+            電脳麻将 majiang-core
+          </a>
+          ・
+          <a href="https://github.com/kobalab/majiang-ai" target="_blank" rel="noopener noreferrer">
+            majiang-ai
+          </a>
+          (MIT License、Copyright(C) 2021 Satoshi Kobayashi)
+        </li>
+      </ul>
+
       <h2>お問い合わせ</h2>
       <p>
         ご意見や誤りのご指摘は、<Link to="/contact">運営者情報・お問い合わせ</Link>のページからお送りください。

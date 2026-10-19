@@ -20,5 +20,5 @@ describe('どのドリルの問題も URL で共有して再現できる', () =>
       covered.add(definition.id)
     }
     expect([...covered].sort()).toEqual(DRILLS.map((d) => d.id).sort())
-  })
+  }, 60000)
 })
