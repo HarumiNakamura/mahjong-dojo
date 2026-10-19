@@ -1,4 +1,5 @@
 import { callLabel, type CallAnswer } from '../../engine/call'
+import { Term } from '../../components/term/Term'
 import type { CallQuestion } from '../../engine/callQuestion'
 import { tileName } from '../../engine/tiles'
 
@@ -18,7 +19,7 @@ export function CallExplanation({ question: q, answer }: { question: CallQuestio
         正解: <strong>{verdictText}</strong>
       </p>
       <p>
-        鳴かないとき: シャンテン数 {a.shanten}。{a.closedReasons.join('')}
+        鳴かないとき: <Term id="shanten">シャンテン数</Term> {a.shanten}。{a.closedReasons.join('')}
       </p>
       <ol className="plan-scores">
         {a.options.map((o) => (

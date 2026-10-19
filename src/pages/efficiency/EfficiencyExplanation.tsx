@@ -1,4 +1,5 @@
 import { Tile } from '../../components/tile/Tile'
+import { Term } from '../../components/term/Term'
 import { explainDiscard, shantenLabel } from '../../engine/efficiencyExplain'
 import type { EfficiencyQuestion } from '../../engine/efficiencyQuestion'
 import { tileName } from '../../engine/tiles'
@@ -10,12 +11,16 @@ export function EfficiencyExplanation({ question, answer }: { question: Efficien
       <p>{e.summary}</p>
       {e.backwardReason && (
         <p className="eff-backward">
-          <strong>シャンテン戻しが正解の理由:</strong>
+          <strong>
+            <Term id="shanten-modoshi">シャンテン戻し</Term>が正解の理由:
+          </strong>
           {e.backwardReason}
         </p>
       )}
 
-      <h3 className="eff-heading">最善の{tileName(e.bestTile)}切りの有効牌</h3>
+      <h3 className="eff-heading">
+        最善の{tileName(e.bestTile)}切りの<Term id="yukohai">有効牌</Term>
+      </h3>
       <ul className="eff-best-tiles">
         {e.bestTiles.map((t) => (
           <li key={t.kind}>
@@ -30,8 +35,12 @@ export function EfficiencyExplanation({ question, answer }: { question: Efficien
         <thead>
           <tr>
             <th scope="col">打牌</th>
-            <th scope="col">シャンテン数</th>
-            <th scope="col">受け入れ</th>
+            <th scope="col">
+              <Term id="shanten">シャンテン数</Term>
+            </th>
+            <th scope="col">
+              <Term id="ukeire">受け入れ</Term>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -47,7 +56,9 @@ export function EfficiencyExplanation({ question, answer }: { question: Efficien
               </td>
               <td>
                 {shantenLabel(r.shanten)}
-                {r.backward && <span className="eff-back">戻し</span>}
+                {r.backward && <span className="eff-back">
+                    <Term id="shanten-modoshi">戻し</Term>
+                  </span>}
               </td>
               <td>
                 {r.kinds}種{r.total}枚

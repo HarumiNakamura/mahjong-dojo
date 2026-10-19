@@ -1,4 +1,5 @@
 import { Link } from '../../app/Link'
+import { Term } from '../../components/term/Term'
 import { useRecords } from '../../app/records/useRecords'
 import { gameRates, gameSummary, type GameRecord } from '../../engine/records'
 import { DIFFICULTIES, difficultyLabel } from '../../game/difficulty'
@@ -51,11 +52,15 @@ function StatsCard({ title, games }: { title: string; games: readonly GameRecord
           <dd>{pct(r.hule)}</dd>
         </div>
         <div>
-          <dt>放銃率</dt>
+          <dt>
+            <Term id="houjuu">放銃</Term>率
+          </dt>
           <dd>{pct(r.fangchong)}</dd>
         </div>
         <div>
-          <dt>副露率</dt>
+          <dt>
+            <Term id="fuuro">副露</Term>率
+          </dt>
           <dd>{pct(r.fulou)}</dd>
         </div>
         <div>

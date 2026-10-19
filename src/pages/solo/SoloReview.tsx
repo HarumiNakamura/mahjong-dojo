@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Term } from '../../components/term/Term'
 import { Discards } from '../../components/tile/Discards'
 import { Hand } from '../../components/tile/Hand'
 import { Tile } from '../../components/tile/Tile'
@@ -44,7 +45,9 @@ export function SoloReview({ game }: { game: SoloGame }) {
             </dd>
           </div>
           <div>
-            <dt>受け入れの差(合計)</dt>
+            <dt>
+              <Term id="ukeire">受け入れ</Term>の差(合計)
+            </dt>
             <dd>{summary.totalDiff}枚</dd>
           </div>
         </dl>
