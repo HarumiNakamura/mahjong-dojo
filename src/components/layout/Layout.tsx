@@ -18,10 +18,12 @@ interface LayoutProps {
   /** ページの題名(ブラウザのタブに出す)。null ならページ自身が設定する */
   title?: string | null
   children: ReactNode
+  /** 広告枠を出さない(操作ボタンが画面の下にあるページ) */
+  hideAd?: boolean
 }
 
 /** サイト共通の枠: ヘッダー・ナビゲーション・本文・広告枠・フッター */
-export function Layout({ title, children }: LayoutProps) {
+export function Layout({ title, children, hideAd = false }: LayoutProps) {
   const path = usePath()
   // メニューを開いたときのページ。別のページに移ったら自動的に閉じた扱いになる
   const [menuOpenedAt, setMenuOpenedAt] = useState<string | null>(null)
@@ -101,9 +103,11 @@ export function Layout({ title, children }: LayoutProps) {
         {children}
       </main>
 
-      <div className="site-ad">
-        <AdSlot />
-      </div>
+      {!hideAd && (
+        <div className="site-ad">
+          <AdSlot />
+        </div>
+      )}
 
       <footer className="site-footer">
         <nav className="footer-nav" aria-label="サイトのページ一覧">

@@ -1,0 +1,334 @@
+/* CPU対戦(スマホ縦画面を優先) */
+.play-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.play-speed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.play-speed select {
+  min-height: 40px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.play-start {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.play-start p,
+.play-start ul {
+  margin: 0;
+}
+
+.play {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* 下の操作ボタンの分だけ余白を取る */
+  padding-bottom: 72px;
+}
+
+.play-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 14px;
+}
+
+.play-round {
+  font-weight: 700;
+}
+
+.play-dora {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.play-dora .tile {
+  --tile-w: 18px;
+}
+
+.play-zoom {
+  margin-left: auto;
+  min-height: 32px;
+  padding: 2px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
+/* 他家3人の河: 対面を上に、上家と下家を左右に */
+.play-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'toimen toimen'
+    'kamicha shimocha';
+  gap: 6px;
+}
+
+.play-board--large {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'toimen'
+    'kamicha'
+    'shimocha';
+}
+
+.play-seat {
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.play-seat--2 {
+  grid-area: toimen;
+}
+
+.play-seat--3 {
+  grid-area: kamicha;
+}
+
+.play-seat--1 {
+  grid-area: shimocha;
+}
+
+.play-seat-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.play-wind {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 12px;
+}
+
+.play-score {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.play-tag {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--wrong-bg);
+  color: var(--wrong);
+  font-size: 12px;
+}
+
+.play-say {
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 13px;
+}
+
+.play-melds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.play-meld {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.play-meld .tile {
+  --tile-w: 26px;
+}
+
+.play-meld--small .tile {
+  --tile-w: 16px;
+}
+
+.play-river {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.play-river-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+/* 捨て牌は小さくなりすぎないようにする(2列のときでも 20px) */
+.play-river .tile {
+  --tile-w: 20px;
+}
+
+.play-river--large .tile {
+  --tile-w: 32px;
+}
+
+.play-river-tile {
+  display: inline-flex;
+}
+
+.play-river-tile--called {
+  opacity: 0.35;
+}
+
+.play-me {
+  padding: 6px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.play-me .play-river .tile {
+  --tile-w: 24px;
+}
+
+.play-me .play-river--large .tile {
+  --tile-w: 32px;
+}
+
+.play-hand {
+  margin-top: 6px;
+}
+
+.play-hand .hand {
+  padding-top: 10px;
+}
+
+.play-my-melds {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.play-hint {
+  min-height: 1.5em;
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* 操作ボタンは画面の下に固定 */
+.play-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom));
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.play-actions:empty {
+  display: none;
+}
+
+.play-actions .button {
+  min-width: 88px;
+  min-height: 48px;
+}
+
+.play-choice .play-meld .tile {
+  --tile-w: 22px;
+}
+
+/* 局・半荘の結果 */
+.play-result {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(100%, var(--content-max));
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 16px var(--gutter) calc(16px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  border-top: 3px solid var(--accent);
+  border-radius: 12px 12px 0 0;
+  background: var(--surface);
+  box-shadow: 0 -4px 16px var(--shadow);
+}
+
+.play-result-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.play-result-hand .hand {
+  padding-top: 0;
+}
+
+.play-result-yaku {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.play-result-points {
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.play-result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.play-result-table td {
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.play-result-me {
+  font-weight: 700;
+  background: var(--accent-soft);
+}

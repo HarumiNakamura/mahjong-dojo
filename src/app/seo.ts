@@ -77,6 +77,8 @@ export function pageMeta(path: string): PageMeta {
     return { ...fix(`${drill.title}の問題`, `麻雀道場(仮)の「${drill.title}」の問題です。あなたならどうする?`, ogImagePath(drill.id)), noindex: true }
   }
   if (/^\/records\/review\//.test(path)) return { ...fix('解き直し', '間違えた問題・お気に入りの問題を解き直します。'), noindex: true }
+  // CPU対戦は作成中。URL を知っている人だけが開ける(検索結果・サイトマップに出さない)
+  if (path === '/play') return { ...fix('CPU対戦', 'CPU 3人と東南戦(半荘)を打ちます。'), noindex: true }
   if (path.startsWith('/dev/')) return { ...fix('開発用ページ', '表示の確認用のページです。'), noindex: true }
   return { ...fix('ページが見つかりません', 'お探しのページは見つかりませんでした。'), noindex: true }
 }
@@ -92,6 +94,7 @@ export function prerenderPaths(): string[] {
     ...ARTICLES.map((a) => a.path),
     ...DRILLS.map((d) => `/q/${d.id}`),
     ...DRILLS.flatMap((d) => [`/records/review/${d.id}/mistakes`, `/records/review/${d.id}/favorites`]),
+    '/play',
     '/dev/tiles',
     '/dev/drill',
   ].filter((p, i, all) => all.indexOf(p) === i)
