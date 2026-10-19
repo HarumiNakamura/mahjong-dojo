@@ -19,7 +19,7 @@ export function WaitsDrillPage() {
   const [level, setLevel] = useState<WaitsLevel | null>(null)
   const [seed, setSeed] = useState(0)
   const rng = useMemo(() => createRng(seed), [seed])
-  const { onResult, favorite } = useDrillRecorder(waitsDrill)
+  const { onResult, favorite, share } = useDrillRecorder(waitsDrill)
   const newSeed = () => setSeed(Math.floor(Math.random() * 2 ** 31))
 
   if (level === null) {
@@ -93,6 +93,7 @@ export function WaitsDrillPage() {
           renderExplanation={waitsDrill.renderExplanation}
           onResult={onResult}
           favorite={favorite}
+          share={share}
         />
       )}
       <StorageNotice compact />

@@ -314,3 +314,53 @@
   font-size: 14px;
   color: var(--text-muted);
 }
+
+/* OGP 画像の元(開発用。/dev/og/<id>) */
+.og-card {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  width: 1200px;
+  height: 630px;
+  padding: 56px 72px;
+  background: var(--bg);
+  border-top: 24px solid var(--accent);
+  color: var(--text);
+}
+
+.og-card p {
+  margin: 0;
+}
+
+.og-site {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.og-title {
+  font-size: 76px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.og-text {
+  font-size: 34px;
+  color: var(--text-muted);
+}
+
+.og-hand {
+  margin-top: 16px;
+}
+
+.og-hand .hand {
+  justify-content: flex-start;
+}
+
+.og-hand .hand-tile {
+  max-width: 72px;
+}

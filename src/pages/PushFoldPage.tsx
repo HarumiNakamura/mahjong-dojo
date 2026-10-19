@@ -17,7 +17,7 @@ const QUESTIONS_PER_SET = 10
 export function PushFoldPage() {
   const [seed] = useState(() => Math.floor(Math.random() * 2 ** 31))
   const rng = useMemo(() => createRng(seed), [seed])
-  const { onResult, favorite } = useDrillRecorder(pushFoldDrill)
+  const { onResult, favorite, share } = useDrillRecorder(pushFoldDrill)
   return (
     <>
       <div className="eff-header">
@@ -37,6 +37,7 @@ export function PushFoldPage() {
         renderExplanation={pushFoldDrill.renderExplanation}
         onResult={onResult}
         favorite={favorite}
+        share={share}
       />
       <StorageNotice compact />
     </>

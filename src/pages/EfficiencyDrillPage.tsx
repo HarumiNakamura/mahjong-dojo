@@ -14,7 +14,7 @@ export function EfficiencyDrillPage() {
   const [difficulty, setDifficulty] = useState<Difficulty | null>(null)
   // 難易度を選ぶたびに新しい乱数で問題を作る
   const [seed, setSeed] = useState(0)
-  const { onResult, favorite } = useDrillRecorder(efficiencyDrill)
+  const { onResult, favorite, share } = useDrillRecorder(efficiencyDrill)
   // 乱数は種が変わったときだけ作り直す(記録を保存して画面が描き直されても、同じ問題に戻らないように)
   const rng = useMemo(() => createRng(seed), [seed])
 
@@ -74,6 +74,7 @@ export function EfficiencyDrillPage() {
         renderExplanation={efficiencyDrill.renderExplanation}
         onResult={onResult}
         favorite={favorite}
+        share={share}
       />
       <StorageNotice compact />
     </>

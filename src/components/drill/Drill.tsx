@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useRef, type ReactNode } from 'react'
 import { accuracy, drillReducer, initialDrillState, type DrillAction, type DrillState } from './drillState'
+import { ShareButton } from './ShareButton'
 import './drill.css'
 
 export interface QuestionViewProps<Q, A> {
@@ -38,6 +39,13 @@ export interface DrillProps<Q, A> {
     isFavorite: (question: Q) => boolean
     toggle: (question: Q) => void
   }
+  /** 指定すると、問題を URL で共有するボタンを出す */
+  share?: {
+    /** 共有のパス(/q/…) */
+    path: (question: Q) => string
+    /** X に投稿するときの文 */
+    text: (question: Q) => string
+  }
 }
 
 /** ドリル共通の部品: 問題 → 回答 → 正誤 → 解説 → 次の問題 */
@@ -49,6 +57,7 @@ export function Drill<Q, A>({
   onResult,
   totalQuestions,
   favorite,
+  share,
 }: DrillProps<Q, A>) {
   const [state, dispatch] = useReducer(
     drillReducer as (s: DrillState<Q, A>, a: DrillAction<Q, A>) => DrillState<Q, A>,
@@ -112,17 +121,22 @@ export function Drill<Q, A>({
           {state.stats.streak >= 2 && <span className="drill-streak">{state.stats.streak}連続正解</span>}
         </span>
       </div>
-      {favorite && (
+      {(favorite || share) && (
         <div className="drill-tools">
-          <button
-            type="button"
-            className="drill-favorite"
-            aria-pressed={favorite.isFavorite(state.question)}
-            onClick={() => favorite.toggle(state.question)}
-          >
-            <span aria-hidden="true">{favorite.isFavorite(state.question) ? '★' : '☆'}</span>
-            {favorite.isFavorite(state.question) ? 'お気に入り登録済み' : 'お気に入りに登録'}
-          </button>
+          {favorite && (
+            <button
+              type="button"
+              className="drill-favorite"
+              aria-pressed={favorite.isFavorite(state.question)}
+              onClick={() => favorite.toggle(state.question)}
+            >
+              <span aria-hidden="true">{favorite.isFavorite(state.question) ? '★' : '☆'}</span>
+              {favorite.isFavorite(state.question) ? 'お気に入り登録済み' : 'お気に入りに登録'}
+            </button>
+          )}
+          {share && (
+            <ShareButton key={state.index} path={share.path(state.question)} text={share.text(state.question)} />
+          )}
         </div>
       )}
 
