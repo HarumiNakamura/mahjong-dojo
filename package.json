@@ -13,9 +13,12 @@
     "deploy": "npm run build && wrangler deploy",
     "build:glyphs": "node scripts/build-tile-glyphs.mjs",
     "report:scoring": "SCORING_REPORT=1 vitest run src/engine/scoring.test.ts",
-    "build:og": "node scripts/build-og-images.mjs"
+    "build:og": "node scripts/build-og-images.mjs",
+    "cpu:selfplay": "vite build --ssr scripts/cpu-selfplay.ts --outDir dist-tools --emptyOutDir && node dist-tools/cpu-selfplay.js"
   },
   "dependencies": {
+    "@kobalab/majiang-ai": "^1.3.0",
+    "@kobalab/majiang-core": "^1.4.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
