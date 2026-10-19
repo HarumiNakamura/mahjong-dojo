@@ -7,6 +7,8 @@ import {
   dailyTrend,
   emptyRecords,
   exportRecords,
+  gameSummary,
+  type GameRecord,
   localDate,
   mergeRecords,
   mistakes,
@@ -14,6 +16,7 @@ import {
   statsOf,
   toggleFavorite,
 } from '../../engine/records'
+import { formatPoints } from '../../game/result'
 import { TrendChart } from './TrendChart'
 import './records.css'
 import '../pages.css'
@@ -35,6 +38,49 @@ function restore(drillId: string, data: unknown) {
   } catch {
     return null
   }
+}
+
+/** CPU対戦の成績(対局したことがあるときだけ出す) */
+function GameSection({ games }: { games: readonly GameRecord[] }) {
+  const s = gameSummary(games)
+  const recent = games.slice(-5).reverse()
+  return (
+    <section className="rec-section">
+      <h2>CPU対戦の成績</h2>
+      <div className="rec-card">
+        <dl className="rec-stats">
+          <div>
+            <dt>対局数</dt>
+            <dd>{s.games}回</dd>
+          </div>
+          <div>
+            <dt>平均順位</dt>
+            <dd>{s.averageRank === null ? '-' : `${s.averageRank.toFixed(2)}位`}</dd>
+          </div>
+          <div>
+            <dt>合計ポイント</dt>
+            <dd>{formatPoints(s.totalPoints10)}</dd>
+          </div>
+          <div>
+            <dt>アガリ率</dt>
+            <dd>{s.huleRate === null ? '-' : `${s.huleRate}%`}</dd>
+          </div>
+          <div>
+            <dt>放銃率</dt>
+            <dd>{s.fangchongRate === null ? '-' : `${s.fangchongRate}%`}</dd>
+          </div>
+        </dl>
+        <h3 className="rec-subheading">最近の対局</h3>
+        <ul className="rec-games">
+          {recent.map((g) => (
+            <li key={g.id}>
+              {formatDateTime(g.playedAt)} {g.rank}位 {g.score.toLocaleString('ja-JP')}点({formatPoints(g.points10)})
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
 }
 
 export function RecordsPage() {
@@ -124,6 +170,8 @@ export function RecordsPage() {
           )
         })}
       </section>
+
+      {data.games.length > 0 && <GameSection games={data.games} />}
 
       <section className="rec-section">
         <h2>間違えた問題</h2>

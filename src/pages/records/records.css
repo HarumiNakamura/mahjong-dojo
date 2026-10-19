@@ -209,3 +209,13 @@
 .rec-more {
   margin-top: 10px;
 }
+
+.rec-subheading {
+  margin: 16px 0 4px;
+  font-size: 16px;
+}
+
+.rec-games {
+  margin: 0;
+  padding-left: 1.2em;
+}
