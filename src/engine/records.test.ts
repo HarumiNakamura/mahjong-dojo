@@ -9,6 +9,7 @@ import {
   MAX_ATTEMPTS,
   mergeRecords,
   mistakes,
+  paipuInFile,
   parseRecordsFile,
   sanitizeRecords,
   statsOf,
@@ -212,5 +213,12 @@ describe('CPU対戦の成績', () => {
   it('書き出したファイルを読み込むと対局成績も戻る', () => {
     const data = addGame(emptyRecords(), game({}))
     expect(parseRecordsFile(exportRecords(data, new Date(0))).games).toEqual(data.games)
+  })
+
+  it('牌譜も一緒に書き出し、読み込める(牌譜のない古いファイルは空)', () => {
+    const text = exportRecords(emptyRecords(), new Date(0), [{ id: 'g1' }])
+    expect(paipuInFile(text)).toEqual([{ id: 'g1' }])
+    expect(paipuInFile(exportRecords(emptyRecords(), new Date(0)))).toEqual([])
+    expect(paipuInFile('broken')).toEqual([])
   })
 })

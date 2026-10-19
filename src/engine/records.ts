@@ -204,11 +204,14 @@ export interface RecordsFile {
   type: typeof RECORDS_FILE_TYPE
   exportedAt: string
   data: RecordsData
+  /** CPU対戦の牌譜(中身は src/game/paipuRecords.ts で確かめる) */
+  paipu?: unknown[]
 }
 
 /** 書き出し用の JSON 文字列 */
-export function exportRecords(data: RecordsData, now: Date): string {
+export function exportRecords(data: RecordsData, now: Date, paipu: readonly unknown[] = []): string {
   const file: RecordsFile = { type: RECORDS_FILE_TYPE, exportedAt: now.toISOString(), data }
+  if (paipu.length) file.paipu = [...paipu]
   return JSON.stringify(file, null, 2)
 }
 
@@ -272,6 +275,16 @@ export function parseRecordsFile(text: string): RecordsData {
     throw new Error('対応していない形式の記録ファイルです')
   }
   return sanitizeRecords(json.data)
+}
+
+/** 書き出したファイルに入っている牌譜(なければ空。parseRecordsFile のあとに呼ぶ) */
+export function paipuInFile(text: string): unknown[] {
+  try {
+    const json: unknown = JSON.parse(text)
+    return isObject(json) && Array.isArray(json.paipu) ? json.paipu : []
+  } catch {
+    return []
+  }
 }
 
 /** 読み込んだ記録を今の記録に合わせる(同じ記録は1つにまとめる) */

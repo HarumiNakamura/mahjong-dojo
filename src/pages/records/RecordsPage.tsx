@@ -12,10 +12,14 @@ import {
   localDate,
   mergeRecords,
   mistakes,
+  paipuInFile,
   parseRecordsFile,
   statsOf,
   toggleFavorite,
 } from '../../engine/records'
+import { addPaipuRecords, clearPaipuRecords, loadPaipuRecords } from '../../app/paipuStore'
+import { sanitizePaipuRecords } from '../../game/paipuRecords'
+import { replayUrl } from '../../game/replay'
 import { formatPoints } from '../../game/result'
 import { TrendChart } from './TrendChart'
 import './records.css'
@@ -43,6 +47,7 @@ function restore(drillId: string, data: unknown) {
 /** CPU対戦の成績(対局したことがあるときだけ出す) */
 function GameSection({ games }: { games: readonly GameRecord[] }) {
   const s = gameSummary(games)
+  const [replayable] = useState(() => new Set(loadPaipuRecords().map((r) => r.id)))
   const recent = games.slice(-5).reverse()
   return (
     <section className="rec-section">
@@ -75,6 +80,12 @@ function GameSection({ games }: { games: readonly GameRecord[] }) {
           {recent.map((g) => (
             <li key={g.id}>
               {formatDateTime(g.playedAt)} {g.rank}位 {g.score.toLocaleString('ja-JP')}点({formatPoints(g.points10)})
+              {replayable.has(g.id) && (
+                <>
+                  {' '}
+                  <Link to={replayUrl(g.id)}>牌譜</Link>
+                </>
+              )}
             </li>
           ))}
         </ul>
@@ -93,7 +104,7 @@ export function RecordsPage() {
 
   const wrong = mistakes(data)
   const handleExport = () => {
-    const blob = new Blob([exportRecords(data, new Date())], { type: 'application/json' })
+    const blob = new Blob([exportRecords(data, new Date(), loadPaipuRecords())], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -110,7 +121,9 @@ export function RecordsPage() {
     e.target.value = ''
     if (!file) return
     try {
-      const incoming = parseRecordsFile(await file.text())
+      const text = await file.text()
+      const incoming = parseRecordsFile(text)
+      addPaipuRecords(sanitizePaipuRecords(paipuInFile(text)))
       let added = 0
       update((current) => {
         const merged = mergeRecords(current, incoming)
@@ -124,8 +137,9 @@ export function RecordsPage() {
   }
 
   const handleClear = () => {
-    if (window.confirm('この端末の学習記録とお気に入りをすべて消します。元に戻せません。よろしいですか?')) {
+    if (window.confirm('この端末の学習記録とお気に入り(CPU対戦の成績・牌譜を含む)をすべて消します。元に戻せません。よろしいですか?')) {
       update(() => emptyRecords())
+      clearPaipuRecords()
       setMessage({ text: '記録をすべて消しました。' })
     }
   }

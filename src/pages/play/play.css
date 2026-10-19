@@ -397,3 +397,79 @@
 .play-result-table td:first-child {
   white-space: nowrap;
 }
+
+/* 牌譜の再生 */
+.replay-controls-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.replay-select select {
+  max-width: 100%;
+  min-height: 40px;
+  margin-left: 4px;
+  font-size: 16px;
+}
+
+.replay-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+}
+
+.replay-small-button {
+  min-height: 40px;
+  font-size: 14px;
+}
+
+.replay-hand--small {
+  margin-top: 4px;
+}
+
+.replay-hand--small .tile {
+  --tile-w: 14px;
+}
+
+.replay-hand--small .hand {
+  padding-top: 0;
+}
+
+.replay {
+  /* 下の操作バー(説明 + ボタン)の分だけ余白を取る */
+  padding-bottom: 120px;
+}
+
+.replay-actions {
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.replay-step {
+  width: 100%;
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+}
+
+.replay-actions .button {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 120px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.replay-list {
+  padding-left: 1.2em;
+}
+
+.replay-list-link {
+  display: inline-block;
+  min-height: 40px;
+  padding: 8px 0;
+}

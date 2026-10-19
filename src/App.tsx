@@ -26,6 +26,7 @@ const SharedQuestionPage = lazy(() => import('./pages/SharedQuestionPage').then(
 const SoloPage = lazy(() => import('./pages/SoloPage').then((m) => ({ default: m.SoloPage })))
 const TodayPage = lazy(() => import('./pages/TodayPage').then((m) => ({ default: m.TodayPage })))
 const WaitsDrillPage = lazy(() => import('./pages/WaitsDrillPage').then((m) => ({ default: m.WaitsDrillPage })))
+const ReplayPage = lazy(() => import('./pages/play/ReplayPage').then((m) => ({ default: m.ReplayPage })))
 const PlayPage = lazy(() => import('./pages/PlayPage').then((m) => ({ default: m.PlayPage })))
 const PrivacyPage = lazy(() => import('./pages/site/PrivacyPage').then((m) => ({ default: m.PrivacyPage })))
 const ContactPage = lazy(() => import('./pages/site/ContactPage').then((m) => ({ default: m.ContactPage })))
@@ -67,6 +68,8 @@ function resolvePage(path: string): { title?: string | null; element: ReactNode 
       return { title: 'このサイトについて', element: <AboutPage /> }
     case '/play':
       return { title: 'CPU対戦', element: <PlayPage /> }
+    case '/play/replay':
+      return { title: 'CPU対戦の牌譜', element: <ReplayPage /> }
     case '/privacy':
       return { title: 'プライバシーポリシー', element: <PrivacyPage /> }
     case '/contact':
@@ -103,7 +106,7 @@ function App() {
     <TileSettingsProvider>
       {/* key でページごとに状態をリセットする */}
       {/* CPU対戦は操作ボタンが画面の下にあるので、広告枠を出さない */}
-      <Layout title={title} hideAd={path === '/play'}>
+      <Layout title={title} hideAd={path === '/play' || path === '/play/replay'}>
         <div key={path}>
           <Suspense fallback={<p className="page-loading">読み込み中…</p>}>{element}</Suspense>
         </div>
