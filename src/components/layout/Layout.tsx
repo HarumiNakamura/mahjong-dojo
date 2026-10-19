@@ -8,8 +8,8 @@ import './layout.css'
 const SITE_NAME = '麻雀道場(仮)'
 
 interface LayoutProps {
-  /** ページの題名(ブラウザのタブに出す) */
-  title?: string
+  /** ページの題名(ブラウザのタブに出す)。null ならページ自身が設定する */
+  title?: string | null
   children: ReactNode
 }
 
@@ -22,6 +22,7 @@ export function Layout({ title, children }: LayoutProps) {
   const close = () => setMenuOpenedAt(null)
 
   useEffect(() => {
+    if (title === null) return
     document.title = title ? `${title} | ${SITE_NAME}` : SITE_NAME
   }, [title])
 

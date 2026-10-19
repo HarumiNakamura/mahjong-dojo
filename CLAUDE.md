@@ -85,6 +85,7 @@
 - `src/pages/home/` … ホームのロードマップ・弱点マップ・今日の練習
 - `src/app/share.ts`・`src/components/drill/ShareButton.tsx`・`src/pages/SharedQuestionPage.tsx` … 問題の共有(`/q/<ドリル>?d=<問題データ>`。問題データは JSON を base64url にしたもの。URL のコピーと X への投稿)
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
+- `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
 - `src/pages/score/` … 点数計算ドリル(`/practice/score`)と点数早見表(`/score-table`)の表示・解説
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック
@@ -95,6 +96,7 @@
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
 - `src/content/` … 解説記事。`articles/*.md` に1記事1ファイルで書く(`markdown.ts` の小さな Markdown:見出し・段落・箇条書き・表・`>` 補足・`[[123m]]` 文中の牌・`@tiles` 手牌の図・`@drill` ドリルの案内)。先頭の `---` に title・description・order・category・drills(記事の最後の「この記事のドリル」)・related(関連記事)。本文は1,500〜3,000文字(`articles.test.ts` で文字数・リンク・牌の表記を確認)
 - `src/pages/LearnPage.tsx`・`ArticlePage.tsx`・`src/components/article/` … 記事一覧(`/learn`)と記事ページ(`/learn/<ファイル名>`)
+- `src/App.tsx` … ページの切り替え。ページは `lazy` で必要なときに読み込む(最初に読み込む JS を小さくする)
 - `src/` … 画面(React コンポーネント)
 
 ## デザイン
@@ -110,7 +112,7 @@ engine では `"123m456p789s1122z"` 形式の文字列を使う(m=萬子, p=筒�
 
 - `npm run dev` … 開発サーバー
 - `npm test` … テスト実行
-- `npm run build` … 本番ビルド(型チェック込み)
+- `npm run build` … 本番ビルド(型チェック込み。最後にページごとの HTML・サイトマップを作る)
 - `npm run lint` … リント
 - `npm run deploy` … ビルドして Cloudflare に公開
 - `npm run build:og` … OGP 画像(`public/og/*.png`)を作り直す(先に `npm run build`)

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from '../../app/Link'
 import { useRecords } from '../../app/records/useRecords'
-import { dailyDoneCount, dailyItems, type DailyItem } from '../../drills/daily'
-import { areaStats, MIN_ANSWERS, recommend, roadmapProgress, streakDays } from '../../engine/progress'
+import { areaStats, countDailyDone, MIN_ANSWERS, recommend, roadmapProgress, streakDays } from '../../engine/progress'
 import { localDate } from '../../engine/records'
+import { loadDailyKeys } from '../../app/dailyCache'
 
 const STATUS_LABELS = { notStarted: '未着手', inProgress: '練習中', cleared: 'クリア' } as const
 
@@ -12,16 +12,11 @@ export function ProgressSections() {
   const { data } = useRecords()
   const [now] = useState(() => new Date())
   const date = localDate(now)
-  // 今日の5問は作るのに少し時間がかかるので、表示のあとで作る
-  const [items, setItems] = useState<DailyItem[] | null>(null)
-  useEffect(() => {
-    const id = window.setTimeout(() => setItems(dailyItems(date)), 0)
-    return () => window.clearTimeout(id)
-  }, [date])
-
+  // 今日の練習のキーは「今日の練習」ページが保存する。なければ今日はまだ0問
+  const [dailyKeys] = useState(() => loadDailyKeys(date))
   const attempts = data.attempts
   const streak = streakDays(attempts, now)
-  const done = items ? dailyDoneCount(items, attempts, date) : null
+  const done = dailyKeys ? countDailyDone(dailyKeys, attempts, date) : 0
   const roadmap = roadmapProgress(attempts)
   const nextStep = roadmap.findIndex((p) => p.status !== 'cleared')
   const stats = areaStats(attempts)
@@ -34,18 +29,14 @@ export function ProgressSections() {
         <div className="today-card">
           <p className="today-card-text">
             毎日入れ替わる5問です。
-            {done !== null && (
-              <>
-                今日は <strong>{done} / 5 問</strong>
-                {done >= 5 ? '(完了!)' : ''}。
-              </>
-            )}
+            今日は <strong>{done} / 5 問</strong>
+            {done >= 5 ? '(完了!)' : ''}。
           </p>
           <p className="today-card-streak">
             連続 <strong>{streak}</strong> 日
           </p>
           <Link to="/today" className="button button--primary button--block">
-            {done !== null && done >= 5 ? 'もう一度解く' : '今日の5問を解く'}
+            {done >= 5 ? 'もう一度解く' : '今日の5問を解く'}
           </Link>
         </div>
       </section>

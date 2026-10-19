@@ -170,3 +170,12 @@ h3 {
   color: var(--wrong);
   background: var(--wrong-bg);
 }
+
+.page-loading {
+  /* 読み込みが終わるまで画面の高さを取っておき、あとから下の広告枠やフッターが動かないようにする */
+  min-height: 100vh;
+  margin: 0;
+  padding-top: 32px;
+  text-align: center;
+  color: var(--text-muted);
+}

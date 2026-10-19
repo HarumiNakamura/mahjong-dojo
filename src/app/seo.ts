@@ -1,0 +1,105 @@
+// 検索対策: ページごとの題名・説明・OGP 画像と、ビルド時に HTML を作るページの一覧
+//
+// ここは画面の部品を使わない(ビルド時の HTML 作り・サイトマップ作りからも使う)。
+
+import { ARTICLES, findArticle } from '../content/articles'
+import { findDrill, DRILLS } from '../drills/registry'
+import { ogImagePath } from './ogp'
+import { findPageInfo, JUDGMENT_PAGES, PRACTICE_PAGES } from './routes'
+
+/** 公開しているサイトの URL(末尾の / なし) */
+export const SITE_URL = 'https://mahjong-dojo.printempslamer.workers.dev'
+export const SITE_NAME = '麻雀道場(仮)'
+export const SITE_DESCRIPTION =
+  '麻雀初心者のための練習サイト。牌効率・待ち・守備・押し引き・点数計算・配牌方針を、解説を読んですぐ手を動かしながら学べます。'
+
+export interface PageMeta {
+  /** ページの題名(サイト名は含まない。ホームは空) */
+  title: string
+  description: string
+  /** OGP 画像のパス */
+  image: string
+  /** 検索結果に出さない(開発用・共有・解き直し・見つからないページ) */
+  noindex: boolean
+  /** ビルド時に本文まで HTML にする(内容が毎回同じページ) */
+  prerenderBody: boolean
+}
+
+/** 練習ページと OGP 画像の対応 */
+const PRACTICE_OG: Record<string, string> = {
+  '/practice/efficiency': 'efficiency',
+  '/practice/waits': 'waits',
+  '/practice/score': 'score',
+  '/practice/defense': 'safety',
+  '/practice/judgment/pushfold': 'pushfold',
+  '/practice/judgment/plan': 'plan',
+  '/practice/judgment/call': 'call',
+  '/practice/solo': 'efficiency',
+  '/score-table': 'score',
+}
+
+const STATIC_PAGES: Record<string, { title: string; description: string; prerenderBody?: boolean }> = {
+  '/': { title: '', description: SITE_DESCRIPTION },
+  '/practice': { title: '練習', description: '牌効率・一人麻雀・待ち・点数計算・守備・判断の練習メニューです。', prerenderBody: true },
+  '/about': { title: 'このサイトについて', description: '麻雀道場(仮)の目的・使い方・Mリーグルール準拠であることなど、このサイトについての説明です。', prerenderBody: true },
+  '/records': { title: '学習記録', description: 'これまでの正解率や間違えた問題を確認し、解き直せます。記録はこの端末のブラウザに保存されます。' },
+  '/learn': { title: '解説', description: '麻雀の基本から、牌効率・守備・点数計算・判断の考え方までを読んで学べる解説記事の一覧です。', prerenderBody: true },
+}
+
+const fix = (title: string, description: string, image = ogImagePath('default')): PageMeta => ({
+  title,
+  description,
+  image,
+  noindex: false,
+  prerenderBody: false,
+})
+
+/** パスに対応するページの情報 */
+export function pageMeta(path: string): PageMeta {
+  const fixed = STATIC_PAGES[path]
+  if (fixed) return { ...fix(fixed.title, fixed.description), prerenderBody: fixed.prerenderBody === true }
+  const article = path.startsWith('/learn/') ? findArticle(path.slice(7)) : undefined
+  if (article) return { ...fix(article.meta.title, article.meta.description), prerenderBody: true }
+  const info = findPageInfo(path)
+  if (info) {
+    const list = path === '/practice/judgment' || path === '/score-table'
+    return {
+      ...fix(info.title, info.description, ogImagePath(PRACTICE_OG[path] ?? 'default')),
+      prerenderBody: list,
+    }
+  }
+  const shared = path.match(/^\/q\/([a-z0-9-]+)$/)
+  const drill = shared ? findDrill(shared[1]) : undefined
+  if (drill) {
+    return { ...fix(`${drill.title}の問題`, `麻雀道場(仮)の「${drill.title}」の問題です。あなたならどうする?`, ogImagePath(drill.id)), noindex: true }
+  }
+  if (/^\/records\/review\//.test(path)) return { ...fix('解き直し', '間違えた問題・お気に入りの問題を解き直します。'), noindex: true }
+  if (path.startsWith('/dev/')) return { ...fix('開発用ページ', '表示の確認用のページです。'), noindex: true }
+  return { ...fix('ページが見つかりません', 'お探しのページは見つかりませんでした。'), noindex: true }
+}
+
+/** ビルド時に HTML を作るページ(見つからないページ以外のすべて) */
+export function prerenderPaths(): string[] {
+  return [
+    ...Object.keys(STATIC_PAGES),
+    ...PRACTICE_PAGES.map((p) => p.path),
+    ...JUDGMENT_PAGES.map((p) => p.path),
+    '/score-table',
+    '/today',
+    ...ARTICLES.map((a) => a.path),
+    ...DRILLS.map((d) => `/q/${d.id}`),
+    ...DRILLS.flatMap((d) => [`/records/review/${d.id}/mistakes`, `/records/review/${d.id}/favorites`]),
+    '/dev/tiles',
+    '/dev/drill',
+  ].filter((p, i, all) => all.indexOf(p) === i)
+}
+
+/** サイトマップに載せるページ(検索結果に出すもの) */
+export function sitemapPaths(): string[] {
+  return prerenderPaths().filter((p) => !pageMeta(p).noindex)
+}
+
+/** ブラウザのタブや検索結果に出す題名 */
+export function fullTitle(meta: PageMeta): string {
+  return meta.title ? `${meta.title} | ${SITE_NAME}` : `${SITE_NAME} | 麻雀初心者のための練習サイト`
+}

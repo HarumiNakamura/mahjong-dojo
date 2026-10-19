@@ -10,6 +10,12 @@ export function NotFoundPage() {
         <Link to="/" className="button button--primary">
           ホームへ
         </Link>
+        <Link to="/practice" className="button">
+          練習メニュー
+        </Link>
+        <Link to="/learn" className="button">
+          解説の一覧
+        </Link>
       </div>
     </>
   )

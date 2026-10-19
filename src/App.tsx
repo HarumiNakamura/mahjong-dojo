@@ -1,36 +1,37 @@
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { usePath } from './app/router'
 import { findComingSoonPage } from './app/routes'
 import { Layout } from './components/layout/Layout'
 import { TileSettingsProvider } from './components/tile/TileSettingsProvider'
-import { AboutPage } from './pages/AboutPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
-import { findArticle } from './content/articles'
-import { ArticlePage } from './pages/ArticlePage'
-import { CallPage } from './pages/CallPage'
-import { DefenseDrillPage } from './pages/DefenseDrillPage'
-import { DevDrillPage } from './pages/DevDrillPage'
-import { DevOgPage } from './pages/DevOgPage'
-import { DevTilesPage } from './pages/DevTilesPage'
-import { EfficiencyDrillPage } from './pages/EfficiencyDrillPage'
 import { HomePage } from './pages/HomePage'
-import { JudgmentPage } from './pages/JudgmentPage'
-import { LearnPage } from './pages/LearnPage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { PlanPage } from './pages/PlanPage'
-import { PracticePage } from './pages/PracticePage'
-import { PushFoldPage } from './pages/PushFoldPage'
-import { RecordsPage } from './pages/records/RecordsPage'
-import { ScoreDrillPage } from './pages/ScoreDrillPage'
-import { ScoreTablePage } from './pages/ScoreTablePage'
-import { SharedQuestionPage } from './pages/SharedQuestionPage'
-import { SoloPage } from './pages/SoloPage'
-import { TodayPage } from './pages/TodayPage'
-import { WaitsDrillPage } from './pages/WaitsDrillPage'
-import { ReviewPage } from './pages/records/ReviewPage'
+
+// ページは必要になったときに読み込む(最初に読み込む量を減らす)
+const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })))
+const CallPage = lazy(() => import('./pages/CallPage').then((m) => ({ default: m.CallPage })))
+const DefenseDrillPage = lazy(() => import('./pages/DefenseDrillPage').then((m) => ({ default: m.DefenseDrillPage })))
+const DevDrillPage = lazy(() => import('./pages/DevDrillPage').then((m) => ({ default: m.DevDrillPage })))
+const DevOgPage = lazy(() => import('./pages/DevOgPage').then((m) => ({ default: m.DevOgPage })))
+const DevTilesPage = lazy(() => import('./pages/DevTilesPage').then((m) => ({ default: m.DevTilesPage })))
+const EfficiencyDrillPage = lazy(() => import('./pages/EfficiencyDrillPage').then((m) => ({ default: m.EfficiencyDrillPage })))
+const JudgmentPage = lazy(() => import('./pages/JudgmentPage').then((m) => ({ default: m.JudgmentPage })))
+const LearnPage = lazy(() => import('./pages/LearnPage').then((m) => ({ default: m.LearnPage })))
+const PlanPage = lazy(() => import('./pages/PlanPage').then((m) => ({ default: m.PlanPage })))
+const PracticePage = lazy(() => import('./pages/PracticePage').then((m) => ({ default: m.PracticePage })))
+const PushFoldPage = lazy(() => import('./pages/PushFoldPage').then((m) => ({ default: m.PushFoldPage })))
+const ScoreDrillPage = lazy(() => import('./pages/ScoreDrillPage').then((m) => ({ default: m.ScoreDrillPage })))
+const ScoreTablePage = lazy(() => import('./pages/ScoreTablePage').then((m) => ({ default: m.ScoreTablePage })))
+const SharedQuestionPage = lazy(() => import('./pages/SharedQuestionPage').then((m) => ({ default: m.SharedQuestionPage })))
+const SoloPage = lazy(() => import('./pages/SoloPage').then((m) => ({ default: m.SoloPage })))
+const TodayPage = lazy(() => import('./pages/TodayPage').then((m) => ({ default: m.TodayPage })))
+const WaitsDrillPage = lazy(() => import('./pages/WaitsDrillPage').then((m) => ({ default: m.WaitsDrillPage })))
+const ArticleRoute = lazy(() => import('./pages/ArticlePage').then((m) => ({ default: m.ArticleRoute })))
+const RecordsPage = lazy(() => import('./pages/records/RecordsPage').then((m) => ({ default: m.RecordsPage })))
+const ReviewPage = lazy(() => import('./pages/records/ReviewPage').then((m) => ({ default: m.ReviewPage })))
 
 /** パスに対応するページと題名 */
-function resolvePage(path: string): { title?: string; element: ReactNode } {
+function resolvePage(path: string): { title?: string | null; element: ReactNode } {
   switch (path) {
     case '/':
       return { element: <HomePage /> }
@@ -70,9 +71,9 @@ function resolvePage(path: string): { title?: string; element: ReactNode } {
   const shared = path.match(/^\/q\/([a-z0-9-]+)$/)
   if (shared) return { title: '共有された問題', element: <SharedQuestionPage drillId={shared[1]} /> }
   if (path === '/learn') return { title: '解説', element: <LearnPage /> }
+  // 記事の題名は記事ページが自分で設定する(記事の本文を最初に読み込まないため)
   const learn = path.match(/^\/learn\/([a-z0-9-]+)$/)
-  const article = learn ? findArticle(learn[1]) : undefined
-  if (article) return { title: article.meta.title, element: <ArticlePage article={article} /> }
+  if (learn) return { title: null, element: <ArticleRoute slug={learn[1]} /> }
   if (path === '/records') return { title: '学習記録', element: <RecordsPage /> }
   const review = path.match(/^\/records\/review\/([a-z0-9-]+)\/(mistakes|favorites)$/)
   if (review) {
@@ -90,7 +91,9 @@ function App() {
     <TileSettingsProvider>
       {/* key でページごとに状態をリセットする */}
       <Layout title={title}>
-        <div key={path}>{element}</div>
+        <div key={path}>
+          <Suspense fallback={<p className="page-loading">読み込み中…</p>}>{element}</Suspense>
+        </div>
       </Layout>
     </TileSettingsProvider>
   )
