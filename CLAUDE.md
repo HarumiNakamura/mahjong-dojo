@@ -83,7 +83,7 @@
 - `src/app/records/` … 学習記録の保存先(localStorage)。使えない環境ではメモリだけで動き、画面に注意を出す(サイトは壊さない)
 - `src/drills/` … ドリルの定義(`DrillDefinition`)と一覧(`registry.ts`)。新しいドリルは定義を作って登録すると、学習記録・解き直し・お気に入りにつながる
 - `src/drills/daily.ts`・`src/pages/TodayPage.tsx` … 今日の練習(`/today`。日付で決まる5問を、いろいろなドリルから1問ずつ)
-- `src/pages/home/` … ホームのロードマップ・弱点マップ・今日の練習
+- `src/pages/home/` … ホーム:「1問だけ何切る」(`HomeQuiz`。日付で決まる初級の1問)・初めての人向けの3ステップ(`FirstSteps`。記録がないときは今日の練習・弱点マップの代わりに出す)・双六のようなロードマップ(`RoadmapPath`)・弱点マップ・今日の練習
 - `src/app/share.ts`・`src/components/drill/ShareButton.tsx`・`src/pages/SharedQuestionPage.tsx` … 問題の共有(`/q/<ドリル>?d=<問題データ>`。問題データは JSON を base64url にしたもの。URL のコピーと X への投稿)
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
 - `src/config/site.ts` … サイト名・「(仮)」の有無・公開 URL・説明文(環境変数 `VITE_SITE_NAME`・`VITE_SITE_PROVISIONAL`・`VITE_SITE_URL` で上書き)。**サイト名と URL は必ずここから取る**(直書きしない)。独自ドメインへの移行は `docs/domain-migration.md`
@@ -115,7 +115,6 @@
 - `src/pages/defense/` … 守備の練習(`/practice/defense`):安パイ並べとベタオリサバイバル。安パイ並べは並べ替え(押したまま動かす/タップで選んで置く)、河の根拠の強調、スジ表(現物からスジへの線・壁)、リーチ者の手牌公開
 - `src/pages/judgment/` … 判断の練習(`/practice/judgment` に一覧)。押し引きジャッジ(`/practice/judgment/pushfold`)・配牌方針クイズ(`/practice/judgment/plan`)・鳴き判断クイズ(`/practice/judgment/call`)
 - `src/pages/efficiency/` … 何切るドリル(`/practice/efficiency`)の問題表示と解説
-- `src/dev/themes.ts`・`src/pages/dev/DevThemePage.tsx` … デザイン3案の比較(`/dev/theme`。A 道場・B 雀卓・C 藍。トークンとコントラストのテスト、狙いと色の一覧は `docs/theme-proposals.md`)。本番には未適用(改善7で選んだ案だけを残す)
 - `src/pages/` … 各ページ(`/dev/tiles` は牌の表示確認用、`/dev/drill` はドリル部品の確認用)。まだないページは準備中と表示する
 - `src/content/` … 解説記事。`articles/*.md` に1記事1ファイルで書く(`markdown.ts` の小さな Markdown:見出し・段落・箇条書き・表・`>` 補足・`[[123m]]` 文中の牌・`@tiles` 手牌の図・`@drill` ドリルの案内)。先頭の `---` に title・description・order・category・drills(記事の最後の「この記事のドリル」)・related(関連記事)。本文は1,500〜3,000文字(`articles.test.ts` で文字数・リンク・牌の表記を確認)
 - `src/content/terms.ts` … 用語データ(用語・読み・別名・一言の意味・牌の例・記事・分類)。用語集(`/learn/glossary#<id>`。`glossary.md` の `@glossary` で全用語を表示)と用語部品(`src/components/term/Term.tsx`。点線の下線、タップで吹き出し、HTML では用語集へのリンク)の両方がここを使う。記事では `{{面子}}`・`{{表示|用語}}` と書く
@@ -123,10 +122,21 @@
 - `src/App.tsx` … ページの切り替え。ページは `lazy` で必要なときに読み込む(最初に読み込む JS を小さくする)
 - `src/` … 画面(React コンポーネント)
 
-## デザイン
+## デザイン(A 道場)
 
-- 色は `src/index.css` の CSS 変数(`--bg`・`--text`・`--accent` など)を使い、直接の色指定は避ける(ダークモードは OS の設定で自動切り替え)
-- 本文は16px以上、押せるボタンは高さ48px前後にする
+- 方向性: 墨色の見出し帯(ヘッダー)と、中(チュン)の牌の朱色。見出しは明朝体で、道場の看板のような引きしまった印象(比べた3案の記録は `docs/theme-proposals.md`)
+- 色は `src/index.css` の CSS 変数(デザイントークン)だけを使い、直接の色指定は避ける。ダークモードは OS の設定で自動切り替え
+  - `--bg`・`--surface`・`--surface-2`(面)、`--text`・`--text-muted`(文字)、`--border`(線)
+  - `--accent`(朱。ボタン・リンク・見出しの線)、`--accent-soft`(朱の薄い背景)、`--ink`・`--header-bg`(墨色)、`--scene`(牌を置く場面)
+  - `--correct`・`--wrong`(正誤)、`--focus`(フォーカス)
+  - 文字と背景のコントラストは WCAG AA 以上(`src/designTokens.test.ts` で確認。色を変えたらテストが通ることを確かめる)
+- フォント: 本文は BIZ UDPゴシック(`--font-body`)、見出し(h1〜h3・ロゴ・カードの題名)はしっぽり明朝 B1 の太さ800(`--font-heading`)
+  - サイトで使う文字だけの `@font-face` を `npm run build:fonts`(`scripts/build-font-css.mjs` → `src/fonts.generated.css`)で作り、読み込みが終わってから読み込む(`font-display: optional`)。`npm run build` でも作り直す
+- 形: 角丸は `--radius`(4px)。ページの題名は左に朱の太線、記事の見出しは朱の下線。影はほとんど使わない
+- 余白: 左右は `--gutter`(16px)。セクションの間は 32px 前後。本文は16px以上、押せるボタンは高さ48px前後にする
+- アイコン: 練習メニュー・解説の一覧は `src/components/card/IconCard.tsx`(牌の絵のアイコン。`routes.ts` の `icon` に牌を書く)。初めての人に最初にやってほしいもの(何切る・基本の流れ)は `featured` で大きくする
+- PC(1024px以上): 一覧・記事は本文を広く使う(`Layout` の `wide`)。練習メニューは3列、記事は目次を右に固定
+- 4人の河は卓の形に固定する(対面が上・上家が左・下家が右・自分が下。`DefenseRivers`・CPU対戦とも同じ)
 
 ## 用語
 

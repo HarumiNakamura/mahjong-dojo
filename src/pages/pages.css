@@ -21,7 +21,7 @@
   padding: 12px 8px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 .home-section {
@@ -69,7 +69,7 @@
   text-decoration: none;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 .card:hover {
@@ -153,7 +153,7 @@
   gap: 8px;
   padding: 12px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -190,7 +190,7 @@
   gap: 12px;
   padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--surface);
   color: inherit;
   text-decoration: none;
@@ -399,4 +399,238 @@
 .info-table th {
   width: 7em;
   background: var(--surface-2);
+}
+
+/* ---- ホーム: 1問だけ何切る ---- */
+.home-quiz {
+  margin: 8px 0 32px;
+  padding: 16px var(--gutter) 20px;
+  border: 1px solid var(--border);
+  border-top: 5px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.home-quiz-title {
+  margin: 0 0 4px;
+  font-size: 1.375rem;
+}
+
+.home-quiz-lead {
+  margin: 0 0 12px;
+  color: var(--text-muted);
+}
+
+.home-quiz-result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.home-quiz-verdict {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--wrong);
+}
+
+.home-quiz-result--ok .home-quiz-verdict {
+  color: var(--correct);
+}
+
+/* ---- ホーム: はじめての方へ ---- */
+.first-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.first-step {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.first-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  font-size: 1.25rem;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.first-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.first-step-body strong {
+  font-size: 1.0625rem;
+}
+
+.first-step-body a {
+  display: inline-block;
+  min-height: 32px;
+  padding-top: 4px;
+  font-weight: 700;
+}
+
+@media (min-width: 1024px) {
+  .first-steps-list {
+    flex-direction: row;
+  }
+
+  .first-step {
+    flex: 1;
+  }
+}
+
+/* ---- ホーム: 双六のロードマップ ---- */
+.sugoroku {
+  position: relative;
+  margin: 8px 0;
+}
+
+.sugoroku-road {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sugoroku-road-line {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 6;
+  stroke-dasharray: 2 10;
+  stroke-linecap: round;
+}
+
+.sugoroku-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sugoroku-step {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  width: 62%;
+  height: 120px;
+}
+
+.sugoroku-step--left {
+  left: 0;
+}
+
+.sugoroku-step--right {
+  right: 0;
+}
+
+.sugoroku-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  color: inherit;
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.sugoroku-step--next .sugoroku-link {
+  border: 2px solid var(--accent);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.sugoroku-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  font-size: 1.125rem;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+}
+
+.sugoroku-step--cleared .sugoroku-node {
+  color: var(--correct);
+  background: var(--correct-bg);
+  border-color: var(--correct);
+}
+
+.sugoroku-step--next .sugoroku-node {
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.sugoroku-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sugoroku-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.sugoroku-status {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.sugoroku-step--next .sugoroku-status {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.sugoroku-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+@media (max-width: 420px) {
+  .sugoroku-step {
+    width: 78%;
+  }
+}
+
+.home-quiz-loading {
+  /* 問題ができるまで高さを取っておき、表示がずれないようにする */
+  min-height: 360px;
+  margin: 0;
+  color: var(--text-muted);
 }

@@ -1,0 +1,114 @@
+/* 牌のアイコンつきのカード。並べる側は .icon-card-grid を使う */
+.icon-card-grid {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .icon-card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .icon-card-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.icon-card-grid > .icon-card-grid-featured {
+  grid-column: 1 / -1;
+}
+
+.icon-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+  min-height: 80px;
+  padding: 12px 14px;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.icon-card:hover {
+  border-color: var(--accent);
+}
+
+.icon-card-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 56px;
+  height: 56px;
+  background: var(--scene);
+  border-radius: var(--radius);
+}
+
+.icon-card-icon .tile {
+  --tile-w: 22px;
+}
+
+.icon-card-icon--many .tile {
+  --tile-w: 15px;
+}
+
+.icon-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.icon-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  font-size: 1.125rem;
+  color: var(--text);
+}
+
+.icon-card-text {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.icon-card-tag {
+  align-self: flex-start;
+  padding: 0 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-radius: var(--radius);
+}
+
+/* 大きいカード: 朱の上線、アイコンも大きく */
+.icon-card--featured {
+  padding: 18px;
+  border-top: 5px solid var(--accent);
+}
+
+.icon-card--featured .icon-card-icon {
+  width: 84px;
+  height: 84px;
+}
+
+.icon-card--featured .icon-card-icon .tile {
+  --tile-w: 32px;
+}
+
+.icon-card--featured .icon-card-title {
+  font-size: 1.375rem;
+}

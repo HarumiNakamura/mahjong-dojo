@@ -99,7 +99,7 @@
   margin: 16px 0;
   padding: 12px;
   border: 2px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -271,4 +271,35 @@
 .glossary-more {
   margin: 4px 0 0;
   font-size: 14px;
+}
+
+/* 記事の並び: スマホは上から順に。PC では目次を右に固定する */
+@media (min-width: 1024px) {
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 720px) 280px;
+    grid-template-areas:
+      'head toc'
+      'content toc';
+    column-gap: 40px;
+    justify-content: center;
+  }
+
+  .article-head {
+    grid-area: head;
+  }
+
+  .article-content {
+    grid-area: content;
+  }
+
+  .article-layout > .article-toc {
+    grid-area: toc;
+    align-self: start;
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    margin-top: 0;
+  }
 }

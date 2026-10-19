@@ -65,7 +65,7 @@
   font: inherit;
   font-weight: 700;
   border: 2px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--surface);
   color: var(--accent);
 }

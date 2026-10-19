@@ -1,30 +1,45 @@
 /* 色・大きさの共通設定。ダークモードは OS の設定に合わせて切り替える */
+/*
+ * 色・文字・形の共通設定(デザイントークン)。デザインは「A 道場」:墨色の見出し帯・中(チュン)の朱色・明朝の見出し。
+ * ダークモードは OS の設定に合わせて切り替える。文字と背景のコントラストは WCAG AA 以上(docs/design.md)
+ */
 :root {
-  --bg: #f6f4ee;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #efece3;
-  --text: #1f2a2e;
-  --text-muted: #5b6568;
-  --border: #d9d4c7;
-  --accent: #2f6b55;
-  --accent-hover: #285c49;
+  --surface-2: #f3f3f2;
+  --text: #1b1b1d;
+  --text-muted: #55565a;
+  --border: #cfcfd2;
+  --accent: #b3261e;
+  --accent-hover: #8f1e18;
   --accent-contrast: #ffffff;
-  --accent-soft: #e3efe9;
-  --correct: #2a7349;
-  --correct-bg: #e5f2e9;
-  --wrong: #a83a2a;
-  --wrong-bg: #f9e6e2;
-  --focus: #2a63b8;
+  --accent-soft: #fbe9e7;
+  /* 墨色(見出しの帯・ヘッダー) */
+  --ink: #1b1b1d;
+  --header-bg: #1b1b1d;
+  --header-text: #ffffff;
+  /* 牌を置く場面の背景 */
+  --scene: #f3f3f2;
+  --correct: #1d6b3a;
+  --correct-bg: #e6f2ea;
+  --wrong: #a3241d;
+  --wrong-bg: #fbe9e7;
+  --focus: #1f5fbf;
   --shadow: rgba(0, 0, 0, 0.08);
-  --backdrop: rgba(0, 0, 0, 0.25);
+  --backdrop: rgba(0, 0, 0, 0.35);
+
+  --radius: 4px;
+  --font-body: 'BIZ UDPGothic', system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  --font-heading: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --heading-weight: 800;
 
   --content-max: 720px;
   --gutter: 16px;
 
   color-scheme: light;
-  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--text);
   background-color: var(--bg);
   -webkit-text-size-adjust: 100%;
@@ -32,23 +47,27 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #14181a;
-    --surface: #1c2225;
-    --surface-2: #252c30;
-    --text: #e6e8e6;
-    --text-muted: #a3abad;
-    --border: #374044;
-    --accent: #7cc1a3;
-    --accent-hover: #93cfb4;
-    --accent-contrast: #0f1a15;
-    --accent-soft: #1f3329;
-    --correct: #7fd0a2;
-    --correct-bg: #1a3124;
-    --wrong: #f19a88;
-    --wrong-bg: #3b2420;
+    --bg: #121213;
+    --surface: #1c1c1e;
+    --surface-2: #26262a;
+    --text: #ececee;
+    --text-muted: #a9a9b0;
+    --border: #3a3a40;
+    --accent: #ff8a80;
+    --accent-hover: #ffaba3;
+    --accent-contrast: #1b0d0b;
+    --accent-soft: #3a1d1a;
+    --ink: #ececee;
+    --header-bg: #000000;
+    --header-text: #ffffff;
+    --scene: #26262a;
+    --correct: #7fd39b;
+    --correct-bg: #183224;
+    --wrong: #ff8a80;
+    --wrong-bg: #3a1d1a;
     --focus: #8ab4f8;
     --shadow: rgba(0, 0, 0, 0.4);
-    --backdrop: rgba(0, 0, 0, 0.5);
+    --backdrop: rgba(0, 0, 0, 0.6);
 
     color-scheme: dark;
   }
@@ -74,6 +93,8 @@ h1,
 h2,
 h3 {
   line-height: 1.4;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
 }
 
 :focus-visible {
@@ -94,7 +115,7 @@ h3 {
   color: var(--accent);
   background: var(--surface);
   border: 2px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 
@@ -120,8 +141,10 @@ h3 {
 }
 
 .page-title {
-  font-size: 1.5rem;
+  font-size: 1.625rem;
   margin: 0 0 8px;
+  padding-left: 12px;
+  border-left: 6px solid var(--accent);
 }
 
 .page-lead {

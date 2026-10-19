@@ -11,12 +11,14 @@ export function ArticlePage({ article }: { article: Article }) {
   const headings = article.blocks.filter((b) => b.type === 'heading' && b.level === 2)
   const related = article.meta.related.map(findArticle).filter((a): a is Article => a !== undefined)
   return (
-    <article>
-      <p className="article-crumb">
-        <Link to="/learn">解説</Link> › {article.meta.category}
-      </p>
-      <h1 className="page-title">{article.meta.title}</h1>
-      <p className="page-lead">{article.meta.description}</p>
+    <article className="article-layout">
+      <div className="article-head">
+        <p className="article-crumb">
+          <Link to="/learn">解説</Link> › {article.meta.category}
+        </p>
+        <h1 className="page-title">{article.meta.title}</h1>
+        <p className="page-lead">{article.meta.description}</p>
+      </div>
       {headings.length >= 3 && (
         <nav className="article-toc" aria-label="目次">
           <p>目次</p>
@@ -31,32 +33,34 @@ export function ArticlePage({ article }: { article: Article }) {
           </ol>
         </nav>
       )}
-      <ArticleBody blocks={article.blocks} />
+      <div className="article-content">
+        <ArticleBody blocks={article.blocks} />
 
-      {article.meta.drills.length > 0 && (
-        <section>
-          <h2 className="article-section-title">この記事のドリル</h2>
-          {article.meta.drills.map((path) => (
-            <DrillCard key={path} path={path} />
-          ))}
-        </section>
-      )}
-      {related.length > 0 && (
-        <section>
-          <h2 className="article-section-title">関連する記事</h2>
-          <ul className="article-related">
-            {related.map((a) => (
-              <li key={a.slug}>
-                <Link to={a.path}>{a.meta.title}</Link>
-              </li>
+        {article.meta.drills.length > 0 && (
+          <section>
+            <h2 className="article-section-title">この記事のドリル</h2>
+            {article.meta.drills.map((path) => (
+              <DrillCard key={path} path={path} />
             ))}
-          </ul>
-        </section>
-      )}
-      <div className="link-row">
-        <Link to="/learn" className="button">
-          解説の一覧へ
-        </Link>
+          </section>
+        )}
+        {related.length > 0 && (
+          <section>
+            <h2 className="article-section-title">関連する記事</h2>
+            <ul className="article-related">
+              {related.map((a) => (
+                <li key={a.slug}>
+                  <Link to={a.path}>{a.meta.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        <div className="link-row">
+          <Link to="/learn" className="button">
+            解説の一覧へ
+          </Link>
+        </div>
       </div>
     </article>
   )

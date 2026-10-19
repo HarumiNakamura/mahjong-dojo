@@ -1,5 +1,5 @@
-import { Link } from '../app/Link'
 import { PLAY_PAGE, PRACTICE_PAGES } from '../app/routes'
+import { IconCard } from '../components/card/IconCard'
 import './pages.css'
 
 export function PracticePage() {
@@ -7,24 +7,12 @@ export function PracticePage() {
     <>
       <h1 className="page-title">練習</h1>
       <p className="page-lead">練習したい分野を選んでください。1問ずつ答えて、すぐに解説を確認できます。</p>
-      <ul className="card-list">
-        {PRACTICE_PAGES.map((page) => (
-          <li key={page.path}>
-            <Link to={page.path} className="card">
-              <span className="card-title">
-                {page.title}
-                {page.comingSoon && <span className="badge">準備中</span>}
-              </span>
-              <span className="card-text">{page.description}</span>
-            </Link>
+      <ul className="icon-card-grid icon-card-grid--3">
+        {[...PRACTICE_PAGES, { ...PLAY_PAGE, title: `${PLAY_PAGE.title}(仕上げ)` }].map((page) => (
+          <li key={page.path} className={page.featured ? 'icon-card-grid-featured' : undefined}>
+            <IconCard to={page.path} title={page.title} text={page.description} icon={page.icon} featured={page.featured} badge={page.comingSoon ? '準備中' : undefined} />
           </li>
         ))}
-        <li>
-          <Link to={PLAY_PAGE.path} className="card">
-            <span className="card-title">{PLAY_PAGE.title}(仕上げ)</span>
-            <span className="card-text">{PLAY_PAGE.description}</span>
-          </Link>
-        </li>
       </ul>
     </>
   )

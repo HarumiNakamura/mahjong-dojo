@@ -131,7 +131,6 @@ export function prerenderPaths(): string[] {
     '/play/review',
     '/play/stats',
     '/dev/tiles',
-    '/dev/theme',
     '/dev/drill',
   ].filter((p, i, all) => all.indexOf(p) === i)
 }

@@ -29,12 +29,12 @@
   padding: 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 .drill-feedback {
   padding: 16px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   border: 2px solid;
   scroll-margin-bottom: 96px;
 }
@@ -108,7 +108,7 @@
   color: var(--text);
   background: var(--surface-2);
   border: 2px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 
