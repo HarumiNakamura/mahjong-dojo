@@ -6,6 +6,7 @@
 import Majiang from '@kobalab/majiang-core'
 import { analyzeCall, CALL_MARGIN, callLabel, type CallSituation } from '../engine/call'
 import { judgeDiscards, type EfficiencyJudgement } from '../engine/efficiency'
+import { explainDiscard } from '../engine/efficiencyExplain'
 import { evaluatePushFold, type PushFoldResult } from '../engine/pushfold'
 import { doraFromIndicator } from '../engine/scoring'
 import { isHonor, rankOf, suitOf, tilesToCounts, type Tile } from '../engine/tiles'
@@ -69,6 +70,8 @@ export function checkDiscard(scene: Scene, base: Base, pai: string, j: Efficienc
   const bestName = kindName(best.tile.kind)
   const better = `${bestName}を切る(${ukeireWord(best.shanten)} ${best.total}枚)`
   const level = Math.min(best.shanten, 3)
+  // 何切る・一人麻雀と同じ、牌の役割と有効牌の増減による理由
+  const why = explainDiscard(j, chosen, hand).reasons.join('')
   if (opt.shanten > best.shanten) {
     return {
       ...base,
@@ -78,7 +81,7 @@ export function checkDiscard(scene: Scene, base: Base, pai: string, j: Efficienc
       title: 'シャンテン数が戻る打牌',
       played: `${name}を切った`,
       better,
-      reason: `${name}を切ると${shantenWord(opt.shanten)}に戻ります。${bestName}を切れば${shantenWord(best.shanten)}のまま、${ukeireWord(best.shanten)}は${best.total}枚です。`,
+      reason: `${name}を切ると${shantenWord(opt.shanten)}に戻ります。${bestName}を切れば${shantenWord(best.shanten)}のまま、${ukeireWord(best.shanten)}は${best.total}枚です。${why}`,
     }
   }
   const diff = best.total - opt.total
@@ -91,7 +94,7 @@ export function checkDiscard(scene: Scene, base: Base, pai: string, j: Efficienc
     title: best.shanten === 0 ? '待ちの少ない打牌' : '受け入れの少ない打牌',
     played: `${name}を切った(${ukeireWord(best.shanten)} ${opt.total}枚)`,
     better,
-    reason: `${bestName}を切ると${ukeireWord(best.shanten)}が${best.total}枚、${name}を切ると${opt.total}枚で、${diff}枚少なくなります。同じ${shantenWord(best.shanten)}なら、${ukeireWord(best.shanten)}の多いほうがアガリやすくなります。`,
+    reason: `${bestName}を切ると${ukeireWord(best.shanten)}が${best.total}枚、${name}を切ると${opt.total}枚で、${diff}枚少なくなります。${why}`,
   }
 }
 

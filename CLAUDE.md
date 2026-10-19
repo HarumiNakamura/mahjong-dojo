@@ -57,7 +57,7 @@
 - `src/engine/random.ts`・`wall.ts` … シード付き乱数と山(136枚・赤5入り)
 - `src/engine/efficiency.ts` … 何切るの正解判定(基本はシャンテン数 → 受け入れ枚数。保つ打牌の受け入れが極端に少ないときだけシャンテン戻しを正解にする。同じ枚数ならどれも正解)
 - `src/engine/efficiencyQuestion.ts` … 何切るの問題作り(山から配牌し、簡易プレイヤーで数巡進めた局面を難易度で切り出す)
-- `src/engine/efficiencyExplain.ts` … 何切るの解説文(テンプレート)
+- `src/engine/efficiencyExplain.ts` … 何切るの解説文(テンプレート。何切る・一人麻雀・CPU対戦の振り返りで共通)。手牌を渡すと、切った牌・最善の牌の役割(`tileRole.ts`:孤立牌・嵌張・辺張・両面・対子・面子)と、減った・増えた有効牌、シャンテン戻しの説明、関連記事を出す
 - `src/components/tile/` … 牌の SVG 絵柄と部品(Tile・Hand・Discards)。牌の画像は既存の画像を使わず SVG で自作する
   - 手牌から1枚選ぶ画面は `Hand` の `onPick` を使う(2段階タップ:選ぶ → もう一度タップか決定ボタン。「1回のタップで決定」の設定つき)。手牌は画面幅いっぱいに大きく並べ、押せる範囲は高さ44px以上(測定結果は `docs/ui-check.md`)
   - 牌の文字は端末のフォントに頼らず、SIL OFL のフォント(npm の @fontsource)から必要な文字だけを SVG のパスに変換して使う(`npm run build:glyphs` → `glyphs.generated.ts`)

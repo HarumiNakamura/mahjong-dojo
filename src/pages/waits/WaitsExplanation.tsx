@@ -55,8 +55,20 @@ export function WaitsExplanation({ question, answer }: { question: WaitsQuestion
       <p>
         待ちは{waits.length}種:<strong>{names(waits.map((w) => w.kind))}</strong>
       </p>
-      {missed.length > 0 && <p>見落とした待ち:{names(missed)}</p>}
-      {extra.length > 0 && <p>待ちではない牌:{names(extra)}</p>}
+      {missed.length > 0 && (
+        <p>
+          見落とした待ち:
+          {missed
+            .map((k) => {
+              // 見落とした待ちは、どの塊で待っているかを一言で
+              const p = waits.find((w) => w.kind === k)?.patterns[0]
+              const why = p && p.shape !== 'kokushi' ? `(${names(p.waiting)}の${WAIT_SHAPE_LABELS[p.shape]})` : ''
+              return `${tileName({ kind: k, red: false })}${why}`
+            })
+            .join('、')}
+        </p>
+      )}
+      {extra.length > 0 && <p>待ちではない牌:{names(extra)}(引いてもアガリの形になりません)</p>}
       {usedUp.length > 0 && <p>{names(usedUp)}は自分で4枚使っているので、待ちになりません。</p>}
 
       <h3 className="eff-heading">どの塊がどの待ちを作るか</h3>

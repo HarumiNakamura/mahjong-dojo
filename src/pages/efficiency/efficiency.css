@@ -228,3 +228,49 @@
   font: inherit;
   font-size: 14px;
 }
+
+.eff-reasons {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.eff-reasons li {
+  margin: 4px 0;
+}
+
+.eff-bar-cell {
+  min-width: 7em;
+}
+
+.eff-bar {
+  display: block;
+  height: 8px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.eff-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+}
+
+.eff-row--chosen .eff-bar-fill {
+  background: var(--focus);
+}
+
+.eff-table-sep th {
+  padding-top: 10px;
+  border-top: 2px dashed var(--border);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  color: var(--text-muted);
+}
+
+.eff-articles {
+  font-size: 15px;
+}

@@ -94,6 +94,33 @@ describe('explainDiscard(解説文)', () => {
     expect(e.rows.filter((r) => r.correct)).toHaveLength(2)
   })
 
+  it('手牌を渡すと、切った牌の役割と、減った有効牌で理由を説明する', () => {
+    // 2筒は孤立牌、5筒は4筒と両面
+    const hand = p('123m79m45p2p11s5z678s')
+    const j = judgeDiscards(hand)
+    expect(j.best.tile.kind).toBe(kindOf('p', 2))
+    const wrong = explainDiscard(j, kindOf('p', 5), hand)
+    expect(wrong.reasons).toEqual([
+      '5筒は4筒と組んで両面(3筒・6筒待ち)になっています。',
+      '一方、2筒は孤立牌で、ほかの牌とつながっていません。切っても手の形が崩れません。',
+      '5筒を切ると、6筒を引いても手が進まなくなります。',
+    ])
+    expect(wrong.articles.map((a) => a.path)).toEqual(['/learn/efficiency', '/learn/ukeire'])
+    const right = explainDiscard(j, j.best.tile.kind, hand)
+    expect(right.reasons[0]).toContain('切っても手の形が崩れません')
+    expect(right.articles.length).toBeGreaterThan(0)
+    expect(right.articles.length).toBeLessThanOrEqual(2)
+  })
+
+  it('シャンテン数が戻る打牌は「受け入れは多いがテンパイまでが1枚遠い」と説明する', () => {
+    const hand = p('123456m789p139s55z')
+    const j = judgeDiscards(hand)
+    const back = j.analysis.options.find((o) => o.shanten > j.best.shanten && o.total > j.best.total)!
+    const e = explainDiscard(j, back.tile.kind, hand)
+    expect(e.reasons[0]).toContain('テンパイまでが1枚遠くなります')
+    expect(e.articles[0].path).toBe('/learn/shanten-back')
+  })
+
   it('手牌にない牌はエラー', () => {
     expect(() => explainDiscard(judgeDiscards(p('123456m78p23s1155z')), kindOf('z', 7))).toThrow()
   })
