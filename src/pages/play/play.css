@@ -80,6 +80,10 @@
   font-size: 13px;
 }
 
+.play-mark {
+  margin-left: 0;
+}
+
 /* 他家3人の河: 対面を上に、上家と下家を左右に */
 .play-board {
   display: grid;
@@ -472,4 +476,150 @@
   display: inline-block;
   min-height: 40px;
   padding: 8px 0;
+}
+
+/* 振り返り */
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-result {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.review-note {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.review-error {
+  color: var(--wrong);
+}
+
+.review-summary {
+  margin: 0;
+  padding: 12px;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-section h2 {
+  margin: 8px 0 0;
+  font-size: 20px;
+}
+
+.review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.review-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+}
+
+.review-rank {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+
+.review-loss {
+  margin-left: auto;
+  color: var(--wrong);
+  font-weight: 700;
+}
+
+.review-hand .tile {
+  --tile-w: 22px;
+}
+
+.review-hand .hand {
+  padding-top: 0;
+}
+
+.review-dl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+}
+
+.review-dl div {
+  display: grid;
+  grid-template-columns: 7em 1fr;
+  gap: 8px;
+}
+
+.review-dl dt {
+  color: var(--text-muted);
+}
+
+.review-dl dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.review-reason {
+  margin: 0;
+}
+
+.review-counts td:nth-child(2) {
+  text-align: right;
+  font-weight: 700;
+}
+
+.review-counts td:last-child,
+.review-rates td:not(:first-child),
+.review-rates th:not(:first-child) {
+  text-align: right;
+}
+
+.review-all summary {
+  min-height: 40px;
+  cursor: pointer;
+}
+
+.review-all ul,
+.review-links {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.review-all li,
+.review-links li {
+  margin: 6px 0;
+}
+
+.review-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
 }

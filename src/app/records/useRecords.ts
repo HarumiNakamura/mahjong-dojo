@@ -3,7 +3,7 @@ import type { RecordsData } from '../../engine/records'
 import { getRecordsStore, type RecordsSnapshot } from './recordsStore'
 
 const SERVER_SNAPSHOT: RecordsSnapshot = {
-  data: { version: 1, attempts: [], favorites: [], games: [] },
+  data: { version: 1, attempts: [], favorites: [], games: [], bookmarks: [] },
   persistent: false,
   saveFailed: false,
 }

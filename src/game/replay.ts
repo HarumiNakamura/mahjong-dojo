@@ -143,3 +143,6 @@ export function replayUrl(id: string, scene?: ReplayScene, showAll = false): str
   if (showAll) q.set('v', 'all')
   return `/play/replay?${q.toString()}`
 }
+
+/** 振り返りの URL */
+export const reviewUrl = (id: string) => `/play/review?g=${encodeURIComponent(id)}`

@@ -100,6 +100,7 @@
   - `paipuRecords.ts` … 牌譜の保存データ(直近20半荘)の確認と合わせ方。保存先は `src/app/paipuStore.ts`(localStorage)。学習記録の書き出し/読み込みに牌譜も入る
   - `gameRecord.ts` … 半荘の牌譜から自分の成績(順位・ポイント・アガリ・放銃など)を作り、学習記録の `games` に保存する
 - `src/review/` … CPU対戦の振り返り(画面から独立、テスト必須)。`reviewGame.ts` が牌譜を1手ずつ再現し、`checks.ts` が分類ごとに判定(打牌の牌効率・押し引き・より安全な牌があった放銃・鳴き・アガリ逃し・役なしダマ)。損失の目安(点)とテンプレートの理由をつけ、分かれ目(上位3つ)を選ぶ。しきい値は `thresholds.ts`、考え方は `docs/review.md`。テスト用の短い牌譜は `fixtures.ts`。画面からは `src/app/runReview.ts`(Web Worker)で呼ぶ
+- `src/pages/play/GameReviewPage.tsx` … CPU対戦の振り返り(`/play/review?g=<対局>`。半荘の結果から開く)。一言まとめ・分かれ目(最大3つ。牌譜の場面へ)・「この判断を後で見る」の場面・分類ごとの指摘・今回とこれまでの率・関連する練習と記事(`reviewLinks.ts`)。判定は目安であることを明記。初めて開いたときに、まとめを対局成績に、分かれ目を学習記録の復習リスト(`bookmarks`)に保存し、打牌の分かれ目は何切るのお気に入りにも入れる(`src/review/efficiencyQuestionAt.ts`)。振り返りの指摘は弱点マップ・おすすめにも使う(`progress.ts` の `gameAreaStats`)
 - `src/pages/play/ReplayPage.tsx` … 牌譜の再生(`/play/replay`。一覧・局の選択・1手ずつ進む/戻る・次の自分の番・自分視点/全員の手牌・場面の URL のコピー)。盤面の部品は `BoardParts.tsx` を対局画面と共用
 - `src/pages/PlayPage.tsx`・`src/pages/play/` … CPU対戦の対局画面(`/play`。スマホ縦優先:上に点数・場・ドラ・残り枚数、中央に河(拡大できる)、下に自分の手牌と操作ボタン)と局の結果(役・符の内訳・点数の動き、流局はテンパイ/ノーテンと罰符)・半荘の結果(順位・持ち点・順位点込みのポイント)。対局をやめる/最初からやり直すは確認つき。広告枠は出さない
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)

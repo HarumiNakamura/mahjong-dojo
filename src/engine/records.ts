@@ -53,6 +53,31 @@ export interface GameRecord {
   fulouKyoku: number
   /** アガリの点数の合計(本場・供託を含まない) */
   huleDefen: number
+  /** 振り返りの結果(振り返りを開いたときに保存する) */
+  review?: GameReviewSummary
+}
+
+/** 半荘の振り返りのまとめ(分類ごとの指摘の数。分類は src/review/types.ts) */
+export interface GameReviewSummary {
+  /** 調べた打牌の数 */
+  decisions: number
+  counts: Record<string, number>
+  /** 損失の目安の合計(点) */
+  loss: number
+}
+
+/** CPU対戦の「あとで見る」場面(復習リスト) */
+export interface SceneBookmark {
+  /** `${gameId}:${kyoku}:${step}` */
+  id: string
+  gameId: string
+  kyoku: number
+  step: number
+  /** 見出し(例: 「東2局 押しすぎ」) */
+  title: string
+  /** auto = 振り返りの分かれ目、marker = 対局中に「この判断を後で見る」を押した */
+  source: 'auto' | 'marker'
+  addedAt: string
 }
 
 export interface RecordsData {
@@ -61,13 +86,69 @@ export interface RecordsData {
   favorites: FavoriteRecord[]
   /** CPU対戦の成績(古い記録にはないので、読み込み時に空にする) */
   games: GameRecord[]
+  /** CPU対戦の復習リスト(古い記録にはないので、読み込み時に空にする) */
+  bookmarks: SceneBookmark[]
 }
 
 /** 保存する対局成績の上限 */
 export const MAX_GAMES = 500
+/** 復習リストの上限 */
+export const MAX_BOOKMARKS = 200
 
 export function emptyRecords(): RecordsData {
-  return { version: RECORDS_VERSION, attempts: [], favorites: [], games: [] }
+  return { version: RECORDS_VERSION, attempts: [], favorites: [], games: [], bookmarks: [] }
+}
+
+export const bookmarkId = (gameId: string, kyoku: number, step: number) => `${gameId}:${kyoku}:${step}`
+
+/** 復習リストに足す(同じ場面は足さない。上限を超えたら古いものから消す) */
+export function addBookmarks(data: RecordsData, list: readonly SceneBookmark[]): RecordsData {
+  const ids = new Set(data.bookmarks.map((b) => b.id))
+  const added: SceneBookmark[] = []
+  for (const b of list) {
+    if (ids.has(b.id)) continue
+    ids.add(b.id)
+    added.push(b)
+  }
+  if (!added.length) return data
+  const bookmarks = [...data.bookmarks, ...added]
+  return { ...data, bookmarks: bookmarks.slice(Math.max(0, bookmarks.length - MAX_BOOKMARKS)) }
+}
+
+export function removeBookmark(data: RecordsData, id: string): RecordsData {
+  return { ...data, bookmarks: data.bookmarks.filter((b) => b.id !== id) }
+}
+
+/** 対局成績に振り返りのまとめを保存する */
+export function setGameReview(data: RecordsData, gameId: string, review: GameReviewSummary): RecordsData {
+  return { ...data, games: data.games.map((g) => (g.id === gameId ? { ...g, review } : g)) }
+}
+
+export interface GameRates {
+  games: number
+  /** アガリ率・放銃率・副露率・リーチ率(%、小数1桁。局がなければ null) */
+  hule: number | null
+  fangchong: number | null
+  fulou: number | null
+  lizhi: number | null
+  /** 平均打点(アガリがなければ null) */
+  averageWin: number | null
+}
+
+/** CPU対戦の、局あたりの率と平均打点 */
+export function gameRates(games: readonly GameRecord[]): GameRates {
+  const sum = (k: 'kyoku' | 'hule' | 'fangchong' | 'fulouKyoku' | 'lizhi' | 'huleDefen') => games.reduce((a, g) => a + g[k], 0)
+  const kyoku = sum('kyoku')
+  const rate = (n: number) => (kyoku ? Math.round((n / kyoku) * 1000) / 10 : null)
+  const hule = sum('hule')
+  return {
+    games: games.length,
+    hule: rate(hule),
+    fangchong: rate(sum('fangchong')),
+    fulou: rate(sum('fulouKyoku')),
+    lizhi: rate(sum('lizhi')),
+    averageWin: hule ? Math.round(sum('huleDefen') / hule / 100) * 100 : null,
+  }
 }
 
 /** 対局成績を追加する(上限を超えたら古いものから消す) */
@@ -241,7 +322,25 @@ function validGame(v: unknown): v is GameRecord {
     isString(v.playedAt) &&
     !Number.isNaN(Date.parse(v.playedAt)) &&
     isString(v.cpu) &&
-    ['rank', 'points10', 'score', 'kyoku', 'hule', 'fangchong', 'lizhi', 'fulouKyoku', 'huleDefen'].every((k) => isNumber(v[k]))
+    ['rank', 'points10', 'score', 'kyoku', 'hule', 'fangchong', 'lizhi', 'fulouKyoku', 'huleDefen'].every((k) => isNumber(v[k])) &&
+    (v.review === undefined || validReview(v.review))
+  )
+}
+
+function validReview(v: unknown): boolean {
+  return isObject(v) && isNumber(v.decisions) && isNumber(v.loss) && isObject(v.counts) && Object.values(v.counts).every(isNumber)
+}
+
+function validBookmark(v: unknown): v is SceneBookmark {
+  return (
+    isObject(v) &&
+    isString(v.id) &&
+    isString(v.gameId) &&
+    isNumber(v.kyoku) &&
+    isNumber(v.step) &&
+    isString(v.title) &&
+    (v.source === 'auto' || v.source === 'marker') &&
+    isString(v.addedAt)
   )
 }
 
@@ -257,6 +356,7 @@ export function sanitizeRecords(value: unknown): RecordsData {
     attempts: Array.isArray(value.attempts) ? value.attempts.filter(validAttempt) : [],
     favorites: Array.isArray(value.favorites) ? value.favorites.filter(validFavorite) : [],
     games: Array.isArray(value.games) ? value.games.filter(validGame) : [],
+    bookmarks: Array.isArray(value.bookmarks) ? value.bookmarks.filter(validBookmark) : [],
   }
 }
 
@@ -299,12 +399,14 @@ export function mergeRecords(current: RecordsData, incoming: RecordsData): { dat
   const gameIds = new Set(current.games.map((g) => g.id))
   const newGames = incoming.games.filter((g) => !gameIds.has(g.id))
   const games = [...current.games, ...newGames].sort((a, b) => a.playedAt.localeCompare(b.playedAt))
+  const { bookmarks } = addBookmarks(current, incoming.bookmarks)
   return {
     data: {
       version: RECORDS_VERSION,
       attempts: attempts.length > MAX_ATTEMPTS ? attempts.slice(attempts.length - MAX_ATTEMPTS) : attempts,
       favorites,
       games: games.length > MAX_GAMES ? games.slice(games.length - MAX_GAMES) : games,
+      bookmarks,
     },
     added: newAttempts.length + newGames.length,
   }

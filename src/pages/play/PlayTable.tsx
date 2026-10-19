@@ -32,6 +32,7 @@ export function PlayTable({ session }: { session: GameSession }) {
   const [lizhiMode, setLizhiMode] = useState(false)
   const [choice, setChoice] = useState<{ kind: 'chi' | 'peng' | 'gang'; options: string[] } | null>(null)
   const [enlarged, setEnlarged] = useState(false)
+  const [marked, setMarked] = useState(false)
 
   const model = human.model
   if (!model.shan) return <p className="page-loading">配牌中…</p>
@@ -102,6 +103,17 @@ export function PlayTable({ session }: { session: GameSession }) {
         <span>残り {model.shan.paishu}枚</span>
         <button type="button" className="play-zoom" aria-pressed={enlarged} onClick={() => setEnlarged((v) => !v)}>
           {enlarged ? '河を戻す' : '河を拡大'}
+        </button>
+        <button
+          type="button"
+          className="play-zoom play-mark"
+          onClick={() => {
+            if (!session.game.mark()) return
+            setMarked(true)
+            setTimeout(() => setMarked(false), 1500)
+          }}
+        >
+          {marked ? '✓ 印をつけました' : `この判断を後で見る${session.game.marks.length ? `(${session.game.marks.length})` : ''}`}
         </button>
       </div>
 

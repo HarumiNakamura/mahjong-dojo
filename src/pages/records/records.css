@@ -219,3 +219,18 @@
   margin: 0;
   padding-left: 1.2em;
 }
+
+.rec-games li {
+  margin: 6px 0;
+}
+
+.rec-remove {
+  min-height: 32px;
+  padding: 2px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}

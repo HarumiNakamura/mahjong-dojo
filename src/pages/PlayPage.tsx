@@ -4,9 +4,9 @@ import { clearGameSave, loadGameSave, storeGameSave } from '../app/playSave'
 import { Link } from '../app/Link'
 import { useRecords } from '../app/records/useRecords'
 import { usePersistentSetting } from '../app/usePersistentSetting'
-import { addGame } from '../engine/records'
+import { addBookmarks, addGame, bookmarkId } from '../engine/records'
 import { gameRecordOf } from '../game/gameRecord'
-import { replayUrl } from '../game/replay'
+import { kyokuLabel, replayUrl, reviewUrl } from '../game/replay'
 import { describeSave } from '../game/save'
 import type { GameSave } from '../game/selfplay'
 import { startSession, type GameSession, type GameSpeed } from '../game/session'
@@ -38,22 +38,32 @@ export function PlayPage() {
     if (!resume) clearGameSave()
     setSaved(null)
     setEndedId(null)
-    setSession(
-      startSession({
-        speed: speed as GameSpeed,
-        resume,
-        // 局が始まるたびに保存する(ページを閉じても、その局の最初から続けられる)
-        onKyokuStart: storeGameSave,
-        onGameEnd: (paipu, final) => {
-          clearGameSave()
-          const now = new Date()
-          const id = `game-${now.getTime()}`
-          update((d) => addGame(d, gameRecordOf(paipu, final, 'latest', now, id)))
-          addPaipuRecords([{ id, playedAt: now.toISOString(), paipu: JSON.parse(JSON.stringify(paipu)) }])
-          setEndedId(id)
-        },
-      }),
-    )
+    const s = startSession({
+      speed: speed as GameSpeed,
+      resume,
+      // 局が始まるたびに保存する(ページを閉じても、その局の最初から続けられる)
+      onKyokuStart: storeGameSave,
+      onGameEnd: (paipu, final) => {
+        clearGameSave()
+        const now = new Date()
+        const id = `game-${now.getTime()}`
+        update((d) => addGame(d, gameRecordOf(paipu, final, 'latest', now, id)))
+        addPaipuRecords([{ id, playedAt: now.toISOString(), paipu: JSON.parse(JSON.stringify(paipu)) }])
+        // 対局中に「この判断を後で見る」を押した場面を、復習リストに入れる
+        const marks = s.game.marks.map((m) => ({
+          id: bookmarkId(id, m.kyoku, m.step),
+          gameId: id,
+          kyoku: m.kyoku,
+          step: m.step,
+          title: `${kyokuLabel(paipu, m.kyoku).replace(/ 0本場$/, '')} 後で見る`,
+          source: 'marker' as const,
+          addedAt: now.toISOString(),
+        }))
+        update((d) => addBookmarks(d, marks))
+        setEndedId(id)
+      },
+    })
+    setSession(s)
   }
 
   const quit = () => {
@@ -93,7 +103,7 @@ export function PlayPage() {
       {session ? (
         <>
           <PlayTable key={String(session.game.model.title) + session.game.model.qijia} session={session} />
-          <PlayResult session={session} onRestart={() => start(null)} replayHref={endedId ? replayUrl(endedId) : null} />
+          <PlayResult session={session} onRestart={() => start(null)} replayHref={endedId ? replayUrl(endedId) : null} reviewHref={endedId ? reviewUrl(endedId) : null} />
           <div className="play-controls">
             <button type="button" className="button" onClick={quit}>
               対局をやめる
