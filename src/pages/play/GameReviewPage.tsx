@@ -9,6 +9,7 @@ import { Hand } from '../../components/tile/Hand'
 import { efficiencyDrill } from '../../drills/efficiency'
 import { addBookmarks, bookmarkId, gameRates, setGameReview, toggleFavorite, isFavorite, type GameRates, type GameRecord, type RecordsData } from '../../engine/records'
 import { handView } from '../../game/convert'
+import { difficultyLabel } from '../../game/difficulty'
 import { boardAt, kyokuLabel, replayUrl } from '../../game/replay'
 import { formatPoints } from '../../game/result'
 import { efficiencyQuestionAt } from '../../review/efficiencyQuestionAt'
@@ -158,7 +159,8 @@ export function GameReviewPage() {
 
   const paipu = record.paipu
   const marks = data.bookmarks.filter((b) => b.gameId === record.id && b.source === 'marker')
-  const others = data.games.filter((g) => g.id !== record.id)
+  // 比べるのは同じモード(練習モードかどうか)の対局
+  const others = data.games.filter((g) => g.id !== record.id && Boolean(g.practice) === Boolean(game?.practice))
   const cats = review ? rankedCategories(review) : []
 
   return (
@@ -167,6 +169,7 @@ export function GameReviewPage() {
       <p className="review-result">
         {paipu.rank[0]}位 {paipu.defen[0].toLocaleString('ja-JP')}点
         {game && `(${formatPoints(game.points10)})`}
+        {game && ` CPU:${difficultyLabel(game.cpu)}${game.practice ? '・練習モード' : ''}`}
       </p>
       <p className="review-note">
         判定は、統計をもとにした<strong>目安</strong>です。麻雀は運の要素が大きいので、結果ではなく「その場面で見えていた情報で、平均的に得だったか」で見ています。損失の点数も概算です。

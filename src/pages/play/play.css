@@ -623,3 +623,160 @@
   gap: 10px;
   margin-top: 12px;
 }
+
+/* 練習モードのヒント */
+.play-hints {
+  margin-top: 6px;
+  padding: 6px 8px;
+  border: 1px dashed var(--accent);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.play-hints-title {
+  margin: 0;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.play-hints ul {
+  margin: 2px 0 0;
+  padding-left: 1.2em;
+}
+
+.play-hints-best {
+  font-weight: 700;
+}
+
+.play-hints-safe {
+  margin: 2px 0 0;
+}
+
+/* 難易度・練習モード */
+.play-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0;
+  padding: 8px 12px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.play-options legend {
+  padding: 0 4px;
+  font-weight: 700;
+}
+
+.play-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px 0;
+}
+
+.play-option input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  flex: none;
+}
+
+.play-option > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.play-option-text {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.play-option--practice {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.play-mode {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* 通算成績 */
+.stats-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+}
+
+.stats-count {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 12px;
+  margin: 0;
+}
+
+.stats-grid div {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-grid dt {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.stats-grid dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.stats-ranks {
+  display: flex;
+  overflow: hidden;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.stats-rank {
+  flex-basis: 0;
+  min-width: 0;
+  padding: 4px 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--text);
+}
+
+.stats-rank--1 {
+  background: var(--correct-bg);
+}
+
+.stats-rank--2 {
+  background: var(--accent-soft);
+}
+
+.stats-rank--3 {
+  background: var(--surface-2);
+}
+
+.stats-rank--4 {
+  background: var(--wrong-bg);
+}

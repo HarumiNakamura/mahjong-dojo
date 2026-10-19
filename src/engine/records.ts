@@ -55,6 +55,8 @@ export interface GameRecord {
   huleDefen: number
   /** 振り返りの結果(振り返りを開いたときに保存する) */
   review?: GameReviewSummary
+  /** 練習モード(ヒントあり)で打った半荘。成績は分けて集計する */
+  practice?: boolean
 }
 
 /** 半荘の振り返りのまとめ(分類ごとの指摘の数。分類は src/review/types.ts) */
@@ -323,7 +325,8 @@ function validGame(v: unknown): v is GameRecord {
     !Number.isNaN(Date.parse(v.playedAt)) &&
     isString(v.cpu) &&
     ['rank', 'points10', 'score', 'kyoku', 'hule', 'fangchong', 'lizhi', 'fulouKyoku', 'huleDefen'].every((k) => isNumber(v[k])) &&
-    (v.review === undefined || validReview(v.review))
+    (v.review === undefined || validReview(v.review)) &&
+    (v.practice === undefined || typeof v.practice === 'boolean')
   )
 }
 

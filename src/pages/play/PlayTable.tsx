@@ -2,6 +2,7 @@ import { useState, useSyncExternalStore } from 'react'
 import { Hand } from '../../components/tile/Hand'
 import { Tile } from '../../components/tile/Tile'
 import { fromPai, handView } from '../../game/convert'
+import { discardHints } from '../../game/hints'
 import { MeldTiles, River } from './BoardParts'
 import type { HumanReply } from '../../game/humanPlayer'
 import { PLAYER_NAMES, type GameSession } from '../../game/session'
@@ -20,6 +21,36 @@ function dapaiOf(tile: TileData, isDrawn: boolean, options: readonly string[]): 
   if (isDrawn && options.includes(`${p}_`)) return `${p}_`
   if (options.includes(p)) return p
   return null
+}
+
+/** 練習モードのヒント(牌効率のよい打牌と、リーチ者に対する危険度) */
+function HintPanel({ session }: { session: GameSession }) {
+  const { human } = session
+  const hints = discardHints(human.model, human._menfeng, human.orders)
+  if (!hints.length) return null
+  const name = (k: number) => tileName({ kind: k, red: false })
+  const top = hints.slice(0, 3)
+  const withDanger = hints.some((h) => h.danger !== null)
+  const safest = withDanger ? [...hints].sort((a, b) => a.danger! - b.danger! || a.kind - b.kind)[0] : null
+  const shantenWord = (n: number) => (n === 0 ? 'テンパイ' : `${n}シャンテン`)
+  return (
+    <div className="play-hints" aria-label="ヒント">
+      <p className="play-hints-title">ヒント(練習モード)</p>
+      <ul>
+        {top.map((h) => (
+          <li key={h.kind} className={h.best ? 'play-hints-best' : ''}>
+            {name(h.kind)}切り:{shantenWord(h.shanten)}・{h.shanten === 0 ? '待ち' : '受け入れ'}{h.ukeire}枚
+            {h.danger !== null && `・危険度 約${h.danger}%`}
+          </li>
+        ))}
+      </ul>
+      {safest && (
+        <p className="play-hints-safe">
+          一番安全:{name(safest.kind)}({safest.dangerLabel}・約{safest.danger}%)
+        </p>
+      )}
+    </div>
+  )
 }
 
 export function PlayTable({ session }: { session: GameSession }) {
@@ -148,6 +179,7 @@ export function PlayTable({ session }: { session: GameSession }) {
             </div>
           )}
         </div>
+        {session.practice && discardOptions.length > 0 && <HintPanel session={session} />}
         <p className="play-hint" aria-live="polite">
           {lizhiMode
             ? 'リーチ:切る牌をタップで選び、もう一度タップで決定'

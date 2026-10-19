@@ -50,6 +50,9 @@ export class HumanPlayer extends Majiang.Player {
   request: HumanRequest | null = null
   /** 画面の再描画のために、変化があるたびに増える */
   version = 0
+  /** 局の中で、各座席の河の牌が何手目に切られたか(練習モードの危険度のヒントに使う) */
+  orders: number[][] = [[], [], [], []]
+  private dapaiCount = 0
   private listeners = new Set<Listener>()
   private respond: ((reply?: unknown) => void) | null = null
 
@@ -91,6 +94,8 @@ export class HumanPlayer extends Majiang.Player {
   }
 
   action_qipai() {
+    this.orders = [[], [], [], []]
+    this.dapaiCount = 0
     this.pass()
   }
 
@@ -110,6 +115,7 @@ export class HumanPlayer extends Majiang.Player {
   }
 
   action_dapai(dapai: { l: number; p: string }) {
+    this.orders[dapai.l].push(++this.dapaiCount)
     if (dapai.l === this._menfeng) return this.pass()
     const d = ['', '+', '=', '-'][(4 + this._model.lunban - this._menfeng) % 4]
     const p = dapai.p.slice(0, 2) + d

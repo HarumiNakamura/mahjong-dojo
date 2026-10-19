@@ -79,8 +79,9 @@ export interface GameAreaStats {
 
 /** 分野ごとの、CPU対戦での1半荘あたりの指摘の数 */
 export function gameAreaStats(games: readonly GameRecord[]): GameAreaStats[] {
+  // 練習モード(ヒントあり)の半荘は数えない
   const reviewed = games
-    .filter((g) => g.review)
+    .filter((g) => g.review && !g.practice)
     .sort((a, b) => a.playedAt.localeCompare(b.playedAt))
     .slice(-RECENT_REVIEWED_GAMES)
   return AREAS.map((area) => {
@@ -112,7 +113,12 @@ export const ROADMAP: readonly RoadmapStep[] = [
     areas: ['pushfold', 'call', 'plan'],
     path: '/practice/judgment',
   },
+  // 仕上げ: 分野の正解率ではなく、CPU対戦を打った半荘の数で進む
+  { id: 'play', label: 'CPU対戦', description: 'CPU と半荘を打ち、振り返りで実戦の判断を確かめる', areas: [], path: '/play' },
 ]
+
+/** CPU対戦のステップをクリアする半荘の数(練習モードを除く) */
+export const CLEAR_GAMES = 3
 
 /** ステップをクリアする条件: 分野ごとに CLEAR_ANSWERS 問以上、正解率 CLEAR_RATE% 以上 */
 export const CLEAR_ANSWERS = 20
@@ -127,9 +133,14 @@ export interface RoadmapProgress {
   percent: number
 }
 
-export function roadmapProgress(attempts: readonly AttemptRecord[]): RoadmapProgress[] {
+export function roadmapProgress(attempts: readonly AttemptRecord[], games: readonly GameRecord[] = []): RoadmapProgress[] {
   const stats = areaStats(attempts)
   return ROADMAP.map((step) => {
+    if (step.areas.length === 0) {
+      const played = games.filter((g) => !g.practice).length
+      const status: StepStatus = played >= CLEAR_GAMES ? 'cleared' : played > 0 ? 'inProgress' : 'notStarted'
+      return { step, status, percent: Math.round(Math.min(1, played / CLEAR_GAMES) * 100) }
+    }
     const mine = stats.filter((s) => step.areas.includes(s.area.id))
     const parts = mine.map((s) => {
       const count = Math.min(1, s.answered / CLEAR_ANSWERS)
@@ -166,7 +177,8 @@ export function recommend(attempts: readonly AttemptRecord[], games: readonly Ga
     .filter((g) => g.perGame !== null && g.perGame >= GAME_WEAK_PER_GAME)
     .sort((a, b) => b.perGame! - a.perGame!)[0]
   if (fromGames) return { area: fromGames.area, reason: `CPU対戦の振り返りで、1半荘あたり${fromGames.perGame}回の指摘があった分野です。` }
-  const progress = roadmapProgress(attempts)
+  // おすすめは練習の分野から選ぶ(CPU対戦のステップは除く)
+  const progress = roadmapProgress(attempts).filter((p) => p.step.areas.length > 0)
   const next = progress.find((p) => p.status !== 'cleared') ?? progress[progress.length - 1]
   const all = areaStats(attempts)
   const areaId = next.step.areas.find((id) => (all.find((s) => s.area.id === id)?.answered ?? 0) < CLEAR_ANSWERS) ?? next.step.areas[0]

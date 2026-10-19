@@ -17,7 +17,7 @@ export function ProgressSections() {
   const attempts = data.attempts
   const streak = streakDays(attempts, now)
   const done = dailyKeys ? countDailyDone(dailyKeys, attempts, date) : 0
-  const roadmap = roadmapProgress(attempts)
+  const roadmap = roadmapProgress(attempts, data.games)
   const nextStep = roadmap.findIndex((p) => p.status !== 'cleared')
   const stats = areaStats(attempts)
   const rec = recommend(attempts, data.games)
@@ -70,7 +70,7 @@ export function ProgressSections() {
             </li>
           ))}
         </ol>
-        <p className="home-note">各分野で20問以上・正解率70%以上になるとクリアです。</p>
+        <p className="home-note">各分野で20問以上・正解率70%以上になるとクリアです。CPU対戦は3半荘打つとクリアです(練習モードを除く)。</p>
       </section>
 
       <section className="home-section">

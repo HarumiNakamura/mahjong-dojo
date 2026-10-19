@@ -8,8 +8,8 @@ describe('ページ構成', () => {
     for (const p of PRACTICE_PAGES) expect(p.path.startsWith('/practice/')).toBe(true)
   })
 
-  it('ナビゲーションはホーム・練習・解説・学習記録・このサイトについて', () => {
-    expect(NAV_ITEMS.map((i) => i.label)).toEqual(['ホーム', '練習', '解説', '学習記録', 'このサイトについて'])
+  it('ナビゲーションはホーム・練習・CPU対戦・解説・学習記録・このサイトについて', () => {
+    expect(NAV_ITEMS.map((i) => i.label)).toEqual(['ホーム', '練習', 'CPU対戦', '解説', '学習記録', 'このサイトについて'])
     expect(NAV_ITEMS[1].children).toHaveLength(6)
   })
 

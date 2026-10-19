@@ -1,5 +1,5 @@
 import { Link } from '../app/Link'
-import { PRACTICE_PAGES } from '../app/routes'
+import { PLAY_PAGE, PRACTICE_PAGES } from '../app/routes'
 import './pages.css'
 
 export function PracticePage() {
@@ -19,6 +19,12 @@ export function PracticePage() {
             </Link>
           </li>
         ))}
+        <li>
+          <Link to={PLAY_PAGE.path} className="card">
+            <span className="card-title">{PLAY_PAGE.title}(仕上げ)</span>
+            <span className="card-text">{PLAY_PAGE.description}</span>
+          </Link>
+        </li>
       </ul>
     </>
   )

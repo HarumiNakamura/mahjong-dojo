@@ -87,11 +87,13 @@
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
 - `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
 - `src/pages/site/`・`src/app/siteInfo.ts` … プライバシーポリシー(`/privacy`)・運営者情報とお問い合わせ(`/contact`)・免責事項(`/disclaimer`)。運営者名・お問い合わせフォーム(Google フォーム)・Google 広告設定の URL は `siteInfo.ts` に書く(空なら「準備中」と表示)。フッターにはすべてのページへのリンクを並べる
-- `src/game/` … CPU対戦(作成中。`/play` はメニュー・サイトマップに載せない)。対局の進行と CPU は `@kobalab/majiang-core`・`@kobalab/majiang-ai`(MIT。型定義は `src/types/majiang.d.ts`)
+- `src/game/` … CPU対戦(`/play`。メニュー・ホームのロードマップ・サイトマップに載せる)。対局の進行と CPU は `@kobalab/majiang-core`・`@kobalab/majiang-ai`(MIT。型定義は `src/types/majiang.d.ts`)
   - `rule.ts` … ライブラリのルールを Mリーグに合わせた設定と補正(海底をツモった人のリーチ不可)。再現できない項目は `docs/game-rules-gap.md`
   - `result.ts` … 半荘の最終成績(順位点・同点の等分・南4局流局時の供託)を自前で計算
   - `convert.ts` … サイトの牌とライブラリの表記の変換。`selfplay.ts` … CPU 同士の自動対局と成績の集計
   - `scoringCrosscheck.ts` … 自前の点数計算とライブラリの点数の突き合わせ
+  - `difficulty.ts` … 難易度(やさしい=`easyPlayer.ts` の受け入れ最大・守備と鳴きなし、ふつう=majiang-ai legacy 0201、つよい=最新版)。強さの差は `docs/cpu-stats.md`
+  - `hints.ts` … 練習モードのヒント(切る牌ごとの受け入れ枚数・リーチ者に対する危険度)。練習モードの成績は `practice` で分けて集計する
   - `humanPlayer.ts` … 対局の「自分」。ライブラリからの知らせに対してできる操作(打牌・リーチ・ツモ・カン・ロン・チー・ポン)を計算し、画面の操作を待つ。喰い替え・フリテン・役なしの判定はライブラリに任せる
   - `session.ts` … 自分 + CPU 3人の半荘を進める(CPU の速さの設定、鳴き・リーチの声の表示、局の始まりの途中保存と続きから、終局の知らせ)
   - `save.ts` … 途中保存の形の確認と表示。保存先は `src/app/playSave.ts`(localStorage。局が始まるたびに保存し、終局で消す)
@@ -100,6 +102,7 @@
   - `paipuRecords.ts` … 牌譜の保存データ(直近20半荘)の確認と合わせ方。保存先は `src/app/paipuStore.ts`(localStorage)。学習記録の書き出し/読み込みに牌譜も入る
   - `gameRecord.ts` … 半荘の牌譜から自分の成績(順位・ポイント・アガリ・放銃など)を作り、学習記録の `games` に保存する
 - `src/review/` … CPU対戦の振り返り(画面から独立、テスト必須)。`reviewGame.ts` が牌譜を1手ずつ再現し、`checks.ts` が分類ごとに判定(打牌の牌効率・押し引き・より安全な牌があった放銃・鳴き・アガリ逃し・役なしダマ)。損失の目安(点)とテンプレートの理由をつけ、分かれ目(上位3つ)を選ぶ。しきい値は `thresholds.ts`、考え方は `docs/review.md`。テスト用の短い牌譜は `fixtures.ts`。画面からは `src/app/runReview.ts`(Web Worker)で呼ぶ
+- `src/pages/play/PlayStatsPage.tsx` … CPU対戦の通算成績(`/play/stats`。難易度ごと・練習モードは別)
 - `src/pages/play/GameReviewPage.tsx` … CPU対戦の振り返り(`/play/review?g=<対局>`。半荘の結果から開く)。一言まとめ・分かれ目(最大3つ。牌譜の場面へ)・「この判断を後で見る」の場面・分類ごとの指摘・今回とこれまでの率・関連する練習と記事(`reviewLinks.ts`)。判定は目安であることを明記。初めて開いたときに、まとめを対局成績に、分かれ目を学習記録の復習リスト(`bookmarks`)に保存し、打牌の分かれ目は何切るのお気に入りにも入れる(`src/review/efficiencyQuestionAt.ts`)。振り返りの指摘は弱点マップ・おすすめにも使う(`progress.ts` の `gameAreaStats`)
 - `src/pages/play/ReplayPage.tsx` … 牌譜の再生(`/play/replay`。一覧・局の選択・1手ずつ進む/戻る・次の自分の番・自分視点/全員の手牌・場面の URL のコピー)。盤面の部品は `BoardParts.tsx` を対局画面と共用
 - `src/pages/PlayPage.tsx`・`src/pages/play/` … CPU対戦の対局画面(`/play`。スマホ縦優先:上に点数・場・ドラ・残り枚数、中央に河(拡大できる)、下に自分の手牌と操作ボタン)と局の結果(役・符の内訳・点数の動き、流局はテンパイ/ノーテンと罰符)・半荘の結果(順位・持ち点・順位点込みのポイント)。対局をやめる/最初からやり直すは確認つき。広告枠は出さない
@@ -133,7 +136,7 @@ engine では `"123m456p789s1122z"` 形式の文字列を使う(m=萬子, p=筒�
 - `npm run lint` … リント
 - `npm run deploy` … ビルドして Cloudflare に公開
 - `npm run build:og` … OGP 画像(`public/og/*.png`)を作り直す(先に `npm run build`)
-- `npm run cpu:selfplay -- [半荘数] [CPU] [並列数]` … CPU 4人の自動対局を回して `docs/cpu-stats.md` に成績を書く(最新版 AI は1半荘約20秒。1,000半荘で約1.5時間)
+- `npm run cpu:selfplay -- [半荘数] [CPU] [並列数]` … CPU 4人の自動対局を回して `docs/cpu-stats.md` に成績を書く(CPU は `easy`・`normal`・`strong` など。`strong,easy,easy,easy` のように4人分も指定できる。最新版 AI は1半荘約20秒。1,000半荘で約1.5時間)
 - `npm run report:scoring` … 点数計算のテスト結果を `docs/scoring-tests.md` に書き出す(点数計算を変えたら実行する)
 
 ## 作業ルール
