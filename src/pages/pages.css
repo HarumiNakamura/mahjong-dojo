@@ -314,6 +314,13 @@
   color: var(--text-muted);
 }
 
+.weak-game {
+  grid-column: 2 / -1;
+  margin-top: -4px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 .article-crumb {
   margin: 0 0 4px;
   font-size: 14px;

@@ -14,7 +14,14 @@ import {
   sanitizeRecords,
   statsOf,
   toggleFavorite,
+  addBookmarks,
   addGame,
+  bookmarkId,
+  gameRates,
+  MAX_BOOKMARKS,
+  removeBookmark,
+  setGameReview,
+  type SceneBookmark,
   gameSummary,
   MAX_GAMES,
   type AttemptRecord,
@@ -220,5 +227,64 @@ describe('CPU対戦の成績', () => {
     expect(paipuInFile(text)).toEqual([{ id: 'g1' }])
     expect(paipuInFile(exportRecords(emptyRecords(), new Date(0)))).toEqual([])
     expect(paipuInFile('broken')).toEqual([])
+  })
+})
+
+const bm = (i: number, source: 'auto' | 'marker' = 'auto'): SceneBookmark => ({
+  id: bookmarkId('g1', 0, i),
+  gameId: 'g1',
+  kyoku: 0,
+  step: i,
+  title: `東1局 ${i}`,
+  source,
+  addedAt: '2026-10-18T10:00:00.000Z',
+})
+
+describe('CPU対戦の復習リスト・振り返りのまとめ', () => {
+  it('同じ場面は1つだけ、上限を超えたら古いものから消す、外せる', () => {
+    let data = addBookmarks(emptyRecords(), [bm(1), bm(1, 'marker'), bm(2)])
+    expect(data.bookmarks.map((b) => b.step)).toEqual([1, 2])
+    data = addBookmarks(data, Array.from({ length: MAX_BOOKMARKS }, (_, i) => bm(i + 10)))
+    expect(data.bookmarks).toHaveLength(MAX_BOOKMARKS)
+    expect(data.bookmarks[0].step).toBe(10)
+    expect(removeBookmark(data, bookmarkId('g1', 0, 10)).bookmarks).toHaveLength(MAX_BOOKMARKS - 1)
+  })
+
+  it('振り返りのまとめを対局成績に保存し、読み込みでも残る', () => {
+    const data = setGameReview(addGame(emptyRecords(), game({})), 'g1', { decisions: 120, counts: { discard: 2 }, loss: 900 })
+    expect(data.games[0].review).toEqual({ decisions: 120, counts: { discard: 2 }, loss: 900 })
+    const back = parseRecordsFile(exportRecords(addBookmarks(data, [bm(1)]), new Date(0)))
+    expect(back.games[0].review).toEqual(data.games[0].review)
+    expect(back.bookmarks).toEqual([bm(1)])
+  })
+
+  it('壊れたまとめ・復習リストは捨てる。古い記録には復習リストがない', () => {
+    const data = sanitizeRecords({
+      version: 1,
+      attempts: [],
+      favorites: [],
+      games: [game({}), { ...game({ id: 'g2' }), review: { decisions: 'x' } }],
+      bookmarks: [bm(1), { ...bm(2), source: 'other' }],
+    })
+    expect(data.games.map((g) => g.id)).toEqual(['g1'])
+    expect(data.bookmarks).toEqual([bm(1)])
+    expect(sanitizeRecords({ version: 1, attempts: [], favorites: [] }).bookmarks).toEqual([])
+  })
+
+  it('読み込みで復習リストも合わせる', () => {
+    const { data } = mergeRecords(addBookmarks(emptyRecords(), [bm(1)]), addBookmarks(emptyRecords(), [bm(1), bm(2)]))
+    expect(data.bookmarks.map((b) => b.step)).toEqual([1, 2])
+  })
+
+  it('局あたりの率と平均打点', () => {
+    expect(gameRates([game({}), game({ id: 'g2', kyoku: 10, hule: 0, fangchong: 3, huleDefen: 0 })])).toEqual({
+      games: 2,
+      hule: 15,
+      fangchong: 20,
+      fulou: 30,
+      lizhi: 20,
+      averageWin: 6000,
+    })
+    expect(gameRates([])).toEqual({ games: 0, hule: null, fangchong: null, fulou: null, lizhi: null, averageWin: null })
   })
 })

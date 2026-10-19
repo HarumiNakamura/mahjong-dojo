@@ -3,7 +3,7 @@
 // すべて学習記録(回答の一覧)から計算する。記録が0件でも動く。
 
 import { createRng, shuffle } from './random'
-import { localDate, type AttemptRecord } from './records'
+import { localDate, type AttemptRecord, type GameRecord } from './records'
 
 // ---- 分野 ----
 
@@ -49,6 +49,44 @@ export function areaStats(attempts: readonly AttemptRecord[]): AreaStats[] {
       .slice(-RECENT_PER_AREA)
     const correct = mine.filter((a) => a.correct).length
     return { area, answered: mine.length, correct, rate: mine.length ? Math.round((correct / mine.length) * 100) : null }
+  })
+}
+
+// ---- CPU対戦の振り返り ----
+
+/** 振り返りの分類(src/review/types.ts)と、弱点マップの分野の対応 */
+export const REVIEW_CATEGORY_AREAS: Record<string, string> = {
+  discard: 'efficiency',
+  pushfold: 'pushfold',
+  dealin: 'defense',
+  call: 'call',
+  missedWin: 'waits',
+  riichi: 'score',
+}
+
+/** 弱点に使う、振り返りをした最近の半荘の数 */
+export const RECENT_REVIEWED_GAMES = 10
+/** 1半荘あたりの指摘がこの回数以上なら、おすすめに出す */
+export const GAME_WEAK_PER_GAME = 1
+
+export interface GameAreaStats {
+  area: Area
+  /** 振り返りをした半荘の数(最大 RECENT_REVIEWED_GAMES) */
+  games: number
+  /** 1半荘あたりの指摘の数(小数1桁。半荘がなければ null) */
+  perGame: number | null
+}
+
+/** 分野ごとの、CPU対戦での1半荘あたりの指摘の数 */
+export function gameAreaStats(games: readonly GameRecord[]): GameAreaStats[] {
+  const reviewed = games
+    .filter((g) => g.review)
+    .sort((a, b) => a.playedAt.localeCompare(b.playedAt))
+    .slice(-RECENT_REVIEWED_GAMES)
+  return AREAS.map((area) => {
+    const cats = Object.keys(REVIEW_CATEGORY_AREAS).filter((c) => REVIEW_CATEGORY_AREAS[c] === area.id)
+    const total = reviewed.reduce((sum, g) => sum + cats.reduce((a, c) => a + (g.review!.counts[c] ?? 0), 0), 0)
+    return { area, games: reviewed.length, perGame: reviewed.length ? Math.round((total / reviewed.length) * 10) / 10 : null }
   })
 }
 
@@ -114,15 +152,20 @@ export interface Recommendation {
 
 /**
  * 次におすすめの練習。
- * 記録が十分ある分野のうち、正解率が CLEAR_RATE% 未満で一番低い分野。
- * そういう分野がなければ、ロードマップでまだクリアしていない最初のステップ。
+ * 1. 記録が十分ある分野のうち、正解率が CLEAR_RATE% 未満で一番低い分野
+ * 2. CPU対戦の振り返りで、1半荘あたりの指摘が GAME_WEAK_PER_GAME 回以上で一番多い分野
+ * 3. ロードマップでまだクリアしていない最初のステップ
  */
-export function recommend(attempts: readonly AttemptRecord[]): Recommendation {
+export function recommend(attempts: readonly AttemptRecord[], games: readonly GameRecord[] = []): Recommendation {
   const stats = areaStats(attempts).filter((s) => s.answered >= MIN_ANSWERS)
   if (stats.length > 0) {
     const weakest = [...stats].sort((a, b) => a.rate! - b.rate! || a.answered - b.answered)[0]
     if (weakest.rate! < CLEAR_RATE) return { area: weakest.area, reason: `正解率が${weakest.rate}%と一番低い分野です。` }
   }
+  const fromGames = gameAreaStats(games)
+    .filter((g) => g.perGame !== null && g.perGame >= GAME_WEAK_PER_GAME)
+    .sort((a, b) => b.perGame! - a.perGame!)[0]
+  if (fromGames) return { area: fromGames.area, reason: `CPU対戦の振り返りで、1半荘あたり${fromGames.perGame}回の指摘があった分野です。` }
   const progress = roadmapProgress(attempts)
   const next = progress.find((p) => p.status !== 'cleared') ?? progress[progress.length - 1]
   const all = areaStats(attempts)

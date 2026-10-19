@@ -15,5 +15,10 @@ describe('CPU対戦の途中保存', () => {
     expect(parseGameSave({ ...ok, defen: [30000, 25000, 24000] })).toBeNull()
     expect(parseGameSave({ ...ok, lizhibang: 0 })).toBeNull()
     expect(parseGameSave({ ...ok, log: 'x' })).toBeNull()
+    expect(parseGameSave({ ...ok, marks: [{ kyoku: 'a', step: 1 }] })).toBeNull()
+  })
+  it('「後で見る」の印も読み込める(古い保存には印がない)', () => {
+    const withMarks = { ...ok, marks: [{ kyoku: 1, step: 12 }] }
+    expect(parseGameSave(JSON.parse(JSON.stringify(withMarks)))).toEqual(withMarks)
   })
 })

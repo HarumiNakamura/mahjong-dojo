@@ -40,7 +40,17 @@ function ScoreMoves({ before, fenpei, nameOf }: { before: number[]; fenpei: read
 }
 
 /** 局の結果(アガリ・流局)と半荘の結果。次へ進むボタンつき */
-export function PlayResult({ session, onRestart, replayHref = null }: { session: GameSession; onRestart: () => void; replayHref?: string | null }) {
+export function PlayResult({
+  session,
+  onRestart,
+  replayHref = null,
+  reviewHref = null,
+}: {
+  session: GameSession
+  onRestart: () => void
+  replayHref?: string | null
+  reviewHref?: string | null
+}) {
   const { human } = session
   // 局の結果は盤面と別の部品なので、ここでも変化を受け取って描き直す
   useSyncExternalStore(
@@ -97,7 +107,12 @@ export function PlayResult({ session, onRestart, replayHref = null }: { session:
             </>
           )}
         </p>
-        <button type="button" className="button button--primary button--block" onClick={onRestart}>
+        {reviewHref && (
+          <Link to={reviewHref} className="button button--primary button--block">
+            振り返りを見る
+          </Link>
+        )}
+        <button type="button" className={`button button--block${reviewHref ? '' : ' button--primary'}`} onClick={onRestart}>
           もう一度対局する
         </button>
       </div>

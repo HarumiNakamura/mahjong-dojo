@@ -8,7 +8,9 @@ import {
   emptyRecords,
   exportRecords,
   gameSummary,
+  removeBookmark,
   type GameRecord,
+  type SceneBookmark,
   localDate,
   mergeRecords,
   mistakes,
@@ -19,7 +21,7 @@ import {
 } from '../../engine/records'
 import { addPaipuRecords, clearPaipuRecords, loadPaipuRecords } from '../../app/paipuStore'
 import { sanitizePaipuRecords } from '../../game/paipuRecords'
-import { replayUrl } from '../../game/replay'
+import { replayUrl, reviewUrl } from '../../game/replay'
 import { formatPoints } from '../../game/result'
 import { TrendChart } from './TrendChart'
 import './records.css'
@@ -45,7 +47,15 @@ function restore(drillId: string, data: unknown) {
 }
 
 /** CPU対戦の成績(対局したことがあるときだけ出す) */
-function GameSection({ games }: { games: readonly GameRecord[] }) {
+function GameSection({
+  games,
+  bookmarks,
+  onRemoveBookmark,
+}: {
+  games: readonly GameRecord[]
+  bookmarks: readonly SceneBookmark[]
+  onRemoveBookmark: (id: string) => void
+}) {
   const s = gameSummary(games)
   const [replayable] = useState(() => new Set(loadPaipuRecords().map((r) => r.id)))
   const recent = games.slice(-5).reverse()
@@ -83,12 +93,29 @@ function GameSection({ games }: { games: readonly GameRecord[] }) {
               {replayable.has(g.id) && (
                 <>
                   {' '}
-                  <Link to={replayUrl(g.id)}>牌譜</Link>
+                  <Link to={reviewUrl(g.id)}>振り返り</Link> <Link to={replayUrl(g.id)}>牌譜</Link>
                 </>
               )}
             </li>
           ))}
         </ul>
+        {bookmarks.length > 0 && (
+          <>
+            <h3 className="rec-subheading">CPU対戦の復習リスト</h3>
+            <p className="rec-empty">振り返りの分かれ目と、対局中に「この判断を後で見る」を押した場面です。</p>
+            <ul className="rec-games">
+              {[...bookmarks].reverse().map((b) => (
+                <li key={b.id}>
+                  {replayable.has(b.gameId) ? <Link to={replayUrl(b.gameId, { kyoku: b.kyoku, step: b.step })}>{b.title}</Link> : b.title}
+                  {b.source === 'marker' && '(印)'}{' '}
+                  <button type="button" className="rec-remove" onClick={() => onRemoveBookmark(b.id)} aria-label={`${b.title}を復習リストから外す`}>
+                    外す
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     </section>
   )
@@ -185,7 +212,9 @@ export function RecordsPage() {
         })}
       </section>
 
-      {data.games.length > 0 && <GameSection games={data.games} />}
+      {data.games.length > 0 && (
+        <GameSection games={data.games} bookmarks={data.bookmarks} onRemoveBookmark={(id) => update((d) => removeBookmark(d, id))} />
+      )}
 
       <section className="rec-section">
         <h2>間違えた問題</h2>

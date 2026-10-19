@@ -20,6 +20,14 @@ export interface GameSave {
   defen: number[]
   /** それまでの局の牌譜 */
   log: Record<string, unknown>[][]
+  /** 対局中に「この判断を後で見る」を押した場面(古い保存にはない) */
+  marks?: GameMark[]
+}
+
+/** 牌譜の場面(局の番号と手数) */
+export interface GameMark {
+  kyoku: number
+  step: number
 }
 
 /** Mリーグの終局処理を使う Game。局の始まりに途中保存でき、保存した局から続けられる */
@@ -28,6 +36,17 @@ export class MleagueGame extends Majiang.Game {
   final: FinalResult | null = null
   /** 局が始まる直前に呼ばれる(途中保存に使う) */
   onKyokuStart?: (save: GameSave) => void
+  /** 「この判断を後で見る」を押した場面 */
+  marks: GameMark[] = []
+
+  /** 今の場面に印をつける(同じ場面は1回だけ)。つけた場面を返す */
+  mark(): GameMark | null {
+    const log = this._paipu.log
+    if (!log.length) return null
+    const m = { kyoku: log.length - 1, step: log[log.length - 1].length - 1 }
+    if (!this.marks.some((x) => x.kyoku === m.kyoku && x.step === m.step)) this.marks.push(m)
+    return m
+  }
 
   qipai(shan?: unknown) {
     this.onKyokuStart?.(this.snapshot())
@@ -46,6 +65,7 @@ export class MleagueGame extends Majiang.Game {
       lizhibang: m.lizhibang,
       defen: [...m.defen],
       log: JSON.parse(JSON.stringify(this._paipu.log)),
+      marks: this.marks.map((m) => ({ ...m })),
     }
   }
 
@@ -60,6 +80,7 @@ export class MleagueGame extends Majiang.Game {
     m.lizhibang = save.lizhibang
     m.defen = [...save.defen]
     this._paipu.log = JSON.parse(JSON.stringify(save.log))
+    this.marks = (save.marks ?? []).map((m) => ({ ...m }))
   }
 
   jieju() {

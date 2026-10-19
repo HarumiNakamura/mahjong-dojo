@@ -12,6 +12,9 @@ export function parseGameSave(value: unknown): GameSave | null {
   if (!isInt(v.changbang, 0, 99) || !isInt(v.lizhibang, 0, 99)) return null
   if (!Array.isArray(v.defen) || v.defen.length !== 4 || !v.defen.every((d) => typeof d === 'number' && Number.isFinite(d))) return null
   if (!Array.isArray(v.log) || !v.log.every((k) => Array.isArray(k))) return null
+  if (v.marks !== undefined && !(Array.isArray(v.marks) && v.marks.every((m) => typeof m === 'object' && m !== null && isInt(m.kyoku, 0, 99) && isInt(m.step, 0, 9999)))) {
+    return null
+  }
   // 持ち点と供託の合計は 100,000点
   const total = (v.defen as number[]).reduce((a, b) => a + b, 0) + (v.lizhibang as number) * 1000
   if (total !== 100000) return null

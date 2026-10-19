@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { areaStats, CLEAR_ANSWERS, dailyPlan, DAILY_COUNT, recommend, roadmapProgress, streakDays } from './progress'
-import type { AttemptRecord } from './records'
+import { areaStats, CLEAR_ANSWERS, dailyPlan, DAILY_COUNT, gameAreaStats, recommend, RECENT_REVIEWED_GAMES, roadmapProgress, streakDays } from './progress'
+import type { AttemptRecord, GameRecord } from './records'
 
 let n = 0
 function att(drill: string, correct: boolean, date = '2026-10-18T12:00:00'): AttemptRecord {
@@ -70,5 +70,47 @@ describe('今日の練習', () => {
     expect(new Set(a.map((x) => x.drill)).size).toBe(DAILY_COUNT)
     expect(dailyPlan('2026-10-18')).toEqual(a)
     expect(dailyPlan('2026-10-19')).not.toEqual(a)
+  })
+})
+
+function game(i: number, counts?: Record<string, number>): GameRecord {
+  return {
+    id: `g${i}`,
+    playedAt: new Date(Date.UTC(2026, 9, 1, i)).toISOString(),
+    cpu: 'latest',
+    rank: 2,
+    points10: 0,
+    score: 25000,
+    kyoku: 10,
+    hule: 2,
+    fangchong: 1,
+    lizhi: 2,
+    fulouKyoku: 3,
+    huleDefen: 10000,
+    ...(counts ? { review: { decisions: 100, counts, loss: 0 } } : {}),
+  }
+}
+
+describe('CPU対戦の振り返りと弱点マップ', () => {
+  it('分野ごとの1半荘あたりの指摘(振り返りをした最近の半荘だけ)', () => {
+    const games = [game(0, { pushfold: 4, dealin: 2 }), game(1, { pushfold: 2, discard: 1 }), game(2)]
+    const stats = gameAreaStats(games)
+    expect(stats.find((s) => s.area.id === 'pushfold')).toMatchObject({ games: 2, perGame: 3 })
+    expect(stats.find((s) => s.area.id === 'defense')!.perGame).toBe(1)
+    expect(stats.find((s) => s.area.id === 'efficiency')!.perGame).toBe(0.5)
+    expect(gameAreaStats([]).every((s) => s.perGame === null)).toBe(true)
+    // 古い半荘は数えない
+    const old = Array.from({ length: RECENT_REVIEWED_GAMES + 5 }, (_, i) => game(i, i < 5 ? { call: 10 } : {}))
+    expect(gameAreaStats(old).find((s) => s.area.id === 'call')!.perGame).toBe(0)
+  })
+
+  it('ドリルの弱点がなければ、CPU対戦で指摘の多い分野をおすすめする', () => {
+    const rec = recommend([], [game(0, { pushfold: 3 }), game(1, { pushfold: 1 })])
+    expect(rec.area.id).toBe('pushfold')
+    expect(rec.reason).toContain('CPU対戦')
+    // ドリルの正解率が低い分野が先
+    expect(recommend(many('waits', 10, 0.3), [game(0, { pushfold: 3 })]).area.id).toBe('waits')
+    // 指摘が少なければロードマップの順
+    expect(recommend([], [game(0, { pushfold: 0 })]).area.id).toBe('waits')
   })
 })

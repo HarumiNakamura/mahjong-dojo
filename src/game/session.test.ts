@@ -71,6 +71,8 @@ describe('途中保存と続きから', () => {
           makeCpu: () => new (legacy('0101'))(),
           resume,
           onKyokuStart: (save) => {
+            // 2局目の始まりで「後で見る」の印をつける(配牌の場面)
+            if (saves.length === 1 && !resume) s.game.mark()
             saves.push(save)
             // 3局目が始まったところでやめる(ページを閉じたのと同じ)
             if (saves.length > stopAfter) {
@@ -88,11 +90,14 @@ describe('途中保存と続きから', () => {
     expect(await play(undefined, 2)).toBeNull()
     const save = saves[saves.length - 1]
     expect(save.log.length).toBe(2)
+    // 印は途中保存に入っている
+    expect(save.marks).toEqual([{ kyoku: 0, step: expect.any(Number) }])
     const paipu = await play(JSON.parse(JSON.stringify(save)))
     expect(paipu).not.toBeNull()
     // 前の2局の牌譜も残っている
     expect(paipu!.log.length).toBeGreaterThanOrEqual(8)
     expect(paipu!.log[0]).toEqual(saves[0] === save ? [] : expect.anything())
     expect(paipu!.defen.reduce((a, b) => a + b, 0)).toBe(100000)
+    expect(saves[saves.length - 1].marks).toEqual(save.marks)
   }, 120000)
 })

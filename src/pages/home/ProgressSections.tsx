@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from '../../app/Link'
 import { useRecords } from '../../app/records/useRecords'
-import { areaStats, countDailyDone, MIN_ANSWERS, recommend, roadmapProgress, streakDays } from '../../engine/progress'
+import { areaStats, countDailyDone, gameAreaStats, MIN_ANSWERS, recommend, REVIEW_CATEGORY_AREAS, roadmapProgress, streakDays } from '../../engine/progress'
 import { localDate } from '../../engine/records'
 import { loadDailyKeys } from '../../app/dailyCache'
 
@@ -20,7 +20,10 @@ export function ProgressSections() {
   const roadmap = roadmapProgress(attempts)
   const nextStep = roadmap.findIndex((p) => p.status !== 'cleared')
   const stats = areaStats(attempts)
-  const rec = recommend(attempts)
+  const rec = recommend(attempts, data.games)
+  const gameStats = gameAreaStats(data.games)
+  const reviewedGames = gameStats[0]?.games ?? 0
+  const hasGameCategory = (areaId: string) => Object.values(REVIEW_CATEGORY_AREAS).includes(areaId)
 
   return (
     <>
@@ -74,6 +77,7 @@ export function ProgressSections() {
         <h2>弱点マップ</h2>
         <p className="home-note">
           分野ごとの正解率(最近の50問まで)。記録が{MIN_ANSWERS}問未満の分野は薄く表示します。
+          {reviewedGames > 0 && `CPU対戦は、振り返りをした最近${reviewedGames}半荘の1半荘あたりの指摘の数です。`}
         </p>
         <ul className="weak-map">
           {stats.map((s) => (
@@ -84,6 +88,9 @@ export function ProgressSections() {
               </span>
               <span className="weak-value">{s.rate === null ? '—' : `${s.rate}%`}</span>
               <span className="weak-count">{s.answered}問</span>
+              {reviewedGames > 0 && hasGameCategory(s.area.id) && (
+                <span className="weak-game">CPU対戦の指摘 {gameStats.find((g) => g.area.id === s.area.id)?.perGame ?? 0}回/半荘</span>
+              )}
             </li>
           ))}
         </ul>
