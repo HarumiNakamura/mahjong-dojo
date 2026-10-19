@@ -73,6 +73,11 @@ export const SCORING_CASES: ScoringCase[] = [
     expect: { han: 6, limit: 'haneman', points: 12000, yaku: ['一発'] },
   },
   {
+    id: 'P07b', category: '点数', title: 'ダブル立直は2翻(立直とは重ならない)。断么九・平和と合わせて30符4翻は切り上げ満貫',
+    hand: '234m34588p345567s', win: '3s', ctx: { doubleRiichi: true },
+    expect: { han: 4, fu: 30, limit: 'mangan', points: 8000, yaku: ['ダブル立直', '断么九', '平和'] },
+  },
+  {
     id: 'P08', category: '点数', title: '子の9翻ロンは倍満 16,000点(清一色・一気通貫・平和)',
     hand: '12334455678999p', win: '6p',
     expect: { han: 9, limit: 'baiman', points: 16000, yaku: ['清一色', '一気通貫', '平和'] },

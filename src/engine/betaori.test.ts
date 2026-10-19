@@ -99,3 +99,17 @@ describe('安パイの使い方の評価', () => {
     throw new Error('現物を持つ局面が見つかりませんでした')
   })
 })
+
+describe('他家のアガリで終わったとき', () => {
+  it('リーチ者がツモアガリしても手牌は13枚のままで、待ちを調べられる(アガリ牌は終わり方に残る)', async () => {
+    const { riichiWaits } = await import('./danger')
+    for (let seed = 1; seed <= 3000; seed++) {
+      const g = playSafest(seed)
+      if (g.end?.reason !== 'otherWin' || !g.end.tsumo || g.situation.riichiIndex[g.end.winner] === null) continue
+      expect(g.situation.hands[g.end.winner]).toHaveLength(13)
+      expect(riichiWaits(g.situation, g.end.winner)).toContain(g.end.tile.kind)
+      return
+    }
+    throw new Error('リーチ者のツモアガリで終わる局が見つかりませんでした')
+  }, 120000)
+})
