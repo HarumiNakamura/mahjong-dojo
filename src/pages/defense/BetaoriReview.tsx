@@ -25,7 +25,7 @@ export function BetaoriReview({ question, answer }: { question: BetaoriQuestion;
       <p>
         結果: <strong>{BETAORI_END_LABELS[end.reason]}</strong>
         {end.reason === 'dealIn' && `(${SEAT_NAMES[end.seat]}に${name(ronTile!.kind)}で放銃)`}
-        {end.reason === 'otherWin' && `(${SEAT_NAMES[end.winner]}の${end.tsumo ? 'ツモ' : 'ロン'})`}
+        {end.reason === 'otherWin' && `(${SEAT_NAMES[end.winner]}が${name(end.tile.kind)}で${end.tsumo ? 'ツモ' : 'ロン'})`}
       </p>
       <p>
         {sum.turns}巡のうち、一番安全な牌を選べたのは <strong>{sum.safestCount}巡</strong>。 放銃する確率の目安は合計 約{sum.risk}%

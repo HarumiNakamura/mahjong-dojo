@@ -43,8 +43,8 @@ export interface BetaoriTurn {
 export type BetaoriEnd =
   | { reason: 'dealIn'; seat: number }
   | { reason: 'ryukyoku' }
-  /** 他家がアガった(ツモ、またはリーチ者へのロン)。自分は放銃していない */
-  | { reason: 'otherWin'; winner: number; tsumo: boolean }
+  /** 他家がアガった(ツモ、またはリーチ者へのロン)。自分は放銃していない。tile はアガリ牌 */
+  | { reason: 'otherWin'; winner: number; tsumo: boolean; tile: Tile }
 
 export interface BetaoriGame {
   seed: number
@@ -115,8 +115,8 @@ export function discardBetaori(game: BetaoriGame, kind: number): BetaoriGame {
     const drawn = s.wall.shift()!
     const hand14 = [...s.hands[seat], drawn]
     if (calcShantenFromTiles(hand14).min === -1) {
-      s.hands[seat] = hand14
-      return { ...game, situation: s, turns, end: { reason: 'otherWin', winner: seat, tsumo: true } }
+      // 手牌は13枚のままにして(待ちの表示に使う)、アガリ牌は終わり方の情報に残す
+      return { ...game, situation: s, turns, end: { reason: 'otherWin', winner: seat, tsumo: true, tile: drawn } }
     }
     const riichi = riichiSeats(s)
     const avoid = new Set<number>()
@@ -128,7 +128,7 @@ export function discardBetaori(game: BetaoriGame, kind: number): BetaoriGame {
     s.hands[seat] = sortTiles(hand14.filter((_, i) => i !== index14))
     s.rivers[seat].push({ tile: discard, order: s.nextOrder++ })
     const ron = riichi.filter((other) => other !== seat && findWaits(s.hands[other]).waits.some((w) => w.kind === discard.kind))
-    if (ron.length > 0) return { ...game, situation: s, turns, end: { reason: 'otherWin', winner: ron[0], tsumo: false } }
+    if (ron.length > 0) return { ...game, situation: s, turns, end: { reason: 'otherWin', winner: ron[0], tsumo: false, tile: discard } }
   }
 
   // 自分のツモ
