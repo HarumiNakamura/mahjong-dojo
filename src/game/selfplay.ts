@@ -8,10 +8,59 @@ import { createRng } from '../engine/random'
 import { finalResult, type FinalResult } from './result'
 import { MLEAGUE_RULE } from './rule'
 
-/** Mリーグの終局処理を使う Game */
+/** 途中保存の中身(局が始まる直前の状態) */
+export interface GameSave {
+  version: 1
+  qijia: number
+  zhuangfeng: number
+  jushu: number
+  changbang: number
+  lizhibang: number
+  /** プレイヤーごとの持ち点 */
+  defen: number[]
+  /** それまでの局の牌譜 */
+  log: Record<string, unknown>[][]
+}
+
+/** Mリーグの終局処理を使う Game。局の始まりに途中保存でき、保存した局から続けられる */
 export class MleagueGame extends Majiang.Game {
   /** 自前で計算した最終成績 */
   final: FinalResult | null = null
+  /** 局が始まる直前に呼ばれる(途中保存に使う) */
+  onKyokuStart?: (save: GameSave) => void
+
+  qipai(shan?: unknown) {
+    this.onKyokuStart?.(this.snapshot())
+    super.qipai(shan)
+  }
+
+  /** 今の状態(局の始まり) */
+  snapshot(): GameSave {
+    const m = this._model
+    return {
+      version: 1,
+      qijia: m.qijia,
+      zhuangfeng: m.zhuangfeng,
+      jushu: m.jushu,
+      changbang: m.changbang,
+      lizhibang: m.lizhibang,
+      defen: [...m.defen],
+      log: JSON.parse(JSON.stringify(this._paipu.log)),
+    }
+  }
+
+  /** 保存した局から始める(kaiju の代わりに呼ぶ) */
+  resume(save: GameSave) {
+    this.kaiju(save.qijia)
+    // kaiju のあと、最初の局を配る前に状態を戻す
+    const m = this._model
+    m.zhuangfeng = save.zhuangfeng
+    m.jushu = save.jushu
+    m.changbang = save.changbang
+    m.lizhibang = save.lizhibang
+    m.defen = [...save.defen]
+    this._paipu.log = JSON.parse(JSON.stringify(save.log))
+  }
 
   jieju() {
     const model = this._model

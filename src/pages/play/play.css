@@ -332,3 +332,68 @@
   font-weight: 700;
   background: var(--accent-soft);
 }
+
+.play-result-table th {
+  padding: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  color: var(--text-muted);
+}
+
+.play-result-table caption {
+  font-weight: 700;
+  text-align: left;
+}
+
+.play-result-moves td:not(:first-child),
+.play-result-moves th:not(:first-child) {
+  text-align: right;
+}
+
+.play-plus {
+  color: var(--correct);
+  font-weight: 700;
+}
+
+.play-minus {
+  color: var(--wrong);
+  font-weight: 700;
+}
+
+.play-result-sub {
+  margin-left: 4px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.play-result-note {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.play-result-hand--small .tile {
+  --tile-w: 18px;
+}
+
+.play-result-fu summary {
+  min-height: 40px;
+  cursor: pointer;
+}
+
+/* 対局をやめる・やり直す(操作ボタンから離して置く) */
+.play-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.play-start .button--block + .button--block {
+  margin-top: 12px;
+}
+
+.play-result-table td:first-child {
+  white-space: nowrap;
+}

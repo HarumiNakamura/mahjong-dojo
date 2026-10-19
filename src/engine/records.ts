@@ -32,14 +32,73 @@ export interface FavoriteRecord {
   addedAt: string
 }
 
+/** CPU対戦の半荘1回の成績 */
+export interface GameRecord {
+  id: string
+  /** 終わった日時(ISO 8601) */
+  playedAt: string
+  /** CPU の種類(難易度) */
+  cpu: string
+  rank: number
+  /** ポイント × 10(例: 523 = +52.3pt) */
+  points10: number
+  /** 最終の持ち点 */
+  score: number
+  kyoku: number
+  hule: number
+  /** 放銃の回数 */
+  fangchong: number
+  lizhi: number
+  /** 副露した局の数 */
+  fulouKyoku: number
+  /** アガリの点数の合計(本場・供託を含まない) */
+  huleDefen: number
+}
+
 export interface RecordsData {
   version: typeof RECORDS_VERSION
   attempts: AttemptRecord[]
   favorites: FavoriteRecord[]
+  /** CPU対戦の成績(古い記録にはないので、読み込み時に空にする) */
+  games: GameRecord[]
 }
 
+/** 保存する対局成績の上限 */
+export const MAX_GAMES = 500
+
 export function emptyRecords(): RecordsData {
-  return { version: RECORDS_VERSION, attempts: [], favorites: [] }
+  return { version: RECORDS_VERSION, attempts: [], favorites: [], games: [] }
+}
+
+/** 対局成績を追加する(上限を超えたら古いものから消す) */
+export function addGame(data: RecordsData, game: GameRecord): RecordsData {
+  const games = [...data.games, game]
+  return { ...data, games: games.length > MAX_GAMES ? games.slice(games.length - MAX_GAMES) : games }
+}
+
+export interface GameSummary {
+  games: number
+  /** 平均順位(対局がなければ null) */
+  averageRank: number | null
+  /** ポイントの合計 × 10 */
+  totalPoints10: number
+  /** アガリ率・放銃率(%、小数1桁。局がなければ null) */
+  huleRate: number | null
+  fangchongRate: number | null
+}
+
+const percent1 = (n: number, d: number) => (d ? Math.round((n / d) * 1000) / 10 : null)
+
+/** CPU対戦の成績をまとめる */
+export function gameSummary(games: readonly GameRecord[]): GameSummary {
+  const kyoku = games.reduce((a, g) => a + g.kyoku, 0)
+  return {
+    games: games.length,
+    averageRank: games.length ? Math.round((games.reduce((a, g) => a + g.rank, 0) / games.length) * 100) / 100 : null,
+    totalPoints10: games.reduce((a, g) => a + g.points10, 0),
+    huleRate: percent1(games.reduce((a, g) => a + g.hule, 0), kyoku),
+    fangchongRate: percent1(games.reduce((a, g) => a + g.fangchong, 0), kyoku),
+  }
 }
 
 /** 回答記録を追加する(上限を超えたら古いものから消す) */
@@ -170,6 +229,19 @@ function validAttempt(v: unknown): v is AttemptRecord {
   )
 }
 
+const isNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+
+function validGame(v: unknown): v is GameRecord {
+  return (
+    isObject(v) &&
+    isString(v.id) &&
+    isString(v.playedAt) &&
+    !Number.isNaN(Date.parse(v.playedAt)) &&
+    isString(v.cpu) &&
+    ['rank', 'points10', 'score', 'kyoku', 'hule', 'fangchong', 'lizhi', 'fulouKyoku', 'huleDefen'].every((k) => isNumber(v[k]))
+  )
+}
+
 function validFavorite(v: unknown): v is FavoriteRecord {
   return isObject(v) && isString(v.drill) && isString(v.questionKey) && 'question' in v && isString(v.addedAt)
 }
@@ -181,6 +253,7 @@ export function sanitizeRecords(value: unknown): RecordsData {
     version: RECORDS_VERSION,
     attempts: Array.isArray(value.attempts) ? value.attempts.filter(validAttempt) : [],
     favorites: Array.isArray(value.favorites) ? value.favorites.filter(validFavorite) : [],
+    games: Array.isArray(value.games) ? value.games.filter(validGame) : [],
   }
 }
 
@@ -210,12 +283,16 @@ export function mergeRecords(current: RecordsData, incoming: RecordsData): { dat
   for (const f of incoming.favorites) {
     if (!isFavorite({ ...current, favorites }, f.drill, f.questionKey)) favorites = [...favorites, f]
   }
+  const gameIds = new Set(current.games.map((g) => g.id))
+  const newGames = incoming.games.filter((g) => !gameIds.has(g.id))
+  const games = [...current.games, ...newGames].sort((a, b) => a.playedAt.localeCompare(b.playedAt))
   return {
     data: {
       version: RECORDS_VERSION,
       attempts: attempts.length > MAX_ATTEMPTS ? attempts.slice(attempts.length - MAX_ATTEMPTS) : attempts,
       favorites,
+      games: games.length > MAX_GAMES ? games.slice(games.length - MAX_GAMES) : games,
     },
-    added: newAttempts.length,
+    added: newAttempts.length + newGames.length,
   }
 }

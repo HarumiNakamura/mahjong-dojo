@@ -13,7 +13,11 @@ import {
   sanitizeRecords,
   statsOf,
   toggleFavorite,
+  addGame,
+  gameSummary,
+  MAX_GAMES,
   type AttemptRecord,
+  type GameRecord,
 } from './records'
 
 let n = 0
@@ -151,5 +155,62 @@ describe('書き出し・読み込み', () => {
     expect(data.attempts.map((a) => a.id)).toEqual(['new', 'same'])
     expect(data.favorites).toHaveLength(1)
     expect(mergeRecords(data, incoming).data.favorites).toHaveLength(1)
+  })
+})
+
+function game(partial: Partial<GameRecord>): GameRecord {
+  return {
+    id: 'g1',
+    playedAt: '2026-10-18T10:00:00.000Z',
+    cpu: 'latest',
+    rank: 1,
+    points10: 523,
+    score: 52300,
+    kyoku: 10,
+    hule: 3,
+    fangchong: 1,
+    lizhi: 2,
+    fulouKyoku: 3,
+    huleDefen: 18000,
+    ...partial,
+  }
+}
+
+describe('CPU対戦の成績', () => {
+  it('対局成績のない古い記録も読み込める', () => {
+    const data = sanitizeRecords({ version: 1, attempts: [], favorites: [] })
+    expect(data.games).toEqual([])
+  })
+
+  it('形が壊れた対局成績は捨てる', () => {
+    const data = sanitizeRecords({ version: 1, attempts: [], favorites: [], games: [game({}), { id: 'x' }, { ...game({ id: 'g2' }), playedAt: 'bad' }] })
+    expect(data.games.map((g) => g.id)).toEqual(['g1'])
+  })
+
+  it('上限を超えたら古いものから消す', () => {
+    let data = emptyRecords()
+    for (let i = 0; i < MAX_GAMES + 2; i++) data = addGame(data, game({ id: `g${i}` }))
+    expect(data.games).toHaveLength(MAX_GAMES)
+    expect(data.games[0].id).toBe('g2')
+  })
+
+  it('読み込みでは同じ対局を1つにまとめ、日時の順に並べる', () => {
+    const current = addGame(emptyRecords(), game({ id: 'b', playedAt: '2026-10-18T02:00:00Z' }))
+    let incoming = addGame(emptyRecords(), game({ id: 'b', playedAt: '2026-10-18T02:00:00Z' }))
+    incoming = addGame(incoming, game({ id: 'a', playedAt: '2026-10-18T01:00:00Z' }))
+    const { data, added } = mergeRecords(current, incoming)
+    expect(added).toBe(1)
+    expect(data.games.map((g) => g.id)).toEqual(['a', 'b'])
+  })
+
+  it('平均順位・合計ポイント・アガリ率・放銃率をまとめる', () => {
+    const s = gameSummary([game({}), game({ id: 'g2', rank: 4, points10: -456, hule: 1, fangchong: 3 })])
+    expect(s).toEqual({ games: 2, averageRank: 2.5, totalPoints10: 67, huleRate: 20, fangchongRate: 20 })
+    expect(gameSummary([])).toEqual({ games: 0, averageRank: null, totalPoints10: 0, huleRate: null, fangchongRate: null })
+  })
+
+  it('書き出したファイルを読み込むと対局成績も戻る', () => {
+    const data = addGame(emptyRecords(), game({}))
+    expect(parseRecordsFile(exportRecords(data, new Date(0))).games).toEqual(data.games)
   })
 })

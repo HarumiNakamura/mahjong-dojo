@@ -103,6 +103,7 @@ declare module '@kobalab/majiang-core' {
     set speed(speed: number)
     get speed(): number
     kaiju(qijia?: number): void
+    qipai(shan?: unknown): void
     do_sync(): this
     stop(callback?: () => void): void
     start(): void

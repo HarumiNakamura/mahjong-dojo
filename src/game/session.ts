@@ -6,8 +6,9 @@
 import AI from '@kobalab/majiang-ai'
 import type { Paipu, Player } from '@kobalab/majiang-core'
 import { HumanPlayer } from './humanPlayer'
+import type { FinalResult } from './result'
 import { MLEAGUE_RULE } from './rule'
-import { MleagueGame } from './selfplay'
+import { MleagueGame, type GameSave } from './selfplay'
 
 /** CPU の手番の速さ(1 = 速い 〜 5 = ゆっくり) */
 export type GameSpeed = 1 | 2 | 3 | 4 | 5
@@ -24,7 +25,18 @@ export interface GameSession {
   onEnd?: (paipu: Paipu) => void
 }
 
-export function startSession(speed: GameSpeed, makeCpu: () => Player = () => new AI()): GameSession {
+export interface SessionOptions {
+  speed: GameSpeed
+  makeCpu?: () => Player
+  /** 途中保存から続ける */
+  resume?: GameSave | null
+  /** 局が始まる直前に呼ばれる(途中保存に使う) */
+  onKyokuStart?: (save: GameSave) => void
+  /** 半荘が終わった直前(結果を出す前)に呼ばれる */
+  onGameEnd?: (paipu: Paipu, final: FinalResult) => void
+}
+
+export function startSession({ speed, makeCpu = () => new AI(), resume, onKyokuStart, onGameEnd }: SessionOptions): GameSession {
   const human = new HumanPlayer()
   const players: Player[] = [human, makeCpu(), makeCpu(), makeCpu()]
   const session = {} as GameSession
@@ -62,6 +74,11 @@ export function startSession(speed: GameSpeed, makeCpu: () => Player = () => new
     },
   })
   game.speed = speed
-  game.kaiju()
+  game.onKyokuStart = onKyokuStart
+  game.handler = () => {
+    if (game.final) onGameEnd?.(game._paipu, game.final)
+  }
+  if (resume) game.resume(resume)
+  else game.kaiju()
   return session
 }

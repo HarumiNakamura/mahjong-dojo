@@ -12,7 +12,7 @@ const SAY_LABELS: Record<string, string> = { chi: 'チー', peng: 'ポン', gang
 const SEAT_LABELS = ['自分', '下家', '対面', '上家']
 
 /** 面子(副露)を小さく並べる。鳴いた牌は横向き */
-function MeldTiles({ m, size }: { m: string; size?: 'small' }) {
+export function MeldTiles({ m, size }: { m: string; size?: 'small' }) {
   const { tiles, called } = meldView(m)
   return (
     <span className={`play-meld${size === 'small' ? ' play-meld--small' : ''}`}>
