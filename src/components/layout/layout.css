@@ -238,3 +238,30 @@
 .site-footer-note {
   font-size: 0.875rem;
 }
+
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 16px;
+  max-width: var(--content-max);
+  margin: 0 auto 16px;
+  text-align: left;
+}
+
+.footer-group-title {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.footer-group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-group a {
+  display: inline-block;
+  padding: 6px 0;
+  color: var(--text-muted);
+  font-size: 15px;
+}
