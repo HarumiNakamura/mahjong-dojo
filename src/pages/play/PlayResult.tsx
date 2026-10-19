@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react'
 import { Hand } from '../../components/tile/Hand'
 import { handView } from '../../game/convert'
 import { PLAYER_NAMES, type GameSession } from '../../game/session'
@@ -8,6 +9,11 @@ const WINDS = ['東', '南', '西', '北']
 /** 局の結果(アガリ・流局)と半荘の結果。次へ進むボタンつき */
 export function PlayResult({ session, onRestart }: { session: GameSession; onRestart: () => void }) {
   const { human } = session
+  // 局の結果は盤面と別の部品なので、ここでも変化を受け取って描き直す
+  useSyncExternalStore(
+    (fn) => human.subscribe(fn),
+    () => human.version,
+  )
   const req = human.request
   const model = human.model
   if (!req || (req.kind !== 'hule' && req.kind !== 'pingju' && req.kind !== 'jieju')) return null
