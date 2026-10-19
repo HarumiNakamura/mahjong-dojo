@@ -63,6 +63,5 @@ export function startSession(speed: GameSpeed, makeCpu: () => Player = () => new
   })
   game.speed = speed
   game.kaiju()
-  ;(globalThis as Record<string, unknown>).__playDebug = session // DEBUG
   return session
 }
