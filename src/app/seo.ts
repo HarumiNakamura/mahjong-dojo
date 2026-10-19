@@ -42,6 +42,9 @@ const STATIC_PAGES: Record<string, { title: string; description: string; prerend
   '/': { title: '', description: SITE_DESCRIPTION },
   '/practice': { title: '練習', description: '牌効率・一人麻雀・待ち・点数計算・守備・判断の練習メニューです。', prerenderBody: true },
   '/about': { title: 'このサイトについて', description: '麻雀道場(仮)の目的・使い方・Mリーグルール準拠であることなど、このサイトについての説明です。', prerenderBody: true },
+  '/privacy': { title: 'プライバシーポリシー', description: '学習記録はブラウザの中だけに保存され、運営者には送られません。広告(Google アドセンス)の Cookie についても説明します。', prerenderBody: true },
+  '/contact': { title: '運営者情報・お問い合わせ', description: '麻雀道場(仮)の運営者情報と、お問い合わせフォームの案内です。', prerenderBody: true },
+  '/disclaimer': { title: '免責事項', description: '正解の判定や危険度・押し引きの数値は、統計をもとにした目安です。サイトの利用についての注意をまとめています。', prerenderBody: true },
   '/records': { title: '学習記録', description: 'これまでの正解率や間違えた問題を確認し、解き直せます。記録はこの端末のブラウザに保存されます。' },
   '/learn': { title: '解説', description: '麻雀の基本から、牌効率・守備・点数計算・判断の考え方までを読んで学べる解説記事の一覧です。', prerenderBody: true },
 }

@@ -109,7 +109,15 @@ export function findComingSoonPage(path: string): PageInfo | undefined {
   return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE].find((p) => p.path === path && p.comingSoon)
 }
 
+/** サイトの情報のページ(フッターに並べる) */
+export const SITE_PAGES: readonly PageInfo[] = [
+  { path: '/about', title: 'このサイトについて', description: 'このサイトの目的・使い方・ルール・学習記録の扱いについての説明です。' },
+  { path: '/privacy', title: 'プライバシーポリシー', description: '学習記録の保存場所(ブラウザの中だけ)と、広告(Google アドセンス)の Cookie についての説明です。' },
+  { path: '/contact', title: '運営者情報・お問い合わせ', description: 'サイトの運営者と、お問い合わせフォームの案内です。' },
+  { path: '/disclaimer', title: '免責事項', description: '判定の数値は統計をもとにした目安であることなど、サイトの利用についての注意です。' },
+]
+
 /** パスからページの情報を探す(記事のドリル案内などに使う) */
 export function findPageInfo(path: string): PageInfo | undefined {
-  return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE, SCORE_TABLE_PAGE, TODAY_PAGE].find((p) => p.path === path)
+  return [...PRACTICE_PAGES, ...JUDGMENT_PAGES, LEARN_PAGE, RECORDS_PAGE, SCORE_TABLE_PAGE, TODAY_PAGE, ...SITE_PAGES].find((p) => p.path === path)
 }

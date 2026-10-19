@@ -86,6 +86,7 @@
 - `src/app/share.ts`・`src/components/drill/ShareButton.tsx`・`src/pages/SharedQuestionPage.tsx` … 問題の共有(`/q/<ドリル>?d=<問題データ>`。問題データは JSON を base64url にしたもの。URL のコピーと X への投稿)
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
 - `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
+- `src/pages/site/`・`src/app/siteInfo.ts` … プライバシーポリシー(`/privacy`)・運営者情報とお問い合わせ(`/contact`)・免責事項(`/disclaimer`)。運営者名・お問い合わせフォーム(Google フォーム)・Google 広告設定の URL は `siteInfo.ts` に書く(空なら「準備中」と表示)。フッターにはすべてのページへのリンクを並べる
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
 - `src/pages/score/` … 点数計算ドリル(`/practice/score`)と点数早見表(`/score-table`)の表示・解説
 - `src/pages/waits/` … 待ち当てドリル(`/practice/waits`)の問題表示・色分けの解説・タイムアタック

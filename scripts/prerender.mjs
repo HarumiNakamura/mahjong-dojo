@@ -21,6 +21,9 @@ function pageModule(path) {
   const map = {
     '/learn': 'src/pages/LearnPage.tsx',
     '/about': 'src/pages/AboutPage.tsx',
+    '/privacy': 'src/pages/site/PrivacyPage.tsx',
+    '/contact': 'src/pages/site/ContactPage.tsx',
+    '/disclaimer': 'src/pages/site/DisclaimerPage.tsx',
     '/practice': 'src/pages/PracticePage.tsx',
     '/practice/judgment': 'src/pages/JudgmentPage.tsx',
     '/score-table': 'src/pages/ScoreTablePage.tsx',

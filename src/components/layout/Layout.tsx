@@ -1,11 +1,18 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from '../../app/Link'
 import { usePath } from '../../app/router'
-import { NAV_ITEMS } from '../../app/routes'
+import { JUDGMENT_PAGES, LEARN_PAGE, NAV_ITEMS, PRACTICE_PAGES, RECORDS_PAGE, SCORE_TABLE_PAGE, SITE_PAGES, TODAY_PAGE } from '../../app/routes'
 import { AdSlot } from './AdSlot'
 import './layout.css'
 
 const SITE_NAME = '麻雀道場(仮)'
+
+/** フッターに並べるリンク(サイトのすべてのページ) */
+const FOOTER_GROUPS = [
+  { title: '練習', links: [{ path: '/practice', title: '練習メニュー' }, ...PRACTICE_PAGES, ...JUDGMENT_PAGES, TODAY_PAGE] },
+  { title: '読む・ふりかえる', links: [LEARN_PAGE, SCORE_TABLE_PAGE, RECORDS_PAGE] },
+  { title: 'このサイト', links: [{ path: '/', title: 'ホーム' }, ...SITE_PAGES] },
+]
 
 interface LayoutProps {
   /** ページの題名(ブラウザのタブに出す)。null ならページ自身が設定する */
@@ -99,10 +106,22 @@ export function Layout({ title, children }: LayoutProps) {
       </div>
 
       <footer className="site-footer">
-        <p>
-          {SITE_NAME} ・ <Link to="/about">このサイトについて</Link>
-        </p>
-        <p className="site-footer-note">ルールは Mリーグ公式ルールに準拠しています。</p>
+        <nav className="footer-nav" aria-label="サイトのページ一覧">
+          {FOOTER_GROUPS.map((g) => (
+            <div key={g.title} className="footer-group">
+              <p className="footer-group-title">{g.title}</p>
+              <ul>
+                {g.links.map((l) => (
+                  <li key={l.path}>
+                    <Link to={l.path}>{l.title}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+        <p>{SITE_NAME}</p>
+        <p className="site-footer-note">ルールは Mリーグ公式ルールに準拠しています(Mリーグとは関係のない非公式サイトです)。</p>
       </footer>
     </div>
   )

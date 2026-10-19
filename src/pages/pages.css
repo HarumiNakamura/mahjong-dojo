@@ -369,3 +369,27 @@
 .og-hand .hand-tile {
   max-width: 72px;
 }
+
+.prose-date {
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table th,
+.info-table td {
+  padding: 8px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.info-table th {
+  width: 7em;
+  background: var(--surface-2);
+}

@@ -26,6 +26,9 @@ const SharedQuestionPage = lazy(() => import('./pages/SharedQuestionPage').then(
 const SoloPage = lazy(() => import('./pages/SoloPage').then((m) => ({ default: m.SoloPage })))
 const TodayPage = lazy(() => import('./pages/TodayPage').then((m) => ({ default: m.TodayPage })))
 const WaitsDrillPage = lazy(() => import('./pages/WaitsDrillPage').then((m) => ({ default: m.WaitsDrillPage })))
+const PrivacyPage = lazy(() => import('./pages/site/PrivacyPage').then((m) => ({ default: m.PrivacyPage })))
+const ContactPage = lazy(() => import('./pages/site/ContactPage').then((m) => ({ default: m.ContactPage })))
+const DisclaimerPage = lazy(() => import('./pages/site/DisclaimerPage').then((m) => ({ default: m.DisclaimerPage })))
 const ArticleRoute = lazy(() => import('./pages/ArticlePage').then((m) => ({ default: m.ArticleRoute })))
 const RecordsPage = lazy(() => import('./pages/records/RecordsPage').then((m) => ({ default: m.RecordsPage })))
 const ReviewPage = lazy(() => import('./pages/records/ReviewPage').then((m) => ({ default: m.ReviewPage })))
@@ -61,6 +64,12 @@ function resolvePage(path: string): { title?: string | null; element: ReactNode 
       return { title: '一人麻雀', element: <SoloPage /> }
     case '/about':
       return { title: 'このサイトについて', element: <AboutPage /> }
+    case '/privacy':
+      return { title: 'プライバシーポリシー', element: <PrivacyPage /> }
+    case '/contact':
+      return { title: '運営者情報・お問い合わせ', element: <ContactPage /> }
+    case '/disclaimer':
+      return { title: '免責事項', element: <DisclaimerPage /> }
     case '/dev/tiles':
       return { title: '牌の表示確認', element: <DevTilesPage /> }
     case '/dev/drill':
