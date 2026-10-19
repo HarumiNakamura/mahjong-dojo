@@ -134,6 +134,20 @@ declare module '@kobalab/majiang-core' {
     lunban: number
   }
 
+  /** 牌譜を1手ずつ再現する盤面 */
+  export interface Board extends BoardModel {
+    menfeng(id: number): number
+    qipai(qipai: unknown): void
+    zimo(zimo: unknown): void
+    dapai(dapai: unknown): void
+    fulou(fulou: unknown): void
+    gang(gang: unknown): void
+    kaigang(kaigang: unknown): void
+    hule(hule: unknown): void
+    pingju(pingju: unknown): void
+    last(): void
+  }
+
   export class Player {
     constructor()
     action(msg: Record<string, unknown>, callback?: (reply?: unknown) => void): void
@@ -161,7 +175,7 @@ declare module '@kobalab/majiang-core' {
     He: typeof He
     Game: typeof Game
     Player: typeof Player
-    Board: new (...args: unknown[]) => unknown
+    Board: new (kaiju?: { title: string; player: string[]; qijia: number }) => Board
     Util: {
       xiangting(shoupai: Shoupai): number
       tingpai(shoupai: Shoupai): Pai[] | null

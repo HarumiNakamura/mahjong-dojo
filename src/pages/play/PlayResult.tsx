@@ -5,7 +5,7 @@ import { handView } from '../../game/convert'
 import { huleDetail, type HuleMessage } from '../../game/huleDetail'
 import { formatPoints } from '../../game/result'
 import { PLAYER_NAMES, type GameSession } from '../../game/session'
-import { MeldTiles } from './PlayTable'
+import { MeldTiles } from './BoardParts'
 
 const WINDS = ['東', '南', '西', '北']
 
@@ -40,7 +40,7 @@ function ScoreMoves({ before, fenpei, nameOf }: { before: number[]; fenpei: read
 }
 
 /** 局の結果(アガリ・流局)と半荘の結果。次へ進むボタンつき */
-export function PlayResult({ session, onRestart }: { session: GameSession; onRestart: () => void }) {
+export function PlayResult({ session, onRestart, replayHref = null }: { session: GameSession; onRestart: () => void; replayHref?: string | null }) {
   const { human } = session
   // 局の結果は盤面と別の部品なので、ここでも変化を受け取って描き直す
   useSyncExternalStore(
@@ -90,6 +90,12 @@ export function PlayResult({ session, onRestart }: { session: GameSession; onRes
         )}
         <p className="play-result-note">
           成績は<Link to="/records">学習記録</Link>に保存しました。
+          {replayHref && (
+            <>
+              {' '}
+              <Link to={replayHref}>牌譜を見る</Link>
+            </>
+          )}
         </p>
         <button type="button" className="button button--primary button--block" onClick={onRestart}>
           もう一度対局する

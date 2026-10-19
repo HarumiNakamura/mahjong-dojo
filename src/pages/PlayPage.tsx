@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
+import { addPaipuRecords } from '../app/paipuStore'
 import { clearGameSave, loadGameSave, storeGameSave } from '../app/playSave'
+import { Link } from '../app/Link'
 import { useRecords } from '../app/records/useRecords'
 import { usePersistentSetting } from '../app/usePersistentSetting'
 import { addGame } from '../engine/records'
 import { gameRecordOf } from '../game/gameRecord'
+import { replayUrl } from '../game/replay'
 import { describeSave } from '../game/save'
 import type { GameSave } from '../game/selfplay'
 import { startSession, type GameSession, type GameSpeed } from '../game/session'
@@ -24,6 +27,8 @@ export function PlayPage() {
   const [session, setSession] = useState<GameSession | null>(null)
   const [saved, setSaved] = useState<GameSave | null>(() => loadGameSave())
   const { update } = useRecords()
+  /** 終わった半荘の id(牌譜を開くため) */
+  const [endedId, setEndedId] = useState<string | null>(null)
 
   // ページを離れたら対局を止める(途中保存は残る)
   useEffect(() => () => session?.game.stop(), [session])
@@ -32,6 +37,7 @@ export function PlayPage() {
     session?.game.stop()
     if (!resume) clearGameSave()
     setSaved(null)
+    setEndedId(null)
     setSession(
       startSession({
         speed: speed as GameSpeed,
@@ -41,7 +47,10 @@ export function PlayPage() {
         onGameEnd: (paipu, final) => {
           clearGameSave()
           const now = new Date()
-          update((d) => addGame(d, gameRecordOf(paipu, final, 'latest', now, `game-${now.getTime()}`)))
+          const id = `game-${now.getTime()}`
+          update((d) => addGame(d, gameRecordOf(paipu, final, 'latest', now, id)))
+          addPaipuRecords([{ id, playedAt: now.toISOString(), paipu: JSON.parse(JSON.stringify(paipu)) }])
+          setEndedId(id)
         },
       }),
     )
@@ -84,7 +93,7 @@ export function PlayPage() {
       {session ? (
         <>
           <PlayTable key={String(session.game.model.title) + session.game.model.qijia} session={session} />
-          <PlayResult session={session} onRestart={() => start(null)} />
+          <PlayResult session={session} onRestart={() => start(null)} replayHref={endedId ? replayUrl(endedId) : null} />
           <div className="play-controls">
             <button type="button" className="button" onClick={quit}>
               対局をやめる
@@ -103,6 +112,9 @@ export function PlayPage() {
             <li>喰い替えになる牌・フリテンのロン・役のないアガリは選べません。</li>
             <li>局が始まるたびに、このブラウザに途中経過を保存します。ページを閉じても続きから打てます。</li>
           </ul>
+          <p>
+            <Link to="/play/replay">これまでの牌譜を見る</Link>
+          </p>
           {saved ? (
             <>
               <button type="button" className="button button--primary button--block" onClick={() => start(saved)}>

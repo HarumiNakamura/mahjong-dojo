@@ -1,7 +1,8 @@
 import { useState, useSyncExternalStore } from 'react'
 import { Hand } from '../../components/tile/Hand'
 import { Tile } from '../../components/tile/Tile'
-import { fromPai, handView, meldView, riverTile } from '../../game/convert'
+import { fromPai, handView } from '../../game/convert'
+import { MeldTiles, River } from './BoardParts'
 import type { HumanReply } from '../../game/humanPlayer'
 import { PLAYER_NAMES, type GameSession } from '../../game/session'
 import { tileName, type Tile as TileData } from '../../engine/tiles'
@@ -10,40 +11,6 @@ const WINDS = ['東', '南', '西', '北']
 const SAY_LABELS: Record<string, string> = { chi: 'チー', peng: 'ポン', gang: 'カン', lizhi: 'リーチ', rong: 'ロン', zimo: 'ツモ' }
 /** 自分から見た席の名前(l の差) */
 const SEAT_LABELS = ['自分', '下家', '対面', '上家']
-
-/** 面子(副露)を小さく並べる。鳴いた牌は横向き */
-export function MeldTiles({ m, size }: { m: string; size?: 'small' }) {
-  const { tiles, called } = meldView(m)
-  return (
-    <span className={`play-meld${size === 'small' ? ' play-meld--small' : ''}`}>
-      {tiles.map((t, i) => (
-        <Tile key={i} tile={t} sideways={i === called} showLabel={false} />
-      ))}
-    </span>
-  )
-}
-
-/** 河。6枚ごとに改行し、リーチ宣言牌は横向き、鳴かれた牌は薄く */
-function River({ pai, large }: { pai: readonly string[]; large: boolean }) {
-  const rows: string[][] = []
-  for (let i = 0; i < pai.length; i += 6) rows.push(pai.slice(i, i + 6))
-  return (
-    <div className={`play-river${large ? ' play-river--large' : ''}`}>
-      {rows.map((row, r) => (
-        <div key={r} className="play-river-row">
-          {row.map((p, i) => {
-            const t = riverTile(p)
-            return (
-              <span key={i} className={`play-river-tile${t.called ? ' play-river-tile--called' : ''}`}>
-                <Tile tile={t.tile} sideways={t.lizhi} showLabel={false} />
-              </span>
-            )
-          })}
-        </div>
-      ))}
-    </div>
-  )
-}
 
 /** 手牌の牌を、majiang-core の打牌の表記(ツモ切りは '_' 付き)にする */
 function dapaiOf(tile: TileData, isDrawn: boolean, options: readonly string[]): string | null {

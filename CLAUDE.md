@@ -96,7 +96,10 @@
   - `session.ts` … 自分 + CPU 3人の半荘を進める(CPU の速さの設定、鳴き・リーチの声の表示、局の始まりの途中保存と続きから、終局の知らせ)
   - `save.ts` … 途中保存の形の確認と表示。保存先は `src/app/playSave.ts`(localStorage。局が始まるたびに保存し、終局で消す)
   - `huleDetail.ts` … アガリを自前の点数計算で計算し直し、役・符の内訳を出す(局の結果画面用)
+  - `replay.ts` … 牌譜の再生(局・手数から盤面を作る、手の説明、場面の URL `/play/replay?g=<対局>&k=<局>&s=<手数>&v=all`)
+  - `paipuRecords.ts` … 牌譜の保存データ(直近20半荘)の確認と合わせ方。保存先は `src/app/paipuStore.ts`(localStorage)。学習記録の書き出し/読み込みに牌譜も入る
   - `gameRecord.ts` … 半荘の牌譜から自分の成績(順位・ポイント・アガリ・放銃など)を作り、学習記録の `games` に保存する
+- `src/pages/play/ReplayPage.tsx` … 牌譜の再生(`/play/replay`。一覧・局の選択・1手ずつ進む/戻る・次の自分の番・自分視点/全員の手牌・場面の URL のコピー)。盤面の部品は `BoardParts.tsx` を対局画面と共用
 - `src/pages/PlayPage.tsx`・`src/pages/play/` … CPU対戦の対局画面(`/play`。スマホ縦優先:上に点数・場・ドラ・残り枚数、中央に河(拡大できる)、下に自分の手牌と操作ボタン)と局の結果(役・符の内訳・点数の動き、流局はテンパイ/ノーテンと罰符)・半荘の結果(順位・持ち点・順位点込みのポイント)。対局をやめる/最初からやり直すは確認つき。広告枠は出さない
 - `src/pages/records/` … 学習記録ページ(`/records`)と解き直し(`/records/review/<ドリル>/<mistakes|favorites>`)
 - `src/pages/score/` … 点数計算ドリル(`/practice/score`)と点数早見表(`/score-table`)の表示・解説
