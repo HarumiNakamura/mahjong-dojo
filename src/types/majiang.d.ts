@@ -42,6 +42,7 @@ declare module '@kobalab/majiang-core' {
     _pai: string[]
     /** その牌を切ったことがあるか(フリテンの判定) */
     find(p: Pai): boolean | undefined
+    dapai(p: Pai): this
   }
 
   export interface HuleParam {

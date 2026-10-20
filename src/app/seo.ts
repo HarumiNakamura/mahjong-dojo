@@ -37,7 +37,7 @@ const PRACTICE_OG: Record<string, string> = {
 }
 
 const STATIC_PAGES: Record<string, { title: string; description: string; prerenderBody?: boolean }> = {
-  '/': { title: '', description: SITE_DESCRIPTION },
+  '/': { title: '', description: SITE_DESCRIPTION, prerenderBody: true },
   '/practice': { title: '練習', description: '牌効率・一人麻雀・待ち・点数計算・守備・判断の練習メニューです。', prerenderBody: true },
   '/about': { title: 'このサイトについて', description: `${SITE_NAME}の目的・使い方・Mリーグルール準拠であることなど、このサイトについての説明です。`, prerenderBody: true },
   '/privacy': { title: 'プライバシーポリシー', description: '学習記録はブラウザの中だけに保存され、運営者には送られません。広告(Google アドセンス)の Cookie についても説明します。', prerenderBody: true },

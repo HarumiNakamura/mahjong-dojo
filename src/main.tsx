@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { startFonts } from './app/fonts'
 
 const root = document.getElementById('root')!
 const app = (
@@ -14,10 +15,5 @@ const app = (
 if (root.hasChildNodes() && !root.hasAttribute('data-shell')) hydrateRoot(root, app)
 else createRoot(root).render(app)
 
-// 本文: BIZ UDPゴシック、見出し: しっぽり明朝 B1(どちらも SIL OFL)。サイトで使う文字だけの @font-face を、
-// ページの読み込みが終わって画面ができてから(2秒後に)読み込む(最初の表示を遅らせない。scripts/build-font-css.mjs)。
-// font-display: optional なので、はじめて開いたときは端末のフォントで表示し、2回目からはサイトのフォントになる
-const loadFonts = () => void import('./fonts.generated.css')
-const FONT_DELAY_MS = 2000
-if (document.readyState === 'complete') setTimeout(loadFonts, FONT_DELAY_MS)
-else window.addEventListener('load', () => setTimeout(loadFonts, FONT_DELAY_MS), { once: true })
+// 本文・見出しのフォント(はじめては端末のフォント、2回目からサイトのフォント。src/app/fonts.ts)
+startFonts()
