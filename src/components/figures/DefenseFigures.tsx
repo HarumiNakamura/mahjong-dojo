@@ -224,3 +224,81 @@ export function FuritenTurnFigure() {
     </svg>
   )
 }
+
+/** 河の例(6枚ずつ2段)。t = 手出し、z = ツモ切り */
+const RIVER = [
+  { tile: '4z', how: 't' },
+  { tile: '9m', how: 't' },
+  { tile: '2z', how: 'z' },
+  { tile: '1s', how: 't' },
+  { tile: '8p', how: 'z' },
+  { tile: '3z', how: 't' },
+  { tile: '3p', how: 't' },
+  { tile: '6s', how: 't' },
+  { tile: '9p', how: 'z' },
+  { tile: '2m', how: 'z' },
+  { tile: '1z', how: 'z' },
+  { tile: '7s', how: 'z' },
+] as const
+
+/** 手出しとツモ切り:中盤の中張牌の手出しのあと、ツモ切りが続く河 */
+export function TedashiFigure() {
+  const w = 32
+  const step = 37
+  const x0 = 10
+  const rows = [36, 128]
+  return (
+    <svg viewBox="0 0 360 262" className="fig-svg">
+      <FigText x={10} y={18} size={12} anchor="start" tone="muted">
+        相手の河(左上から順に)
+      </FigText>
+      <FigText x={350} y={18} size={12} anchor="end" bold>
+        <tspan className="fig-t--accent">手</tspan>=手出し <tspan className="fig-t--muted">ツ</tspan>=ツモ切り
+      </FigText>
+      {RIVER.map((r, i) => {
+        const row = Math.floor(i / 6)
+        const x = x0 + (i % 6) * step
+        const y = rows[row]
+        const t = r.how === 't'
+        return (
+          <g key={i}>
+            <FigTile tile={r.tile} x={x} y={y} w={w} />
+            <FigText x={x + w / 2} y={y + 60} size={13} tone={t ? 'accent' : 'muted'} bold={t}>
+              {t ? '手' : 'ツ'}
+            </FigText>
+          </g>
+        )
+      })}
+      {/* 注目する部分 */}
+      <rect x={x0 - 3} y={rows[1] - 4} width={step * 2 - 2} height={70} rx={4} className="fig-outline-accent" />
+      <rect x={x0 + step * 2 - 3} y={rows[1] - 4} width={step * 4 - 2} height={70} rx={4} className="fig-roundup" />
+      <FigText x={240} y={rows[0] + 18} size={13} anchor="start" bold>
+        序盤
+      </FigText>
+      <FigText x={240} y={rows[0] + 36} size={11} anchor="start" tone="muted">
+        字牌・端の牌を
+      </FigText>
+      <FigText x={240} y={rows[0] + 52} size={11} anchor="start" tone="muted">
+        整理している
+      </FigText>
+      <FigText x={240} y={rows[1] + 18} size={13} anchor="start" bold>
+        中盤
+      </FigText>
+      <FigText x={240} y={rows[1] + 36} size={11} anchor="start" tone="muted">
+        中張牌を手出し
+      </FigText>
+      <FigText x={240} y={rows[1] + 52} size={11} anchor="start" tone="muted">
+        → ツモ切りが続く
+      </FigText>
+      <FigText x={x0 + step - 2} y={rows[1] + 86} size={12} tone="accent" bold>
+        中張牌の手出し
+      </FigText>
+      <FigText x={x0 + step * 4 - 2} y={rows[1] + 86} size={12} tone="accent" bold>
+        ツモ切りが続く
+      </FigText>
+      <FigText x={180} y={254} size={14} bold>
+        → テンパイした可能性が高い
+      </FigText>
+    </svg>
+  )
+}
