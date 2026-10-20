@@ -87,10 +87,10 @@
 - `src/app/share.ts`・`src/components/drill/ShareButton.tsx`・`src/pages/SharedQuestionPage.tsx` … 問題の共有(`/q/<ドリル>?d=<問題データ>`。問題データは JSON を base64url にしたもの。URL のコピーと X への投稿)
 - `src/app/ogp.ts`・`public/og/` … OGP 画像(ドリルごとに固定、1200×630)。`npm run build` のあと `npm run build:og` で `/dev/og/<id>` を撮影して作る
 - `src/config/site.ts` … サイト名・「(仮)」の有無・公開 URL・説明文(環境変数 `VITE_SITE_NAME`・`VITE_SITE_PROVISIONAL`・`VITE_SITE_URL` で上書き)。**サイト名と URL は必ずここから取る**(直書きしない)。独自ドメインへの移行は `docs/domain-migration.md`
-- `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。記事は検索向けの題名(先頭の `seoTitle`。一覧は `docs/seo-titles.md`)・パンくずと記事の構造化データ(JSON-LD)・記事ごとの OGP 画像(`scripts/article-og.mjs` がビルド時に `dist/og/articles/<記事>.png` を作る)。本文を HTML にできないホーム・練習の入口・CPU対戦などは、紹介(`src/shell/PageShell.tsx`)を HTML に入れ、ブラウザで置きかえる。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
+- `src/app/seo.ts`・`src/entry-server.tsx`・`scripts/prerender.mjs` … 検索対策。記事は検索向けの題名(先頭の `seoTitle`。一覧は `docs/seo-titles.md`)・パンくずと記事の構造化データ(JSON-LD)・記事ごとの OGP 画像(`scripts/article-og.mjs` がビルド時に `dist/og/articles/<記事>.png` を作る)。ホームは本文まで HTML にして引き継ぐ(学習記録で変わる部分と「1問だけ何切る」は、画面ができてから出す)。本文を HTML にできない練習の入口・CPU対戦などは、紹介(`src/shell/PageShell.tsx`)を HTML に入れ、ブラウザで置きかえる。ページごとの題名・説明・OGP・X カードと、ビルド時に作る HTML(`dist/<パス>.html`、記事などは本文まで)・`404.html`・`sitemap.xml`・`robots.txt`。新しいページを足したら `seo.ts` にも追加する(計測結果は `docs/performance.md`)
 - `src/pages/site/`・`src/app/siteInfo.ts` … プライバシーポリシー(`/privacy`)・運営者情報とお問い合わせ(`/contact`)・免責事項(`/disclaimer`)。運営者名・お問い合わせフォーム(Google フォーム)・Google 広告設定の URL は `siteInfo.ts` に書く(空なら「準備中」と表示)。フッターにはすべてのページへのリンクを並べる
 - `src/game/` … CPU対戦(`/play`。メニュー・ホームのロードマップ・サイトマップに載せる)。対局の進行と CPU は `@kobalab/majiang-core`・`@kobalab/majiang-ai`(MIT。型定義は `src/types/majiang.d.ts`)
-  - `rule.ts` … ライブラリのルールを Mリーグに合わせた設定と補正(海底をツモった人のリーチ不可)。再現できない項目は `docs/game-rules-gap.md`
+  - `rule.ts` … ライブラリのルールを Mリーグに合わせた設定と補正(海底をツモった人のリーチ不可・四槓子のパオ・パオのロンの積み棒・副露も含めた4枚使いのノーテン。点数は `pao.ts`)。再現できない項目は `docs/game-rules-gap.md`
   - `result.ts` … 半荘の最終成績(順位点・同点の等分・南4局流局時の供託)を自前で計算
   - `convert.ts` … サイトの牌とライブラリの表記の変換。`selfplay.ts` … CPU 同士の自動対局と成績の集計
   - `scoringCrosscheck.ts` … 自前の点数計算とライブラリの点数の突き合わせ
@@ -132,7 +132,7 @@
   - `--correct`・`--wrong`(正誤)、`--focus`(フォーカス)
   - 文字と背景のコントラストは WCAG AA 以上(`src/designTokens.test.ts` で確認。色を変えたらテストが通ることを確かめる)
 - フォント: 本文は BIZ UDPゴシック(`--font-body`)、見出し(h1〜h3・ロゴ・カードの題名)はしっぽり明朝 B1 の太さ800(`--font-heading`)
-  - サイトで使う文字だけの `@font-face` を `npm run build:fonts`(`scripts/build-font-css.mjs` → `src/fonts.generated.css`)で作り、読み込みが終わってから読み込む(`font-display: optional`)。`npm run build` でも作り直す
+  - サイトで使う文字だけの `@font-face` を `npm run build:fonts`(`scripts/build-font-css.mjs` → `src/fonts.generated.css`)で作る(`npm run build` でも作り直す)。はじめて開いたときは CSS を当てずにフォントのファイルだけを空いた時間に読み込み、2回目から CSS を当てる(`src/app/fonts.ts`。当てるとファイルが届くたびにページ全体の配置をやり直して重いため)
 - 形: 角丸は `--radius`(4px)。ページの題名は左に朱の太線、記事の見出しは朱の下線。影はほとんど使わない
 - 余白: 左右は `--gutter`(16px)。セクションの間は 32px 前後。本文は16px以上、押せるボタンは高さ48px前後にする
 - アイコン: 練習メニュー・解説の一覧は `src/components/card/IconCard.tsx`(牌の絵のアイコン。`routes.ts` の `icon` に牌を書く)。初めての人に最初にやってほしいもの(何切る・基本の流れ)は `featured` で大きくする
